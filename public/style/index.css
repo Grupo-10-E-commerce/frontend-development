@@ -59,7 +59,7 @@
     border: 2px solid var(--azul-claro);
 }
 
-.carrossel {
+.titulo-azul {
     display: flex;
     justify-content: center;
     margin-top: 30px;
@@ -126,5 +126,8 @@
 footer{
     display: flex;
     justify-content: space-around;
+    align-items: center;
     padding: 20px;
+    background-color: var(--azul-escuro);
+    color: white;
 }

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CtrlTen</title>
+    <title>Fraux</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
     <link rel="stylesheet" href="./style/index.css">
@@ -15,9 +15,30 @@
 <body>
     <!-- NavBar -->
     <div class="nav-bar">
-        <h3>SPTECH</h3>
-        <i class='bx  bx-menu'></i>
+        <h3>FRAUX</h3>
+        <ul class="nav-list nav-menus">
+            <li><a href="#">Funcionalidades</a></li>
+            <li><a href="#">Sobre nós</a></li>
+            <li><a href="#">Clientes</a></li>
+            <li><a href="#faq">FAQ ∨</a></li>
+        </ul>
+        <ul class="nav-list">
+            <li><a href="#">Login</a></li>
+            <div>
+                <li><a class="btn-cadastrar" href="#">Cadastro</a></li>
+            </div>
+        </ul>
+        <i class='bx  bx-menu' id="btn-menu" onclick="abrirMenu()"></i>
     </div>
+    <div class="menu-lateral" id="div_menu_lateral">
+        <div class="lista-lateral">
+            <a href="#">Funcionalidades</a>
+            <a href="#">Sobre nós</a>
+            <a href="#">Clientes</a>
+            <a href="#faq">FAQ ∨</a>
+        </div>
+    </div>
+
 
     <!-- Banner inicial -->
     <div class="banner-inicial">
@@ -153,7 +174,7 @@
 
     <!-- FAQ -->
     <div class="faq">
-        <h1>FAQ</h1>
+        <h1 id="faq">FAQ</h1>
 
         <div id="div_caixaPergunta" class="caixa-pergunta">
             <div class="faq-pergunta">
@@ -253,6 +274,17 @@
             div_caixaPergunta2.style.height = "120px";
             div_faq_resposta2.style.display = "block";
             img_arrow2.src = "./img/arrow Icon up.png";
+        }
+    }
+
+    let menu_aberto = false;
+    function abrirMenu() {
+        if (menu_aberto) {
+            div_menu_lateral.style.display = "none";
+            menu_aberto = false;
+        } else {
+            div_menu_lateral.style.display = "block";
+            menu_aberto = true;
         }
     }
 </script>

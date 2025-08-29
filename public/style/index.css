@@ -8,7 +8,8 @@
 body {
     background-color: #efeeff;
 }
-html{
+
+html {
     scroll-behavior: smooth;
 }
 
@@ -34,6 +35,7 @@ html{
     align-items: center;
     height: 30px;
 }
+
 .nav-list {
     list-style: none;
     display: flex;
@@ -43,9 +45,11 @@ html{
     margin: 0;
     margin-right: 10%;
 }
-.nav-menus{
+
+.nav-menus {
     margin-right: 2%;
 }
+
 
 .nav-list li a {
     display: none;
@@ -73,6 +77,7 @@ html{
     color: white;
     font-weight: 400;
 }
+
 .nav-bar i {
     margin: 15px;
     margin-right: 45px;
@@ -89,6 +94,32 @@ html{
     color: white;
 }
 
+.btn-entrar {
+    display: flex;
+    align-items: center;
+    transition: 0.3s;
+}
+.btn-entrar:hover {
+    color: var(--azul-claro);
+    font-weight: 700;
+    border-radius: 10px;
+    background-color: #e1dffa;
+}
+
+.btn-entrar a {
+    color: rgb(107, 107, 107);
+    text-decoration: none;
+    transition: 0.4s;
+    font-size: 16px;
+    padding: 5px;
+}
+
+
+.btn-entrar img {
+    margin: 8px;
+    height: 18px;
+}
+
 @media only screen and (min-width: 800px) {
     .nav-bar {
         padding-left: 5%;
@@ -100,6 +131,10 @@ html{
 
     .nav-list li a {
         display: block;
+    }
+
+    .btn-entrar {
+        display: none;
     }
 }
 
@@ -140,11 +175,13 @@ html{
     color: white;
     font-weight: 600;
 }
+
 @media only screen and (min-width: 700px) {
 
-    .menu-lateral{
+    .menu-lateral {
         display: none;
     }
+
     .menu-lateral i {
         display: none;
     }
@@ -158,6 +195,23 @@ html{
     color: white;
     background-color: var(--azul);
     margin-bottom: 10px;
+    display: flex;
+}
+
+.banner-inicial img {
+    height: 40%;
+    width: 40%;
+}
+
+@media only screen and (min-width: 900px) {
+
+    .banner-inicial img {
+        height: 280px;
+    }
+
+    .banner-inicial {
+        padding-bottom: 120px;
+    }
 }
 
 .banner-inicial h1 {

@@ -99,6 +99,7 @@ html {
     align-items: center;
     transition: 0.3s;
 }
+
 .btn-entrar:hover {
     color: var(--azul-claro);
     font-weight: 700;
@@ -188,6 +189,7 @@ html {
 
 }
 
+/*========================= BANNER INICIAL =========================*/
 .banner-inicial {
     padding: 10%;
     padding-bottom: 15%;
@@ -198,21 +200,12 @@ html {
     display: flex;
 }
 
+
 .banner-inicial img {
     height: 40%;
     width: 40%;
 }
 
-@media only screen and (min-width: 900px) {
-
-    .banner-inicial img {
-        height: 280px;
-    }
-
-    .banner-inicial {
-        padding-bottom: 120px;
-    }
-}
 
 .banner-inicial h1 {
     font-size: 40px;
@@ -234,12 +227,31 @@ html {
     transition: 0.3s;
 }
 
+@media only screen and (min-width: 900px) {
+    .banner-inicial {
+        padding-bottom: 100px;
+    }
+
+    .banner-inicial div {
+        width: 40%;
+    }
+
+    .banner-inicial h1 {
+        font-size: 60px;
+        margin-bottom: 10px;
+    }
+
+    .banner-inicial span {
+        font-size: 12px;
+    }
+}
+
 
 .banner-inicial button:hover {
     background-color: #7065d540;
 }
 
-/* FUNCIONALIDADES */
+/*========================= FUNCIONALIDADES =========================*/
 .titulo-azul {
     display: flex;
     justify-content: center;
@@ -313,12 +325,12 @@ html {
     width: 100px;
 }
 
-/* Voce sabia */
+/*========================= Voce sabia =========================*/
 .btn-saiba-mais {
     width: 30%;
 }
 
-/* Relatos */
+/*========================= Relatos =========================*/
 .relatos-card {
     margin: 70px;
     margin-top: 100px;
@@ -351,7 +363,7 @@ html {
     margin-bottom: 20px;
 }
 
-/* FAQ */
+/*========================= FAQ =========================*/
 .faq {
     display: flex;
     align-items: center;
@@ -397,7 +409,7 @@ html {
     background-color: var(--azul-claro);
 }
 
-/* Rodapé */
+/*========================= Rodapé =========================*/
 footer {
     display: flex;
     justify-content: space-around;

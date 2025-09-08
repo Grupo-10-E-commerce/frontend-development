@@ -24,9 +24,16 @@ html {
     --cinza-escuro: rgb(74, 73, 73);
 }
 
+@media only screen and (min-width: 1000px) {
+    h1 {
+        font-size: 3vw;
+    }
+}
+
 /* ========================= Nav Bar ========================= */
 .nav-bar {
     position: fixed;
+    z-index: 1000;
     width: 100vw;
     background-color: white;
     padding: 10px;
@@ -350,14 +357,44 @@ html {
 }
 
 /*========================= Voce sabia =========================*/
+.div-voceSabia img {
+    width: 40%;
+}
+
+.div-voceSabia-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.div-voceSabia-content span {
+    font-size: 2vh;
+}
+
 .btn-saiba-mais {
     width: 30%;
 }
 
+@media only screen and (min-width: 1000px) {
+    .div-voceSabia {
+        padding: 7%;
+        justify-content: space-evenly;
+    }
+
+    .div-voceSabia-content span {
+        font-size: 3vh;
+    }
+
+    .btn-saiba-mais {
+        font-size: large;
+    }
+}
+
 /*========================= Relatos =========================*/
 .relatos-card {
-    margin: 70px;
+    margin: 20px;
     margin-top: 100px;
+    margin-bottom: 35px;
     padding: 20px;
     text-align: center;
     font-size: 16px;
@@ -394,6 +431,10 @@ html {
     flex-direction: column;
     padding: 50px;
     background-color: white;
+}
+
+#h1_faq {
+    margin-bottom: 20px;
 }
 
 .caixa-pergunta {
@@ -433,6 +474,12 @@ html {
     background-color: var(--azul-claro);
 }
 
+@media only screen and (min-width: 1000px) {
+    .caixa-pergunta {
+        width: 40vw;
+    }
+}
+
 /*========================= Rodapé =========================*/
 footer {
     display: flex;
@@ -441,4 +488,16 @@ footer {
     padding: 20px;
     background-color: var(--azul-escuro);
     color: white;
+}
+
+/*========================= SWIPER =========================*/
+.swiper{
+    width: 80%;
+}
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

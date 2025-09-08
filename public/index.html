@@ -10,6 +10,10 @@
     <link rel="stylesheet" href="./style/index.css">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Konkhmer+Sleokchher&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap ">
+
+    <!-- Swiper js-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </head>
 
 <body>
@@ -20,7 +24,7 @@
             <li><a href="#">Funcionalidades</a></li>
             <li><a href="#">Sobre nós</a></li>
             <li><a href="#">Clientes</a></li>
-            <li><a href="#faq">FAQ ∨</a></li>
+            <li><a href="#h1_faq">FAQ ∨</a></li>
         </ul>
         <li class="btn-entrar"><a href="#">Entrar</a><img src="./img/icons8-login.png" alt=""></li>
         <ul class="nav-list">
@@ -123,63 +127,122 @@
     </div>
 
     <!-- Você sabia -->
-    <div class="banner-inicial">
-        <h1>Você Sabia?</h1>
-        <span>
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eius temporibus dignissimos placeat exercitationem
-            illo eos tenetur laudantium neque quaerat? Tenetur sequi quod assumenda qui error pariatur excepturi
-            asperiores aspernatur cum?
-        </span> <br>
-        <button class="btn-saiba-mais">Saiba mais</button>
+    <div class="banner-inicial div-voceSabia">
+        <img src="./img/voce sabia.png" alt="">
+        <div class="div-voceSabia-content">
+            <h1>Você Sabia?</h1>
+            <span>
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eius temporibus dignissimos placeat
+                exercitationem
+                illo eos tenetur laudantium neque quaerat? Tenetur sequi quod assumenda qui error pariatur excepturi
+                asperiores aspernatur cum?
+            </span> <br>
+            <button class="btn-saiba-mais">Saiba mais</button>
+        </div>
     </div>
 
 
     <!-- RELATOS -->
-    <h1 class="titulo-azul">Relatos</h1>
+    <h1 id="h1_relatos" class="titulo-azul">Relatos</h1>
 
-    <div class="relatos-card">
-        <img src="./img/profile.jpg" alt="">
+    <!-- Slider main container -->
+    <div class="swiper mySwiper">
+        <!-- Additional required wrapper -->
+        <div class="swiper-wrapper">
+            <!-- Slides -->
+            <div class="swiper-slide">
+                <div class="relatos-card">
+                    <img src="./img/profile.jpg" alt="">
+                    <p>
+                        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam porro velit earum asperiores
+                        similique laudantium debitis. Officiis officia laudantium similique libero suscipit aliquid
+                        nostrum ad
+                        labore recusandae porro, quam quidem!"
+                    </p>
+                    <h4>Eduardo Gomes</h4>
+                    <span>
+                        Position @ Company A
+                    </span>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="relatos-card">
+                    <img src="./img/profile.jpg" alt="">
 
-        <p>
-            "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam porro velit earum asperiores
-            similique laudantium debitis. Officiis officia laudantium similique libero suscipit aliquid nostrum ad
-            labore recusandae porro, quam quidem!"
-        </p>
-        <h4>Eduardo Gomes</h4>
-        <span>
-            Position @ Company A
-        </span>
+                    <p>
+                        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam porro velit earum asperiores
+                        similique laudantium debitis. Officiis officia laudantium similique libero suscipit aliquid
+                        nostrum ad
+                        labore recusandae porro, quam quidem!"
+                    </p>
+                    <h4>Eduardo Gomes</h4>
+                    <span>
+                        Position @ Company A
+                    </span>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="relatos-card">
+                    <img src="./img/profile.jpg" alt="">
+
+                    <p>
+                        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam porro velit earum asperiores
+                        similique laudantium debitis. Officiis officia laudantium similique libero suscipit aliquid
+                        nostrum ad
+                        labore recusandae porro, quam quidem!"
+                    </p>
+                    <h4>Eduardo Gomes</h4>
+                    <span>
+                        Position @ Company A
+                    </span>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="relatos-card">
+                    <img src="./img/profile.jpg" alt="">
+
+                    <p>
+                        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam porro velit earum asperiores
+                        similique laudantium debitis. Officiis officia laudantium similique libero suscipit aliquid
+                        nostrum ad
+                        labore recusandae porro, quam quidem!"
+                    </p>
+                    <h4>Eduardo Gomes</h4>
+                    <span>
+                        Position @ Company A
+                    </span>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="relatos-card">
+                    <img src="./img/profile.jpg" alt="">
+
+                    <p>
+                        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam porro velit earum asperiores
+                        similique laudantium debitis. Officiis officia laudantium similique libero suscipit aliquid
+                        nostrum ad
+                        labore recusandae porro, quam quidem!"
+                    </p>
+                    <h4>Eduardo Gomes</h4>
+                    <span>
+                        Position @ Company A
+                    </span>
+                </div>
+            </div>
+        </div>
+        <!-- If we need pagination -->
+        <div class="swiper-pagination"></div>
+
+        <!-- If we need navigation buttons -->
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+
     </div>
 
-    <div class="relatos-card">
-        <img src="./img/profile.jpg" alt="">
-        <p>
-            "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam porro velit earum asperiores
-            similique laudantium debitis. Officiis officia laudantium similique libero suscipit aliquid nostrum ad
-            labore recusandae porro, quam quidem!"
-        </p>
-        <h4>Eduardo Gomes</h4>
-        <span>
-            Position @ Company A
-        </span>
-    </div>
-
-    <div class="relatos-card">
-        <img src="./img/profile.jpg" alt="">
-        <p>
-            "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam porro velit earum asperiores
-            similique laudantium debitis. Officiis officia laudantium similique libero suscipit aliquid nostrum ad
-            labore recusandae porro, quam quidem!"
-        </p>
-        <h4>Eduardo Gomes</h4>
-        <span>
-            Position @ Company A
-        </span>
-    </div>
 
     <!-- FAQ -->
     <div class="faq">
-        <h1 id="faq">FAQ</h1>
+        <h1 id="h1_faq">FAQ</h1>
 
         <div id="div_caixaPergunta" class="caixa-pergunta">
             <div class="faq-pergunta">
@@ -229,6 +292,23 @@
 
 </html>
 <script>
+    // Alterar tamanho títulos (responsividade)
+    var larguraTela = window.innerWidth;
+    ajustarTitulos(larguraTela);
+    function ajustarTitulos(larguraTela) {
+        if (larguraTela >= 1000) {
+            h1_faq.innerHTML = "Perguntas Frequentes (FAQ)";
+            h1_relatos.innerHTML = "Relatos de Empreendedores:"
+        } else {
+            h1_faq.innerHTML = "FAQ"
+            h1_relatos.innerHTML = "Relatos"
+        }
+    }
+    window.addEventListener('resize', () => {
+        var larguraTela = window.innerWidth;
+        ajustarTitulos(larguraTela);
+    })
+    // FAQ MOSTRAR/ESCONDER RESPOSTA
     var resposta_a_mostra = false;
     var resposta_a_mostra1 = false;
     var resposta_a_mostra2 = false;
@@ -248,7 +328,6 @@
             img_arrow.src = "./img/arrow Icon up.png";
         }
     }
-
 
     function mostrarResposta1() {
         if (resposta_a_mostra1) {
@@ -282,6 +361,7 @@
         }
     }
 
+    // ABRIR / FECHAR MENU LATERAL (MOBILE)
     let menu_aberto = false;
     function abrirMenu() {
         if (menu_aberto) {
@@ -292,4 +372,20 @@
             menu_aberto = true;
         }
     }
+
+    // Swiper JS
+        var swiper = new Swiper(".mySwiper", {
+            slidesPerView: 1,
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            breakpoints: {
+                1000: { slidesPerView: 4},
+            }
+        });
 </script>

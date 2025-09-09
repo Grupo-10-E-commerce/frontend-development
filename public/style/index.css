@@ -36,6 +36,7 @@ html {
     z-index: 1000;
     width: 100vw;
     background-color: white;
+    border-bottom: solid 2px var(--azul-claro);
     padding: 10px;
     display: flex;
     justify-content: space-between;
@@ -56,7 +57,6 @@ html {
 .nav-menus {
     margin-right: 2%;
 }
-
 
 .nav-list li a {
     display: none;
@@ -153,10 +153,12 @@ html {
     flex-direction: column;
     align-items: end;
     background-color: white;
+    border-left: solid 2px var(--azul-claro);
     position: fixed;
     top: 50px;
     right: 0;
     height: 100%;
+    z-index: 1000;
 }
 
 .lista-lateral {

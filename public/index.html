@@ -19,9 +19,13 @@
 <body>
     <!-- NavBar -->
     <div class="nav-bar">
-        <h3>FRAUX</h3>
+        <div class="div-logo">
+            <img width="30px" src="./img/fraux-logo.png" alt="">
+            <h3>FRAUX</h3>
+        </div>
         <ul class="nav-list nav-menus">
-            <li><a href="#">Funcionalidades</a></li>
+            <li><a class="menu-selecionado" href="./index.html">Início</a></li>
+            <li><a href="#h1_funcionalidades">Funcionalidades</a></li>
             <li><a href="#">Sobre nós</a></li>
             <li><a href="#">Clientes</a></li>
             <li><a href="#h1_faq">FAQ ∨</a></li>
@@ -37,7 +41,8 @@
     </div>
     <div class="menu-lateral" id="div_menu_lateral">
         <div class="lista-lateral">
-            <a href="#">Funcionalidades</a>
+            <a class="menu-lateral-selecionado" href="./index.html">Início</a>
+            <a href="#h1_funcionalidades">Funcionalidades</a>
             <a href="#">Sobre nós</a>
             <a href="#">Clientes</a>
             <a href="#h1_faq">FAQ ∨</a>
@@ -60,7 +65,7 @@
     </div>
 
     <!-- CARDS FUNCIONALIDADES -->
-    <h1 class="titulo-azul">Funcionalidades</h1>
+    <h1 id="h1_funcionalidades" class="titulo-azul">Funcionalidades</h1>
 
     <div class="div-funcionalidades">
         <div class="cards">
@@ -279,7 +284,6 @@
                 <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facere consequatur iure.</p>
             </div>
         </div>
-
     </div>
 
     <!-- Rodapé -->
@@ -363,6 +367,8 @@
 
     // ABRIR / FECHAR MENU LATERAL (MOBILE)
     let menu_aberto = false;
+    div_menu_lateral.style.display = "none";
+
     function abrirMenu() {
         if (menu_aberto) {
             div_menu_lateral.style.display = "none";
@@ -374,18 +380,18 @@
     }
 
     // Swiper JS
-        var swiper = new Swiper(".mySwiper", {
-            slidesPerView: 1,
-            navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-            },
-            pagination: {
-                el: ".swiper-pagination",
-                clickable: true,
-            },
-            breakpoints: {
-                1000: { slidesPerView: 4},
-            }
-        });
+    var swiper = new Swiper(".mySwiper", {
+        slidesPerView: 1,
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        breakpoints: {
+            1000: { slidesPerView: 4 },
+        }
+    });
 </script>

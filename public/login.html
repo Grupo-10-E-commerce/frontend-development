@@ -7,173 +7,77 @@
     <title>Fraux</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
-    <link rel="stylesheet" href="./style/index.css">
+    <link rel="stylesheet" href="./style/login-cadastro.css">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Konkhmer+Sleokchher&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap ">
-
-    <!-- Swiper js-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </head>
 
 <body>
-    <!-- NavBar -->
-    <div class="nav-bar">
-        <h3>FRAUX</h3>
-        <ul class="nav-list nav-menus">
-            <li><a href="#">Funcionalidades</a></li>
-            <li><a href="#">Sobre nós</a></li>
-            <li><a href="#">Clientes</a></li>
-            <li><a href="#h1_faq">FAQ ∨</a></li>
-        </ul>
-        <li class="btn-entrar"><a href="#">Entrar</a><img src="./img/icons8-login.png" alt=""></li>
-        <ul class="nav-list">
-            <li><a href="#">Login</a></li>
-            <div>
-                <li><a class="btn-cadastrar" href="#">Cadastro</a></li>
-            </div>
-        </ul>
-        <i class='bx  bx-menu' id="btn-menu" onclick="abrirMenu()"></i>
-    </div>
-    <div class="menu-lateral" id="div_menu_lateral">
-        <div class="lista-lateral">
-            <a href="#">Funcionalidades</a>
-            <a href="#">Sobre nós</a>
-            <a href="#">Clientes</a>
-            <a href="#h1_faq">FAQ ∨</a>
+    <!--============== LOGO ==============-->
+    <div class="div-titulo">
+        <div class="div-logo">
+            <img width="60px" src="./img/fraux-logo-branco.png" alt="">
+            <h1>FRAUX</h1>
         </div>
+        <span>Fraude detectada, estresse rejeitado!</span>
+
+        <img id="img_login" width="300px" src="./img/bannerInicial.png" alt="">
+        
+        <p id="p_login">Sente a necessidade de alerta de fraude, análise de perdas e organização de documentação de transações fraudulentas? Conheça a FRAUX.</p>
     </div>
 
+    <!--============== FORMULÁARIO ==============-->
+    <div class="div-formulario">
+        <h1>Login</h1>
+        <div class="div-input">
+            <span>E-mail</span>
+            <input type="text" name="" id="" placeholder="usuario@dominio.com">
 
-    <!-- Banner inicial -->
-    <div class="banner-inicial">
-        <div>
-            <h1>Extrair, verificar e analisar Chargebacks.</h1>
-            <span>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi harum saepe similique, porro error unde
-                possimus,asperiores voluptates architecto impedit illum.
-            </span> <br>
+            <span>Senha</span>
+            <input type="password" name="" id="">
 
-            <button>Simulador de perdas</button>
+            <div id="div_mensagem-erro">
+                <p>E-mail ou senha incorreto(s)!</p>
+            </div>
+
+            <button class="btn-entrar">Entrar</button>
+
+            <div class="div-redirecionar">
+                <button id="btn_criarConta" class="btn-criar-conta">Criar conta</button>
+                <p id="p_alteraFormulario">Não possui uma conta?</p>
+                <span id="span_alteraFormulario" onclick="">Criar conta</span>
+            </div>
         </div>
-        <img src="./img/bannerInicial.png" alt="">
     </div>
 
-
-
-
-    <!-- Slider main container -->
-
-
-
-    <!-- FAQ -->
-    <div class="faq">
-        <h1 id="h1_faq">FAQ</h1>
-
-        <div id="div_caixaPergunta" class="caixa-pergunta">
-            <div class="faq-pergunta">
-                <h2>Pergunta 1</h2>
-                <div id="btn_faq" class="faq-arrow" onclick="mostrarResposta()">
-                    <img id="img_arrow" src="./img/arrow Icon down.png" alt="" height="25px">
-                </div>
-            </div>
-            <div id="div_faq_resposta" class="faq-resposta">
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facere consequatur iure.</p>
-            </div>
-        </div>
-
-        <div id="div_caixaPergunta1" class="caixa-pergunta">
-            <div class="faq-pergunta">
-                <h2>Pergunta 2</h2>
-                <div id="btn_faq" class="faq-arrow" onclick="mostrarResposta1()">
-                    <img id="img_arrow1" src="./img/arrow Icon down.png" alt="" height="25px">
-                </div>
-            </div>
-            <div id="div_faq_resposta1" class="faq-resposta">
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facere consequatur iure.</p>
-            </div>
-        </div>
-
-        <div id="div_caixaPergunta2" class="caixa-pergunta">
-            <div class="faq-pergunta">
-                <h2>Pergunta 3</h2>
-                <div id="btn_faq" class="faq-arrow" onclick="mostrarResposta2()">
-                    <img id="img_arrow2" src="./img/arrow Icon down.png" alt="" height="25px">
-                </div>
-            </div>
-            <div id="div_faq_resposta2" class="faq-resposta">
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facere consequatur iure.</p>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Rodapé -->
-    <footer>
-        <h1>SPTECH</h1>
-        <span>©2025 SPTECH</span>
-        <i class='bx bx-camera-alt' style='color:#ce37db'></i>
-    </footer>
 </body>
-
 </html>
 <script>
-
-    // FAQ MOSTRAR/ESCONDER RESPOSTA
-    var resposta_a_mostra = false;
-    var resposta_a_mostra1 = false;
-    var resposta_a_mostra2 = false;
-
-    function mostrarResposta() {
-        if (resposta_a_mostra) {
-            resposta_a_mostra = false
-            div_caixaPergunta.style.alignItems = "start";
-            div_faq_resposta.style.display = "none";
-            div_caixaPergunta.style.height = "60px";
-            img_arrow.src = "./img/arrow Icon down.png";
+    var larguraTela = window.innerWidth;
+    ajustarElementos(larguraTela);
+    function ajustarElementos(larguraTela) {
+        if (larguraTela >= 1000) {
+            img_login.style.display = "block";
+            p_login.style.display = "block";
+            btn_criarConta.style.display = "none";
+            p_alteraFormulario.style.display = "block";
+            span_alteraFormulario.style.display = "block";
         } else {
-            resposta_a_mostra = true;
-            div_caixaPergunta.style.alignItems = "start";
-            div_caixaPergunta.style.height = "120px";
-            div_faq_resposta.style.display = "block";
-            img_arrow.src = "./img/arrow Icon up.png";
+            img_login.style.display = "none";
+            p_login.style.display = "none";
+            btn_criarConta.style.display = "block";
+            p_alteraFormulario.style.display = "none";
+            span_alteraFormulario.style.display = "none";
         }
     }
-
-    function mostrarResposta1() {
-        if (resposta_a_mostra1) {
-            resposta_a_mostra1 = false
-            div_caixaPergunta1.style.alignItems = "start";
-            div_faq_resposta1.style.display = "none";
-            div_caixaPergunta1.style.height = "60px";
-            img_arrow1.src = "./img/arrow Icon down.png";
-        } else {
-            resposta_a_mostra1 = true;
-            div_caixaPergunta1.style.alignItems = "start";
-            div_caixaPergunta1.style.height = "120px";
-            div_faq_resposta1.style.display = "block";
-            img_arrow1.src = "./img/arrow Icon up.png";
-        }
-    }
-
-    function mostrarResposta2() {
-        if (resposta_a_mostra2) {
-            resposta_a_mostra2 = false
-            div_caixaPergunta2.style.alignItems = "start";
-            div_faq_resposta2.style.display = "none";
-            div_caixaPergunta2.style.height = "60px";
-            img_arrow2.src = "./img/arrow Icon down.png";
-        } else {
-            resposta_a_mostra2 = true;
-            div_caixaPergunta2.style.alignItems = "start";
-            div_caixaPergunta2.style.height = "120px";
-            div_faq_resposta2.style.display = "block";
-            img_arrow2.src = "./img/arrow Icon up.png";
-        }
-    }
-
+    window.addEventListener('resize', () => {
+        var larguraTela = window.innerWidth;
+        ajustarElementos(larguraTela);
+    })
     // ABRIR / FECHAR MENU LATERAL (MOBILE)
     let menu_aberto = false;
+    div_menu_lateral.style.display = "none";
+
     function abrirMenu() {
         if (menu_aberto) {
             div_menu_lateral.style.display = "none";
@@ -183,20 +87,4 @@
             menu_aberto = true;
         }
     }
-
-    // Swiper JS
-        var swiper = new Swiper(".mySwiper", {
-            slidesPerView: 1,
-            navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-            },
-            pagination: {
-                el: ".swiper-pagination",
-                clickable: true,
-            },
-            breakpoints: {
-                1000: { slidesPerView: 4},
-            }
-        });
 </script>

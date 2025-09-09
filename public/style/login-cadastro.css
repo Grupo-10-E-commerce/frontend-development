@@ -3,14 +3,25 @@
     border: 0;
     margin: 0;
     font-family: "DM Sans", serif;
+    overflow: hidden;
 }
 
 body {
-    background-color: #f4f3ff;
+    background: #302961;
+    background: linear-gradient(131deg, rgba(48, 41, 97, 1) 13%, rgba(149, 148, 216, 1) 100%);
+    height: 100%;
+}
+
+@media only screen and (min-width: 1000px) {
+    body {
+        display: flex;
+        justify-content: space-between;
+    }
 }
 
 html {
     scroll-behavior: smooth;
+    height: 100%;
 }
 
 :root {
@@ -22,203 +33,162 @@ html {
     --vermelho: #CD8A8F;
     --cyan: #9DC9CB;
     --cinza-escuro: rgb(74, 73, 73);
+    --cinza-claro: rgb(225, 225, 225);
+}
+
+/* ============== LOGO ============== */
+.div-titulo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    margin-top: 50px;
+}
+
+.div-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+}
+
+/* ============== FORMULARIO ============== */
+.div-formulario {
+    background-color: white;
+    margin-top: 20px;
+    height: 100vh;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+}
+
+.div-formulario h1 {
+    margin: 20px;
+    color: var(--azul-claro);
+    font-weight: 900;
+    font-size: 40px;
+}
+
+.div-input {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+}
+
+.div-input span {
+    margin-top: 20px;
+    font-size: 13px;
+}
+
+#div_mensagem-erro {
+    display: flex;
+    justify-content: center;
+}
+
+#div_mensagem-erro p {
+    display: none;
+    margin-top: 10px;
+    color: rgb(215, 3, 3);
 }
 
 @media only screen and (min-width: 1000px) {
-    h1 {
-        font-size: 3vw;
+    .div-titulo {
+        margin-left: 10%;
+        margin-top: 7%;
+        font-size: larger;
+        width: 35%;
+    }
+
+    .div-titulo span{
+        margin-bottom: 20px;
+    }
+    .div-titulo p{
+        margin-top: 20px;
+        text-align: center;
+        font-size: 16px;
+    }
+    .div-logo {
+        font-size: 35px;
+    }
+
+    .div-formulario {
+        width: 40%;
+        margin-top: 0;
+        border-top-right-radius: 0;
+        border-top-left-radius: 100px;
+    }
+
+    .div-formulario h1 {
+        font-size: 50px;
+        margin: 60px;
     }
 }
 
-/* ========================= Nav Bar ========================= */
-.nav-bar {
-    position: fixed;
-    z-index: 1000;
-    width: 100vw;
-    background-color: white;
-    border-bottom: solid 2px var(--azul-claro);
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 30px;
+input {
+    height: 50px;
+    font-size: 15px;
+    background-color: var(--cinza-claro);
+    border-radius: 10px;
+    padding-left: 20px;
 }
 
-.nav-list {
-    list-style: none;
-    display: flex;
-    align-items: center;
-    gap: 35px;
-    padding: 0;
-    margin: 0;
-    margin-right: 10%;
+input:hover {
+    border: solid 0.5px var(--azul-claro);
 }
 
-.nav-menus {
-    margin-right: 2%;
-}
-
-.nav-list li a {
-    display: none;
-    color: rgb(107, 107, 107);
-    text-decoration: none;
-    transition: 0.4s;
+/* ============== BOTOES ============== */
+button {
+    width: 100%;
+    margin-top: 20px;
     font-size: 16px;
-}
-
-.nav-list li a:hover {
-    color: var(--azul-claro);
-    font-weight: 900;
-}
-
-.nav-list div li a {
-    background-color: var(--azul-claro);
-    color: white;
-    border-radius: 5px;
-    padding: 6px;
-    transition: 0.4s;
-}
-
-.nav-list div li a:hover {
-    background-color: var(--roxo-claro);
-    color: white;
-    font-weight: 400;
-}
-
-.nav-bar i {
-    margin: 15px;
-    margin-right: 45px;
-    font-size: 30px;
-    border: 1px solid rgb(71, 71, 71);
-    border-radius: 5px;
-    margin-bottom: 20px;
-    transition: 0.3s;
-}
-
-.nav-bar i:hover {
-    cursor: pointer;
-    background-color: var(--azul-claro);
-    color: white;
+    font-weight: bold;
+    height: 50px;
+    border-radius: 10px;
+    transition: 0.2s;
 }
 
 .btn-entrar {
-    display: flex;
-    align-items: center;
-    transition: 0.3s;
+    margin-top: 40px;
+    background-color: var(--azul-claro);
+    color: white;
 }
 
 .btn-entrar:hover {
+    background-color: var(--roxo-claro);
+    cursor: pointer;
+}
+
+.btn-criar-conta {
+    background-color: transparent;
+    border: solid 2px var(--azul-claro);
     color: var(--azul-claro);
-    font-weight: 700;
-    border-radius: 10px;
-    background-color: #d7d4f9;
 }
 
-.btn-entrar a {
-    color: rgb(107, 107, 107);
-    text-decoration: none;
-    transition: 0.4s;
+.btn-criar-conta:hover {
+    background-color: #eaeafa;
+}
+
+/* ============== TEXTO REDIRECIONAMENTO ============== */
+.div-redirecionar {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-size: 16px;
-    padding: 5px;
 }
-
-
-.btn-entrar img {
-    margin: 8px;
-    height: 18px;
+.div-redirecionar span{
+    margin: 0;
+    margin-left: 4px;
+    color: var(--azul-claro);
+    font-weight: bolder;
+    text-decoration: underline;
+    transition: 0.3s;
 }
-
-@media only screen and (min-width: 800px) {
-    .nav-bar {
-        padding-left: 5%;
-    }
-
-    .nav-bar i {
-        display: none;
-    }
-
-    .nav-list li a {
-        display: block;
-    }
-
-    .btn-entrar {
-        display: none;
-    }
-}
-
-/*========================= Menu lateral =========================*/
-.menu-lateral {
-    display: none;
-    display: flex;
-    flex-direction: column;
-    align-items: end;
-    background-color: white;
-    border-left: solid 2px var(--azul-claro);
-    position: fixed;
-    top: 50px;
-    right: 0;
-    height: 100%;
-    z-index: 1000;
-}
-
-.lista-lateral {
-    display: flex;
-    flex-direction: column;
-    padding: 0;
-}
-
-.lista-lateral a {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 200px;
-    height: 50px;
-    margin: 1px;
-    color: rgb(107, 107, 107);
-    text-decoration: none;
-    transition: 0.4s;
-    font-size: 18px;
-}
-
-.lista-lateral a:hover {
-    background-color: var(--azul-claro);
-    color: white;
-    font-weight: 600;
-}
-
-@media only screen and (min-width: 700px) {
-
-    .menu-lateral {
-        display: none;
-    }
-
-    .menu-lateral i {
-        display: none;
-    }
-
-}
-
-/*========================= Rodapé =========================*/
-footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 20px;
-    background-color: var(--azul-escuro);
-    color: white;
-}
-
-/*========================= SWIPER =========================*/
-.swiper{
-    width: 80%;
-}
-.swiper-slide {
-    text-align: center;
-    font-size: 18px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.div-redirecionar span:hover{
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 900;
 }

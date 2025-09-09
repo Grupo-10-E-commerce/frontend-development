@@ -22,6 +22,7 @@ html {
     --vermelho: #CD8A8F;
     --cyan: #9DC9CB;
     --cinza-escuro: rgb(74, 73, 73);
+    --cinza-claro: rgb(225, 225, 225);
 }
 
 @media only screen and (min-width: 1000px) {
@@ -43,7 +44,10 @@ html {
     align-items: center;
     height: 30px;
 }
-
+.div-logo{
+    display: flex;
+    align-items: center;
+}
 .nav-list {
     list-style: none;
     display: flex;
@@ -69,6 +73,13 @@ html {
 .nav-list li a:hover {
     color: var(--azul-claro);
     font-weight: 900;
+    background-color: var(--cinza-claro);
+    border-radius: 5px;
+    padding: 4px;
+}
+
+.menu-selecionado {
+    border-bottom: solid 4px var(--azul-claro);
 }
 
 .nav-list div li a {
@@ -111,7 +122,7 @@ html {
     color: var(--azul-claro);
     font-weight: 700;
     border-radius: 10px;
-    background-color: #d7d4f9;
+    background-color: var(--cinza-claro);
 }
 
 .btn-entrar a {
@@ -167,6 +178,12 @@ html {
     padding: 0;
 }
 
+.menu-lateral-selecionado {
+    background-color: var(--cinza-claro);
+    color: white;
+    font-weight: 600;
+}
+
 .lista-lateral a {
     display: flex;
     justify-content: center;
@@ -185,6 +202,7 @@ html {
     color: white;
     font-weight: 600;
 }
+
 
 @media only screen and (min-width: 700px) {
 
@@ -493,9 +511,10 @@ footer {
 }
 
 /*========================= SWIPER =========================*/
-.swiper{
+.swiper {
     width: 80%;
 }
+
 .swiper-slide {
     text-align: center;
     font-size: 18px;

@@ -101,6 +101,9 @@ html {
         font-size: larger;
         width: 35%;
     }
+    .div-titulo h1{
+        margin: 20px;
+    }
 
     .div-titulo span{
         margin-bottom: 20px;

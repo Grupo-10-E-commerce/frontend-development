@@ -13,6 +13,7 @@
 </head>
 
 <body>
+    <i class='bx  bx-home' style='color:#ffffff' onclick="voltarTelaInicial()"></i>
     <!--============== LOGO ==============-->
     <div id="div_titulo" class="div-titulo">
         <div class="div-logo">
@@ -70,48 +71,16 @@
     // AJUSTAR ELEMENTOS RESPONSIVIDADE
     var telaCadastro = false;
     var larguraTela = window.innerWidth;
-    
+
     ajustarElementos(larguraTela);
     function ajustarElementos(larguraTela) {
         if (larguraTela >= 1000) {
-            ajustarCadastro(larguraTela);
-
             img_login.style.display = "block";
             p_login.style.display = "block";
             btn_criarConta.style.display = "none";
             p_alteraFormulario.style.display = "block";
             span_alteraFormulario.style.display = "block";
         } else {
-            ajustarCadastro(larguraTela);
-
-            if (telaCadastro) {
-                // div_titulo.style.marginTop = "50px";
-                // h1_login.style.margin = "20px";
-                // h1_login.style.fontSize = "40px";
-
-                // input_nome.style.height = "50px";
-                // input_sobrenome.style.height = "50px";
-                // input_email.style.height = "50px";
-                // input_senha.style.height = "50px";
-                // input_confirmarSenha.style.height = "50px";
-
-                // btn_cadastrar.style.height = "50px";
-                // btn_criarConta.style.height = "50px";
-            } else {
-                // div_titulo.style.marginTop = "10px";
-                // h1_login.style.fontSize = "30px";
-                // h1_login.style.margin = 0;
-
-                // input_nome.style.height = "35px";
-                // input_sobrenome.style.height = "35px";
-                // input_email.style.height = "35px";
-                // input_senha.style.height = "35px";
-                // input_confirmarSenha.style.height = "35px";
-
-                // btn_cadastrar.style.height = "35px";
-                // btn_criarConta.style.height = "35px";
-            }
-
             img_login.style.display = "none";
             p_login.style.display = "none";
             btn_criarConta.style.display = "block";
@@ -120,8 +89,9 @@
         }
     }
     window.addEventListener('resize', () => {
-        var larguraTela = window.innerWidth;
+        larguraTela = window.innerWidth;
         ajustarElementos(larguraTela);
+        ajustarCadastro(larguraTela);
     })
 
     // ALTERAR FORMULARIO CADASTRO/LOGIN
@@ -137,7 +107,6 @@
         if (telaCadastro) {
             telaCadastro = false;
 
-            ajustarCadastro(larguraTela);
             h1_login.innerHTML = "Login";
 
             span_nome.style.display = "none";
@@ -156,26 +125,8 @@
 
             btn_criarConta.innerHTML = "Criar conta";
         } else {
-
             telaCadastro = true;
-            ajustarCadastro(larguraTela);
 
-            // if (larguraTela < 1000) {
-            //     // div_titulo.style.marginTop = "10px";
-            //     // h1_login.style.fontSize = "30px";
-            //     // h1_login.style.margin = 0;
-
-            //     // input_nome.style.height = "35px";
-            //     // input_sobrenome.style.height = "35px";
-            //     // input_email.style.height = "35px";
-            //     // input_senha.style.height = "35px";
-            //     // input_confirmarSenha.style.height = "35px";
-
-            //     // btn_cadastrar.style.height = "35px";
-            //     // btn_criarConta.style.height = "35px";
-            // } else {
-            //     h1_login.style.margin = "20px";
-            // }
             h1_login.innerHTML = "Criar conta";
 
             span_nome.style.display = "block";
@@ -193,11 +144,10 @@
 
             btn_criarConta.innerHTML = "Já possui cadastro?";
         }
-
+        ajustarCadastro(larguraTela);
     }
 
     function ajustarCadastro(larguraTela) {
-
         if (telaCadastro) {
             if (larguraTela < 1000) {
                 div_titulo.style.marginTop = "10px";
@@ -212,13 +162,12 @@
 
                 btn_cadastrar.style.height = "35px";
                 btn_criarConta.style.height = "35px";
-                
+
             } else {
                 h1_login.style.margin = "20px";
                 // h1_login.style.margin = "60px";
             }
         } else {
-            
             if (larguraTela < 1000) {
                 div_titulo.style.marginTop = "50px";
                 h1_login.style.margin = "20px";
@@ -237,5 +186,8 @@
                 h1_login.style.fontSize = "50px";
             }
         }
+    }
+    function voltarTelaInicial() {
+        window.location.href = "./index.html";
     }
 </script>

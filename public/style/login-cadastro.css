@@ -35,6 +35,18 @@ html {
     --cinza-escuro: rgb(74, 73, 73);
     --cinza-claro: rgb(225, 225, 225);
 }
+i{
+    font-size: 40px;
+    margin: 25px;
+    position: absolute;
+    transition: 0.3s;
+}
+i:hover{
+    cursor: pointer;
+    background-color: var(--roxo-claro);
+    border-radius: 10px;
+    padding: 2px;
+}
 
 /* ============== LOGO ============== */
 .div-titulo {

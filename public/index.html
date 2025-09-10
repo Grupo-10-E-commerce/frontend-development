@@ -32,13 +32,14 @@
         </ul>
         <li class="btn-entrar"><a href="#">Entrar</a><img src="./img/icons8-login.png" alt=""></li>
         <ul class="nav-list">
-            <li><a href="login.html">Login</a></li>
             <div>
-                <li><a class="btn-cadastrar" href="login.html">Cadastro</a></li>
+                <li><a class="btn-cadastrar" href="./login.html">Entrar</a></li>
             </div>
         </ul>
+        <!-- menu lateral -->
         <i class='bx  bx-menu' id="btn-menu" onclick="abrirMenu()"></i>
     </div>
+    
     <div class="menu-lateral" id="div_menu_lateral">
         <div class="lista-lateral">
             <a class="menu-lateral-selecionado" href="./index.html">Início</a>
@@ -280,6 +281,8 @@
         if (larguraTela >= 1000) {
             h1_faq.innerHTML = "Perguntas Frequentes (FAQ)";
             h1_relatos.innerHTML = "Relatos de Empreendedores:"
+            menu_aberto = false;
+            div_menu_lateral.style.display = "none";
         } else {
             h1_faq.innerHTML = "FAQ"
             h1_relatos.innerHTML = "Relatos"
@@ -343,7 +346,7 @@
     }
 
     // ABRIR / FECHAR MENU LATERAL (MOBILE)
-    let menu_aberto = false;
+    var menu_aberto = false;
     div_menu_lateral.style.display = "none";
 
     function abrirMenu() {

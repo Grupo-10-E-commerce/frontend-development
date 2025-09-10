@@ -242,8 +242,8 @@ html {
     margin-bottom: 10px;
 }
 
-.banner-inicial span {
-    font-size: 12px;
+.banner-inicial #texto-banner-inicial{
+    font-size: 16px;
 }
 
 .banner-inicial button {

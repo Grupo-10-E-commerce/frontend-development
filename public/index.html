@@ -26,15 +26,15 @@
         <ul class="nav-list nav-menus">
             <li><a class="menu-selecionado" href="./index.html">Início</a></li>
             <li><a href="#h1_funcionalidades">Funcionalidades</a></li>
-            <li><a href="#">Sobre nós</a></li>
-            <li><a href="#">Clientes</a></li>
-            <li><a href="#h1_faq">FAQ ∨</a></li>
+            <li><a href="#VcSabia">Curiosidade</a></li>
+            <li><a href="#h1_relatos">Clientes</a></li>
+            <li><a href="#h1_faq">FAQ</a></li>
         </ul>
         <li class="btn-entrar"><a href="#">Entrar</a><img src="./img/icons8-login.png" alt=""></li>
         <ul class="nav-list">
-            <li><a href="#">Login</a></li>
+            <li><a href="login.html">Login</a></li>
             <div>
-                <li><a class="btn-cadastrar" href="#">Cadastro</a></li>
+                <li><a class="btn-cadastrar" href="login.html">Cadastro</a></li>
             </div>
         </ul>
         <i class='bx  bx-menu' id="btn-menu" onclick="abrirMenu()"></i>
@@ -43,9 +43,9 @@
         <div class="lista-lateral">
             <a class="menu-lateral-selecionado" href="./index.html">Início</a>
             <a href="#h1_funcionalidades">Funcionalidades</a>
-            <a href="#">Sobre nós</a>
-            <a href="#">Clientes</a>
-            <a href="#h1_faq">FAQ ∨</a>
+            <a href="#VcSabia">Curiosidade</a>
+            <a href="#h1_relatos">Clientes</a>
+            <a href="#h1_faq">FAQ</a>
         </div>
     </div>
 
@@ -53,10 +53,9 @@
     <!-- Banner inicial -->
     <div class="banner-inicial">
         <div>
-            <h1>Extrair, verificar e analisar Chargebacks.</h1>
-            <span>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi harum saepe similique, porro error unde
-                possimus,asperiores voluptates architecto impedit illum.
+            <h1>Fraude detectada, estresse rejeitado!</h1>
+            <span id="texto-banner-inicial">
+                Sente a necessidade de alerta de fraude, análise de perdas e organização de documentação de transações fraudulentas? Conheça a FRAUX.
             </span> <br>
 
             <button>Simulador de perdas</button>
@@ -75,12 +74,10 @@
             <div>
                 <h3>Extração dados de Transações</h3>
                 <span>
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eligendi delectus expedita itaque a
-                    sapiente
-                    accusamus, architecto sequi illo dolore quo ut.
+                    Extraímos os dados mais relevantes para a sua empresa, realizamos o tratamento e a análise detalhada, e por fim, disponibilizamos essas informações de forma clara e estratégica em uma dashboard.                
                 </span>
             </div>
-            <button>Button Text</button>
+            <button>Cadastre-se já</button>
         </div>
 
         <div class="cards">
@@ -88,14 +85,12 @@
                 <img src="./img/pencil icon.png" alt="" height="25px">
             </div>
             <div>
-                <h3>Análise de Chargebacks solicitados</h3>
+                <h3>Análise de perfis Fraudulentos</h3>
                 <span>
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eligendi delectus expedita itaque a
-                    sapiente
-                    accusamus, architecto sequi illo dolore quo ut.
+                    Em nosso site, disponibilizamos uma área dedicada ao registro de perfis fraudulentos, permitindo que futuras transações com esses perfis sejam automaticamente evitadas.                
                 </span>
             </div>
-            <button>Button Text</button>
+            <button>Cadastre-se já</button>
         </div>
 
 
@@ -106,12 +101,10 @@
             <div>
                 <h3>Alerta de transação fradulenta</h3>
                 <span>
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eligendi delectus expedita itaque a
-                    sapiente
-                    accusamus, architecto sequi illo dolore quo ut.
+                    Emitimos alertas sobre possíveis transações suspeitas, garantindo que o usuário seja informado de forma rápida e assertiva.                
                 </span>
             </div>
-            <button>Button Text</button>
+            <button>Cadastre-se já</button>
         </div>
 
 
@@ -122,25 +115,21 @@
             <div>
                 <h3>Visualizar todas transações realizada</h3>
                 <span>
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eligendi delectus expedita itaque a
-                    sapiente
-                    accusamus, architecto sequi illo dolore quo ut.
+                    Disponibilizamos uma dashboard intuitiva, que oferece ao usuário uma visão completa das necessidades e do andamento do negócio, facilitando análises estratégicas e apoiando a tomada de decisões.
                 </span>
             </div>
-            <button>Button Text</button>
+            <button>Cadastre-se já</button>
         </div>
     </div>
 
     <!-- Você sabia -->
-    <div class="banner-inicial div-voceSabia">
+    <div class="banner-inicial div-voceSabia" id="VcSabia">
         <img src="./img/voce sabia.png" alt="">
         <div class="div-voceSabia-content">
-            <h1>Você Sabia?</h1>
+            <h1 >Você Sabia?</h1>
             <span>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eius temporibus dignissimos placeat
-                exercitationem
-                illo eos tenetur laudantium neque quaerat? Tenetur sequi quod assumenda qui error pariatur excepturi
-                asperiores aspernatur cum?
+                Os impactos das fraudes atingem os consumidores, com dois em cada cinco brasileiros sendo vítimas de fraudes de pagamentos.<br><br>
+                Além de que no Brasil, as ações fraudulentas resultaram em um prejuízo médio de R$ 8,5 milhões por empresa.
             </span> <br>
             <button class="btn-saiba-mais">Saiba mais</button>
         </div>
@@ -157,80 +146,68 @@
             <!-- Slides -->
             <div class="swiper-slide">
                 <div class="relatos-card">
-                    <img src="./img/profile.jpg" alt="">
+                    <img src="./img/marianaLopes.jpg" alt="">
                     <p>
-                        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam porro velit earum asperiores
-                        similique laudantium debitis. Officiis officia laudantium similique libero suscipit aliquid
-                        nostrum ad
-                        labore recusandae porro, quam quidem!"
+                        "A plataforma transformou a forma como lidamos com fraudes. Desde que começamos a usar, reduzimos significativamente nossos prejuízos e conseguimos focar em estratégias de crescimento."
                     </p>
-                    <h4>Eduardo Gomes</h4>
+                    <h4>Mariana Lopes</h4>
                     <span>
-                        Position @ Company A
+                        Gerente de E-commerce @Vitrine Digital
                     </span>
                 </div>
             </div>
             <div class="swiper-slide">
                 <div class="relatos-card">
-                    <img src="./img/profile.jpg" alt="">
+                    <img src="./img/rafaelMartins.jpg" alt="">
 
                     <p>
-                        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam porro velit earum asperiores
-                        similique laudantium debitis. Officiis officia laudantium similique libero suscipit aliquid
-                        nostrum ad
-                        labore recusandae porro, quam quidem!"
+                        "O recurso de cadastro de perfis fraudulentos é simplesmente indispensável. 
+                        Hoje temos muito mais segurança e tranquilidade em cada transação"
                     </p>
-                    <h4>Eduardo Gomes</h4>
+                    <h4>Rafael Martins</h4>
                     <span>
-                        Position @ Company A
+                        Diretor de Operações @ShopMais
                     </span>
                 </div>
             </div>
             <div class="swiper-slide">
                 <div class="relatos-card">
-                    <img src="./img/profile.jpg" alt="">
+                    <img src="./img/claudiaFerreira.jpg" alt="">
 
                     <p>
-                        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam porro velit earum asperiores
-                        similique laudantium debitis. Officiis officia laudantium similique libero suscipit aliquid
-                        nostrum ad
-                        labore recusandae porro, quam quidem!"
+                        "As dashboards são extremamente intuitivas. 
+                        Agora consigo ter uma visão clara do que realmente importa para o meu negócio, facilitando decisões rápidas."
                     </p>
-                    <h4>Eduardo Gomes</h4>
+                    <h4>Cláudia Ferreira</h4>
                     <span>
-                        Position @ Company A
+                        CEO @NovaTrend Store
                     </span>
                 </div>
             </div>
             <div class="swiper-slide">
                 <div class="relatos-card">
-                    <img src="./img/profile.jpg" alt="">
+                    <img src="./img/henriqueDuarte.jpg" alt="">
 
                     <p>
-                        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam porro velit earum asperiores
-                        similique laudantium debitis. Officiis officia laudantium similique libero suscipit aliquid
-                        nostrum ad
-                        labore recusandae porro, quam quidem!"
+                        "Antes tínhamos grandes problemas com fraudes amigáveis. 
+                        Com essa solução, conseguimos identificá-las em tempo recorde e reduzir as perdas quase a zero."
                     </p>
-                    <h4>Eduardo Gomes</h4>
+                    <h4>Henrique Duarte</h4>
                     <span>
-                        Position @ Company A
+                        Analista de Risco @Conecta WebStores
                     </span>
                 </div>
             </div>
             <div class="swiper-slide">
                 <div class="relatos-card">
-                    <img src="./img/profile.jpg" alt="">
-
+                    <img src="./img/julianaAndrade.jpg" alt="">
                     <p>
-                        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam porro velit earum asperiores
-                        similique laudantium debitis. Officiis officia laudantium similique libero suscipit aliquid
-                        nostrum ad
-                        labore recusandae porro, quam quidem!"
+                        "O sistema de alertas nos mantém sempre um passo à frente. 
+                        A equipe consegue agir rápido e evitar prejuízos que antes pareciam inevitáveis"
                     </p>
-                    <h4>Eduardo Gomes</h4>
+                    <h4>Juliana Andrade</h4>
                     <span>
-                        Position @ Company A
+                        Coordenadora de Segurança Digital @EasyBuy Brasil
                     </span>
                 </div>
             </div>
@@ -251,45 +228,45 @@
 
         <div id="div_caixaPergunta" class="caixa-pergunta">
             <div class="faq-pergunta">
-                <h2>Pergunta 1</h2>
+                <h2>Como o sistema identifica perfis fraudulentos?</h2>
                 <div id="btn_faq" class="faq-arrow" onclick="mostrarResposta()">
                     <img id="img_arrow" src="./img/arrow Icon down.png" alt="" height="25px">
                 </div>
             </div>
             <div id="div_faq_resposta" class="faq-resposta">
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facere consequatur iure.</p>
+                <p>Através de banco de dados de perfis suspeitos e análise de padrões de transações.</p>
             </div>
         </div>
 
         <div id="div_caixaPergunta1" class="caixa-pergunta">
             <div class="faq-pergunta">
-                <h2>Pergunta 2</h2>
+                <h2>Posso personalizar os alertas de fraude?</h2>
                 <div id="btn_faq" class="faq-arrow" onclick="mostrarResposta1()">
                     <img id="img_arrow1" src="./img/arrow Icon down.png" alt="" height="25px">
                 </div>
             </div>
             <div id="div_faq_resposta1" class="faq-resposta">
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facere consequatur iure.</p>
+                <p>Sim, é possível configurar os alertas conforme a necessidade do negócio.</p>
             </div>
         </div>
 
         <div id="div_caixaPergunta2" class="caixa-pergunta">
             <div class="faq-pergunta">
-                <h2>Pergunta 3</h2>
+                <h2>A dashboard é fácil de usar?</h2>
                 <div id="btn_faq" class="faq-arrow" onclick="mostrarResposta2()">
                     <img id="img_arrow2" src="./img/arrow Icon down.png" alt="" height="25px">
                 </div>
             </div>
             <div id="div_faq_resposta2" class="faq-resposta">
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facere consequatur iure.</p>
+                <p>Sim, ela é intuitiva e apresenta os dados de forma clara e prática.</p>
             </div>
         </div>
     </div>
 
     <!-- Rodapé -->
     <footer>
-        <h1>SPTECH</h1>
-        <span>©2025 SPTECH</span>
+        <h1>FRAUX</h1>
+        <span>©2025 FRAUX</span>
         <i class='bx bx-camera-alt' style='color:#ce37db'></i>
     </footer>
 </body>

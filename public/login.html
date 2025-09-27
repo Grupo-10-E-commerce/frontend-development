@@ -43,7 +43,7 @@
             <input type="text" name="" id="input_email" placeholder="usuario@dominio.com">
 
             <span>Senha</span>
-            <input type="password" name="" id="input_senha" placeholder="mínimo 8 caracteres">
+            <input type="password" name="" id="input_senha" placeholder="mínimo 8 caracteres" minlength="8">
 
             <span id="span_confirmarSenha">Confirmar senha</span>
             <input type="password" name="" id="input_confirmarSenha">
@@ -53,8 +53,9 @@
             </div>
 
             <!-- Botões/Opções -->
-            <button id="btn_cadastrar" class="btn-entrar">Cadastrar</button>
-            <button id="btn_entrar" class="btn-entrar">Entrar</button>
+            <button id="btn_cadastrar" class="btn-entrar" onclick="cadastrar()">Cadastrar</button>
+            
+            <button id="btn_entrar" class="btn-entrar" onclick="entrar()">Entrar</button>
 
             <div class="div-redirecionar">
                 <button id="btn_criarConta" class="btn-criar-conta" onclick="alterarFormulario()">Criar conta</button>
@@ -71,6 +72,125 @@
     // AJUSTAR ELEMENTOS RESPONSIVIDADE
     var telaCadastro = false;
     var larguraTela = window.innerWidth;
+
+
+    function cadastrar(){
+
+        var nome = input_nome.value;
+        var sobrenome = input_sobrenome.value;
+        var email = input_email.value;
+        var senha = input_senha.value;
+        var confirmarSenha = input_confirmarSenha.value;
+
+    if(nome == "" || sobrenome == "" || email == "" || senha == ""){
+            alert("Preencha todos os campos necessários para cadastro.")
+            return;
+    } 
+
+    if(senha.length < 8){
+        alert("A senha deve conter no mínimo 8 caracteres.");
+        return;
+    }
+
+    if(senha != confirmarSenha){
+        alert("As senhas não coincidem.");
+        return;
+    }
+
+    if(!email.includes("@") || !email.includes(".")){
+        alert("Por favor, insira um email válido.");
+        return;
+    }
+
+        fetch("/usuarios/cadastrar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body:JSON.stringify({
+                nome: nome,
+                sobrenome: sobrenome,
+                email: email,
+                senha: senha
+            }),
+        })
+        .then(function(resposta){
+            console.log("resposta: ", resposta);
+
+            if(resposta.ok){
+                setTimeout(() => {
+                    alert("Cadastro feito com sucesso!");
+                    window.location = "login.html";
+                }, "2000");
+            } else {
+                throw "Houve um erro ao tentar realizar cadastro!"
+            }
+        })
+        .catch(function(resposta){
+            console.log(`#ERRO: ${resposta}`);
+        });
+        return false;
+    }
+
+    function entrar(){
+
+        var email = input_email.value;
+        var senha = input_senha.value;
+
+        if(senha == "" || email == ""){
+            alert("Insira todos os campos para logar.");
+            return;
+        }
+
+        if(!email.includes("@") || !email.includes(".")){
+            alert("Insira um email válido.");
+            return;
+        }
+
+        if(senha.length < 8){
+            alert("Senha inválida.");
+            return;
+        }
+
+        fetch("/usuarios/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: email,
+                senha: senha
+            })
+        }).then(function (resposta){
+            console.log("estou no then do entrar()!")
+
+            if(resposta.ok) {
+                console.log(resposta);
+
+                resposta.json().then(json =>{
+                    console.log(json);
+                    console.log(JSON.stringify(json));
+                    sessionStorage.EMAIL_USUARIO = json.email;
+                    sessionStorage.NOME_USUARIO = json.nome;
+                    sessionStorage.ID_USUARIO = json.id;
+
+                    setTimeout(function(){
+                        alert("Login efetuado com sucesso!");
+                        window.location = "index.html";
+                    }, 1000);
+                });
+            } else {
+                console.log("Houve um erro ao tentar realizar login!");
+
+                resposta.text().then(texto =>{
+                    console.error(texto);
+                });
+            }
+        }).catch(function(erro){
+            console.log(erro);
+        })
+        return false;
+    }
 
     ajustarElementos(larguraTela);
     function ajustarElementos(larguraTela) {

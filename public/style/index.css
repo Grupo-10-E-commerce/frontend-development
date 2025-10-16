@@ -295,12 +295,14 @@ html {
 }
 
 .cards {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     background-color: white;
     height: 50%;
     margin: 60px;
     padding: 19px;
     border-radius: 20px;
-    text-align: justify;
     border: 1px solid black;
 }
 
@@ -318,7 +320,7 @@ html {
     color: white;
     font-weight: 700;
     margin-top: 15px;
-    width: 40%;
+    width: 50%;
     height: 40px;
     background-color: var(--roxo-claro);
     border-radius: 10px;

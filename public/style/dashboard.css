@@ -1,0 +1,50 @@
+* {
+    /* background-color: rgb(226, 226, 226); */
+    border: 0;
+    margin: 0;
+    font-family: "DM Sans", serif;
+    overflow: hidden;
+    background-color: rgb(246, 246, 246);
+}
+
+:root {
+    --roxo-claro: #9594D8;
+    --roxo-escuro: #332C66;
+}
+
+/* ---------MENU LATERAL---------- */
+.icons{
+    font-size: 35px;
+    padding: 2px;
+    border-radius: 7px;
+    background-color: #ffffff00;
+    color: rgb(255, 255, 255);
+    margin: 10px;
+    transition: 0.3s;
+}
+.icons:hover{
+    background-color: var(--roxo-claro);
+}
+.div-menu-lateral {
+    display: flex;
+    flex-direction: column;
+    width: 4%;
+    height: 100%;
+    padding-top: 10px;
+    background-color: var(--roxo-escuro);
+    position: fixed;
+    left: 0;
+    height: 100%;
+    z-index: 1000;
+    text-align: center;
+}
+
+/* ---------DASHBOARD---------- */
+.div-dashboard{
+    position: fixed;
+    left: 4%;
+    padding-left: 4%;
+    padding-right: 4%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+}

@@ -69,11 +69,6 @@
 
 </html>
 <script>
-    // AJUSTAR ELEMENTOS RESPONSIVIDADE
-    var telaCadastro = false;
-    var larguraTela = window.innerWidth;
-
-
     function cadastrar(){
 
         var nome = input_nome.value;
@@ -191,6 +186,10 @@
         })
         return false;
     }
+
+    // AJUSTAR ELEMENTOS RESPONSIVIDADE
+    var telaCadastro = false;
+    var larguraTela = window.innerWidth;
 
     ajustarElementos(larguraTela);
     function ajustarElementos(larguraTela) {

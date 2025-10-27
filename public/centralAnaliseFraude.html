@@ -4,16 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="./script/sideBar.js"></script>
+    <link rel="stylesheet" href="./style/centralAnaliseFraude.css">
     <title>Document</title>
 </head>
 <body>
     <side-Bar></side-Bar>
-    <main>
-        <div class="container-bar">
+        <div class="header">
             <div class="title">Painel de Performance e Risco</div>
+            <div class="btn">
+                <button id="btn_relatorio" class="btn_emitir_relatorio" onclick="emitirRelatorio()">Emitir Relatório</button>
+                <button id="btn_notificacao" class="btn_sino" onclick="notificacao()">
+                    <img src="img/notification-bell.png" alt="Notificacoes">
+                </button>
+                <span>Bem vindo(a), Vitor!</span>
+            </div>
         </div>
-
-    </main>
 
 </body>
 </html>

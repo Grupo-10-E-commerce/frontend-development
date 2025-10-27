@@ -35,13 +35,15 @@ html {
     --cinza-escuro: rgb(74, 73, 73);
     --cinza-claro: rgb(225, 225, 225);
 }
-i{
+
+i {
     font-size: 40px;
     margin: 25px;
     position: absolute;
     transition: 0.3s;
 }
-i:hover{
+
+i:hover {
     cursor: pointer;
     background-color: var(--roxo-claro);
     border-radius: 10px;
@@ -90,6 +92,22 @@ i:hover{
     width: 80%;
 }
 
+.div-input h3 {
+    margin-top: 20px;
+    color: var(--azul-claro);
+}
+
+.div-input-empresa {
+    display: flex;
+}
+
+.div-input-empresa div {
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+    width: 100%;
+}
+
 .div-input span {
     margin-top: 20px;
     font-size: 13px;
@@ -113,18 +131,21 @@ i:hover{
         font-size: larger;
         width: 35%;
     }
-    .div-titulo h1{
+
+    .div-titulo h1 {
         margin: 20px;
     }
 
-    .div-titulo span{
+    .div-titulo span {
         margin-bottom: 20px;
     }
-    .div-titulo p{
+
+    .div-titulo p {
         margin-top: 20px;
         text-align: center;
         font-size: 16px;
     }
+
     .div-logo {
         font-size: 35px;
     }
@@ -144,7 +165,7 @@ i:hover{
 
 input {
     height: 50px;
-    font-size: 15px;
+    font-size: 12px;
     background-color: var(--cinza-claro);
     border-radius: 10px;
     padding-left: 20px;
@@ -194,7 +215,8 @@ button {
     align-items: center;
     font-size: 16px;
 }
-.div-redirecionar span{
+
+.div-redirecionar span {
     margin: 0;
     margin-left: 4px;
     color: var(--azul-claro);
@@ -202,7 +224,8 @@ button {
     text-decoration: underline;
     transition: 0.3s;
 }
-.div-redirecionar span:hover{
+
+.div-redirecionar span:hover {
     cursor: pointer;
     font-size: 13px;
     font-weight: 900;

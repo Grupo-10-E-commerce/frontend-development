@@ -9,9 +9,9 @@ return database.executar(instrucao);
 
 }
 
-function cadastrar(nome, sobrenome, email, senha){
+function cadastrar(nome, email, senha){
     var instrucao = `
-    INSERT INTO usuario (nome, sobrenome, email, senha) VALUES ('${nome}',  '${sobrenome}', '${email}', '${senha}');
+    INSERT INTO usuario (nome, email, senha) VALUES ('${nome}', '${email}', '${senha}');
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);

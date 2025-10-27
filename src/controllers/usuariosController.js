@@ -26,16 +26,15 @@ function login(req, res){
 
 function cadastrar(req, res){
     var nome = req.body.nome;
-    var sobrenome = req.body.sobrenome;
     var email = req.body.email;
     var senha = req.body.senha;
 
-    if(nome == undefined && sobrenome == undefined){
+    if(nome == undefined){
         res.status(400).send("Seu nome está undefined!");
     }
 
 
-    usuariosModel.cadastrar(nome, sobrenome, email, senha).then(function(resposta){
+    usuariosModel.cadastrar(nome, email, senha).then(function(resposta){
         res.status(200).send("Usuário cadastrado com sucesso!");
     }).catch(function(erro){
         res.status(500).json(erro.sqlMessage);

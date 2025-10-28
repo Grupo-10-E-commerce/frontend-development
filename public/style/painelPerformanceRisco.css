@@ -1,0 +1,153 @@
+* {
+    /* background-color: rgb(226, 226, 226); */
+    border: 0;
+    margin: 0;
+    font-family: "DM Sans", serif;
+    color: #333;
+}
+
+body {
+    background-color: #f4f3ff;
+}
+
+/* CABEÇALHO */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    /* border: 5px solid red; */
+}
+
+.title {
+    font-size: 25px;
+    font-weight: 600;
+    color: #333;
+}
+
+.btn {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.btn_emitir_relatorio {
+    color: #333;
+    padding: 8px 16px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.3s;
+}
+
+.btn_emitir_relatorio:hover {
+    background-color: #9194de91;
+    border-color: #333;
+    color: #333;
+}
+
+.btn_sino img,
+.btn_user img {
+    width: 24px;
+    height: 24px;
+    display: block;
+    background-color: #f4f3ff;
+}
+
+.btn span {
+    font-size: 20px;
+}
+
+.metricas {
+    margin: 4px;
+}
+
+/* KPIs */
+
+.containers {
+    /* border: 1px solid blue; */
+    display: flex;
+    justify-content: space-around;
+    height: 10rem;
+    margin: 10px;
+}
+
+.containers .KPI {
+    border: 2px solid #333;
+    border-radius: 5px;
+    width: 23%;
+}
+
+.containers .KPI span {
+    font-size: 25px;
+    margin: 10px;
+    font-weight: bold;
+}
+
+/* GRAFICOS */
+
+.containers2 {
+    /* border: 1px solid blue; */
+    display: flex;
+    justify-content: space-around;
+    height: 15rem;
+    margin: 10px;
+}
+
+.grafico1 {
+    border: 2px solid #333;
+    border-radius: 5px;
+    width: 48%;
+}
+
+.grafico1 span {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 10px;
+}
+
+.grafico2 {
+    border: 2px solid #333;
+    border-radius: 5px;
+    width: 48%;
+}
+
+.grafico2 span {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 10px;
+}
+
+.containers3 {
+    /* border: 1px solid blue; */
+    display: flex;
+    justify-content: space-around;
+    height: 17rem;
+}
+
+.grafico3 {
+    border: 2px solid #333;
+    border-radius: 5px;
+    width: 30.5%;
+}
+
+.grafico3 span {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 10px;
+}
+
+.grafico4 {
+    border: 2px solid #333;
+    border-radius: 5px;
+    width: 63%;
+}
+
+.grafico4 span {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 10px;
+}
+

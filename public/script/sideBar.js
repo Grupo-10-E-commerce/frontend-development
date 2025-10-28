@@ -227,7 +227,7 @@ class SideBarComponent extends HTMLElement {
                 </nav>
 
                 <div class="profile">
-                    ${(sessionStorage.NAME_USER || 'L').charAt(0).toUpperCase()}
+                    ${(sessionStorage.NAME_USER || 'V').charAt(0).toUpperCase()}
                 </div>
             </div>
 

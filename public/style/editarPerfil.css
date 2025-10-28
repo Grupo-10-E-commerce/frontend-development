@@ -1,0 +1,123 @@
+* {
+    /* background-color: rgb(226, 226, 226); */
+    border: 0;
+    margin: 0;
+    font-family: "DM Sans", serif;
+    overflow: hidden;
+}
+
+body {
+    background: #f4f3ff;
+}
+
+html {
+    scroll-behavior: smooth;
+    height: 100%;
+}
+
+:root {
+    --azul: #302961;
+    --azul-escuro: #040332;
+    --azul-claro: #695DD7;
+    --roxo-claro: #9594D8;
+    --amarelo: #D5C284;
+    --vermelho: #CD8A8F;
+    --cyan: #9DC9CB;
+    --cinza-escuro: rgb(113, 113, 113);
+    --cinza-claro: rgb(225, 225, 225);
+}
+
+main {
+    display: flex;
+}
+
+.div-menu-editar {
+    display: flex;
+    flex-direction: column;
+    padding-top: 10%;
+    padding-left: 20px;
+    width: 15%;
+    height: 100vh;
+    border: 1px solid var(--cinza-escuro);
+}
+
+.div-menu-editar div {
+    margin: 15px;
+    display: flex;
+}
+
+.div-menu-editar span {
+    color: var(--cinza-escuro);
+    font-size: 20px;
+    margin-left: 15px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.div-menu-editar span:hover {
+    font-weight: 900;
+    color: #040332;
+}
+
+/* conteudo EDIÇÃO */
+.div-content {
+    width: 100%;
+    right: 30%;
+    padding: 20px;
+}
+
+.div-editar-informacoes {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    margin-right: 10%;
+    margin-left: 3%;
+    margin-top: 6%;
+    height: 75vh;
+    border: 1px solid var(--cinza-escuro);
+}
+.div-editar-informacoes h2{
+    margin-bottom: 20px;
+}
+.div-formulario{
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+}
+.div-editar-informacoes span {
+    margin-top: 30px;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.div-editar-informacoes input {
+    height: 40px;
+    width: 60vw;
+    font-size: 16px;
+    background-color: #f4f3ff;
+    border: 2px solid var(--cinza-escuro);
+    border-radius: 10px;
+    padding-left: 20px;
+}
+button{
+    width: 120px;
+    height: 40px;
+    border-radius: 10px;
+    transition: 0.2s;
+    margin-left: 30px;
+    margin-top: 30px;
+}
+.btn-salvar{
+    color: white;
+    background-color: var(--azul-claro);
+}
+.btn-salvar:hover{
+    background-color: var(--roxo-claro);
+}
+.btn-cancelar{
+    background-color: rgb(205, 205, 205);
+    border: 1px solid rgb(205, 205, 205);;
+}
+.btn-cancelar:hover{
+    background-color: rgb(229, 228, 228);;
+}

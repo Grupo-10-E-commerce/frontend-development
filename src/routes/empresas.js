@@ -8,7 +8,7 @@ router.post("/cadastrar", function (req, res) {
     empresaController.cadastrar(req, res);
 })
 
-router.get("/buscar", function (req, res) {
+router.post("/buscar", function (req, res) {
     empresaController.buscarPorCnpj(req, res);
 });
 

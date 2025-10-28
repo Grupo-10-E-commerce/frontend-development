@@ -82,8 +82,8 @@
 <script>
     function cadastrar() {
 
-        var razaoSocial = input_razao_social;
-        var cnpj = input_cnpj;
+        var razaoSocial = input_razao_social.value;
+        var cnpj = input_cnpj.value;
         var nome = input_nome.value;
         var email = input_email.value;
         var senha = input_senha.value;
@@ -108,6 +108,59 @@
             alert("Por favor, insira um email válido.");
             return;
         }
+
+        // cadastrar empresa
+        fetch("/empresas/cadastrar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                razaoSocial: razaoSocial,
+                cnpj: cnpj
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+                    console.log("Cadastro da empresa realizado")
+                } else {
+                    throw "Houve um erro ao tentar realizar cadastro!"
+                }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+
+        // // buscar id empresa
+        // fetch("/empresas/buscar", {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/json",
+        //     },
+        //     body: JSON.stringify({
+        //         cnpj: cnpj
+        //     }),
+        // })
+        //     .then(function (resposta) {
+        //         console.log("resposta: ", resposta);
+
+        //         if (resposta.ok) {
+        //             resposta.json().then(json => {
+        //                 console.log(json);
+        //                 console.log(JSON.stringify(json));
+        //                 var id_empresa = json[0].id_empresa;
+        //             });
+        //             console.log("id empresa: " + id_empresa)
+
+        //         } else {
+        //             throw "Houve um erro ao tentar realizar cadastro!"
+        //         }
+        //     })
+        //     .catch(function (resposta) {
+        //         console.log(`#ERRO: ${resposta}`);
+        //     });
 
         fetch("/usuarios/cadastrar", {
             method: "POST",
@@ -138,32 +191,6 @@
 
 
 
-        // fetch("/usuarios/cadastrar", {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //     },
-        //     body: JSON.stringify({
-        //         nome: nome,
-        //         email: email,
-        //         senha: senha
-        //     }),
-        // })
-        //     .then(function (resposta) {
-        //         console.log("resposta: ", resposta);
-
-        //         if (resposta.ok) {
-        //             setTimeout(() => {
-        //                 alert("Cadastro feito com sucesso!");
-        //                 window.location = "login.html";
-        //             }, "2000");
-        //         } else {
-        //             throw "Houve um erro ao tentar realizar cadastro!"
-        //         }
-        //     })
-        //     .catch(function (resposta) {
-        //         console.log(`#ERRO: ${resposta}`);
-        //     });
         return false;
     }
 
@@ -212,7 +239,7 @@
 
                     setTimeout(function () {
                         alert("Login efetuado com sucesso!");
-                        window.location = "dashboard.html";
+                        window.location = "centralAnaliseFraude.html";
                     }, 1000);
                 });
             } else {

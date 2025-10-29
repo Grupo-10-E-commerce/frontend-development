@@ -3,7 +3,7 @@
     border: 0;
     margin: 0;
     font-family: "DM Sans", serif;
-    color: #333;
+    color: #919191;
 }
 
 body {
@@ -21,7 +21,7 @@ body {
 }
 
 .title {
-    font-size: 25px;
+    font-size: 35px;
     font-weight: 600;
     color: #333;
 }
@@ -35,16 +35,16 @@ body {
 .btn_emitir_relatorio {
     color: #333;
     padding: 8px 16px;
-    border: 1px solid #333;
+    border: 1px solid #919191;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 22px;
     transition: all 0.3s;
 }
 
 .btn_emitir_relatorio:hover {
     background-color: #9194de91;
-    border-color: #333;
+    border-color: #919191;
     color: #333;
 }
 
@@ -57,7 +57,9 @@ body {
 }
 
 .btn span {
-    font-size: 20px;
+    font-size: 22px;
+    color: #333;
+    font-weight: bold;
 }
 
 .metricas {
@@ -75,15 +77,51 @@ body {
 }
 
 .containers .KPI {
-    border: 2px solid #333;
+    align-items: left;
+    border: 2px solid #919191;
     border-radius: 5px;
     width: 23%;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
 }
 
-.containers .KPI span {
+.containers .KPI .title-KPI {
     font-size: 25px;
     margin: 10px;
     font-weight: bold;
+    color: #333;
+}
+
+.containers .valor {
+    display: flex;
+    text-align: left;
+    justify-content: space-around;
+}
+
+.valor .image img {
+    width: 50px;
+    height: 50px;
+}
+
+.containers .KPI .valor-KPI {
+    font-size: 35px;
+    margin: 10px;
+    font-weight: bold;
+    width: 70%;
+    color: #333;
+}
+
+.containers img {
+    width: 40%;
+    height: 40%;
+}
+
+.containers .KPI .legenda-KPI {
+    font-size: 25px;
+    margin: 10px;
+    font-weight: bold;
+    color: #333;
 }
 
 /* GRAFICOS */
@@ -92,14 +130,15 @@ body {
     /* border: 1px solid blue; */
     display: flex;
     justify-content: space-around;
-    height: 15rem;
+    height: 23rem;
     margin: 10px;
 }
 
 .grafico1 {
-    border: 2px solid #333;
+    border: 2px solid #919191;
     border-radius: 5px;
     width: 48%;
+    background-color: white;
 }
 
 .grafico1 span {
@@ -108,10 +147,77 @@ body {
     margin: 10px;
 }
 
+/* CSS - Adicione ao seu painelPerformanceRisco.css */
+.grafico-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 0 5px;
+}
+
+.titulo-legenda {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.grafico-titulo {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+}
+
+.legenda {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.legenda-ponto {
+    width: 10px;
+    height: 10px;
+    background-color: #655ADF;
+    border-radius: 50%;
+}
+
+.legenda-texto {
+    font-size: 13px;
+    color: #333;
+}
+
+.ano-select1 {
+    width: 15%;
+    height: 15%;
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: white;
+    color: #333;
+    font-size: 20px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 30px;
+}
+
+.ano-select:hover {
+    border-color: #655ADF;
+}
+
+.ano-select:focus {
+    border-color: #655ADF;
+    box-shadow: 0 0 0 3px rgba(101, 90, 223, 0.1);
+}
+
 .grafico2 {
-    border: 2px solid #333;
+    border: 2px solid #919191;
     border-radius: 5px;
     width: 48%;
+    background-color: white;
 }
 
 .grafico2 span {
@@ -120,34 +226,131 @@ body {
     margin: 10px;
 }
 
+.filtros {
+    display: flex;
+    gap: 10px;
+}
+
+.data-select,
+.ano-select {
+    height: 15%;
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: white;
+    color: #666;
+    font-size: 20px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 30px;
+}
+
+.data-select:hover,
+.ano-select:hover {
+    border-color: #2E3A59;
+}
+
+.data-select:focus,
+.ano-select:focus {
+    border-color: #2E3A59;
+    box-shadow: 0 0 0 3px rgba(46, 58, 89, 0.1);
+}
+
 .containers3 {
     /* border: 1px solid blue; */
     display: flex;
     justify-content: space-around;
-    height: 17rem;
+    height: 23rem;
 }
 
 .grafico3 {
-    border: 2px solid #333;
+    border: 2px solid #919191;
     border-radius: 5px;
     width: 30.5%;
+    background-color: white;
+
 }
 
 .grafico3 span {
     font-size: 22px;
     font-weight: bold;
     margin: 10px;
+    color: #333;
 }
 
 .grafico4 {
-    border: 2px solid #333;
+    border: 2px solid #919191;
     border-radius: 5px;
     width: 63%;
+    background-color: white;
+}
+
+.grafico-header-lucros {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    padding: 0 5px;
+    margin: 10px;
+}
+
+.titulo-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.grafico-titulo {
+    font-size: 25px;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.grafico-subtitulo {
+    font-size: 18px;
+    color: #999;
+    font-weight: 400;
+    margin: 0;
+    padding: 0;
+}
+
+.ano-select {
+    width: 10%;
+    height: 15%;
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: white;
+    color: #666;
+    font-size: 20px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 30px;
+}
+
+.ano-select:hover {
+    border-color: #2E3A59;
+}
+
+.ano-select:focus {
+    border-color: #2E3A59;
+    box-shadow: 0 0 0 3px rgba(46, 58, 89, 0.1);
 }
 
 .grafico4 span {
     font-size: 22px;
     font-weight: bold;
     margin: 10px;
+    color: #333;
 }
 

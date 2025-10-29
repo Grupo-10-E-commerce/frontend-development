@@ -162,38 +162,40 @@
         //         console.log(`#ERRO: ${resposta}`);
         //     });
 
-        fetch("/usuarios/cadastrar", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                nome: nome,
-                email: email,
-                senha: senha
-            }),
-        })
-            .then(function (resposta) {
-                console.log("resposta: ", resposta);
-
-                if (resposta.ok) {
-                    setTimeout(() => {
-                        alert("Cadastro feito com sucesso!");
-                        window.location = "login.html";
-                    }, "2000");
-                } else {
-                    throw "Houve um erro ao tentar realizar cadastro!"
-                }
+        setTimeout(() => {
+            fetch("/usuarios/cadastrar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    nome: nome,
+                    email: email,
+                    senha: senha
+                }),
             })
-            .catch(function (resposta) {
-                console.log(`#ERRO: ${resposta}`);
-            });
+                .then(function (resposta) {
+                    console.log("resposta: ", resposta);
+
+                    if (resposta.ok) {
+                        setTimeout(() => {
+                            alert("Cadastro feito com sucesso!");
+                            window.location = "login.html";
+                        }, "2000");
+                    } else {
+                        throw "Houve um erro ao tentar realizar cadastro!"
+                    }
+                })
+                .catch(function (resposta) {
+                    console.log(`#ERRO: ${resposta}`);
+                });
 
 
 
-        return false;
+            return false;
+        }, 2000);
+
     }
-
 
     function entrar() {
 

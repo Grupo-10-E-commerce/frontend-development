@@ -1,0 +1,263 @@
+* {
+    /* background-color: rgb(226, 226, 226); */
+    border: 0;
+    margin: 0;
+    font-family: "DM Sans", serif;
+    overflow: hidden;
+}
+
+body {
+    background: #f4f3ff;
+}
+
+html {
+    scroll-behavior: smooth;
+    height: 100%;
+}
+
+:root {
+    --azul: #302961;
+    --azul-escuro: #040332;
+    --azul-claro: #695DD7;
+    --roxo-claro: #9594D8;
+    --amarelo: #D5C284;
+    --vermelho: #CD8A8F;
+    --cyan: #9DC9CB;
+    --cinza-escuro: rgb(113, 113, 113);
+    --cinza-claro: rgb(225, 225, 225);
+}
+
+/* Cabeçalho */
+.title {
+    font-size: 25px;
+    font-weight: 600;
+    color: #333;
+}
+
+.header {
+    position: fixed;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    border: 1px solid var(--cinza-escuro);
+    width: 100vw;
+    height: 40px;
+}
+
+.btn {
+    display: flex;
+    padding-right: 350px;
+    align-items: center;
+    gap: 15px;
+}
+
+.btn_emitir_relatorio {
+    margin: 0;
+    width: 200px;
+    color: #333;
+    padding: 8px 16px;
+    border: 1px solid #333;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.3s;
+}
+
+.btn_emitir_relatorio:hover {
+    background-color: #9194de91;
+    border-color: #333;
+    color: #333;
+}
+
+.btn_sino {
+    margin-top: 0;
+}
+
+.btn_sino img,
+.btn_user img {
+    width: 24px;
+    height: 24px;
+    display: block;
+    background-color: #f4f3ff;
+}
+
+.btn span {
+    font-size: 20px;
+}
+
+
+/* alertas personalizados */
+.conteudo-principal{
+    padding: 80px;
+}
+.container {
+  max-width: 900px;
+  margin: auto;
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.descricao {
+  color: #555;
+  font-size: 17px;
+  margin-bottom: 30px;
+}
+
+.novo-alerta p {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.add-card {
+  width: 80px;
+  height: 80px;
+  border: 1.5px solid #aaa;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  color: #333;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.add-card:hover {
+  background-color: #f2f2f2;
+}
+
+.lista-alertas h3 {
+  margin-top: 40px;
+  font-size: 15px;
+}
+
+.cards {
+  display: flex;
+  gap: 20px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.alerta-card {
+  background-color: white;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  padding: 12px;
+  width: 200px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+}
+
+.alerta-titulo {
+  margin: 8px 0;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.alerta-card button {
+  display: block;
+  width: 100%;
+  margin: 6px 0;
+  padding: 6px;
+  border: none;
+  border-radius: 4px;
+  background-color: #e7dbff;
+  color: #4b3fad;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.alerta-card button:hover {
+  background-color: #d7c8ff;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 10;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 25px 35px;
+  border-radius: 10px;
+  width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.modal-content h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 6px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.regras p {
+  font-size: 13px;
+  color: #444;
+}
+
+.add-regra {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  color: #444;
+  padding: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.modal-actions button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.cancelar {
+  background-color: #222;
+  color: white;
+}
+
+.criar {
+  background-color: #6a4df5;
+  color: white;
+}

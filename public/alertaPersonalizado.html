@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./script/sideBar.js"></script>
+    <link rel="stylesheet" href="./style/alertaPersonalizado.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Konkhmer+Sleokchher&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap ">
+
+    <title>Alertas personalizados</title>
+</head>
+
+<body>
+    <side-Bar></side-Bar>
+    <main>
+        <header class="header">
+            <div class="title">Alertas Personalizados</div>
+            <div class="btn">
+                <button id="btn_notificacao" class="btn_sino" onclick="notificacao()">
+                    <img src="img/notification-bell.png" alt="Notificacoes">
+                </button>
+                <span id="span_bem_vindo"></span>
+            </div>
+        </header>
+
+        <div class="conteudo-principal">
+
+            <p class="descricao">Aqui você pode ver seus alertas personalizados criados, editá-los ou criar novos</p>
+
+            <section class="novo-alerta">
+                <p><strong>Adicionar um novo alerta</strong></p>
+                <div id="btnAddAlerta" class="add-card">+</div>
+            </section>
+
+            <section class="lista-alertas">
+                <h3>Seus Alertas Personalizados:</h3>
+                <div class="cards">
+                    <div class="alerta-card">
+                        <div class="card-header">
+                            <span>...</span>
+                            <span class="icon">🔔</span>
+                        </div>
+                        <p class="alerta-titulo">Alerta 1</p>
+                        <button>Exibir Alerta</button>
+                        <button>Modificar Alerta</button>
+                        <button>Excluir Alerta</button>
+                    </div>
+
+                    <div class="alerta-card">
+                        <div class="card-header">
+                            <span>...</span>
+                            <span class="icon">🔔</span>
+                        </div>
+                        <p class="alerta-titulo">Alerta 2</p>
+                        <button>Exibir Alerta</button>
+                        <button>Modificar Alerta</button>
+                        <button>Excluir Alerta</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h2>Alerta Personalizado</h2>
+
+            <label for="nomeAlerta">Nome do Alerta</label>
+            <input type="text" id="nomeAlerta" placeholder="Digite aqui...">
+
+            <div class="regras">
+                <label>Regras do Alerta</label>
+                <p>Me alertar quando o valor for maior que</p>
+                <input type="text" placeholder="R$">
+                <button class="add-regra">Adicionar mais uma regra +</button>
+            </div>
+
+            <div class="modal-actions">
+                <button id="btnCancelar" class="cancelar">Cancelar</button>
+                <button class="criar">Criar Alerta</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+    span_bem_vindo.innerHTML = `Bem vindo(a), ${sessionStorage.NOME_USUARIO}!`;
+
+    const btnAdd = document.getElementById("btnAddAlerta");
+    const modal = document.getElementById("modal");
+    const btnCancelar = document.getElementById("btnCancelar");
+
+    // Mostrar modal
+    btnAdd.addEventListener("click", () => {
+        modal.classList.add("active");
+    });
+
+    // Fechar modal ao clicar em "Cancelar"
+    btnCancelar.addEventListener("click", () => {
+        modal.classList.remove("active");
+    });
+
+    // Fechar modal ao clicar fora do conteúdo
+    modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+            modal.classList.remove("active");
+        }
+    });
+
+</script>

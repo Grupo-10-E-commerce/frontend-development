@@ -27,6 +27,64 @@ html {
     --cinza-claro: rgb(225, 225, 225);
 }
 
+/* Cabeçalho */
+.title {
+    font-size: 25px;
+    font-weight: 600;
+    color: #333;
+}
+
+.header {
+    position: fixed;
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px 20px;
+    width: 100vw;
+    height: 40px;
+}
+
+.btn {
+    display: flex;
+    padding-right: 350px;
+    align-items: center;
+    gap: 15px;
+}
+
+.btn_emitir_relatorio {
+    margin: 0;
+    width: 200px;
+    color: #333;
+    padding: 8px 16px;
+    border: 1px solid #333;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.3s;
+}
+
+.btn_emitir_relatorio:hover {
+    background-color: #9194de91;
+    border-color: #333;
+    color: #333;
+}
+
+.btn_sino {
+    margin-top: 0;
+}
+
+.btn_sino img,
+.btn_user img {
+    width: 24px;
+    height: 24px;
+    display: block;
+    background-color: #f4f3ff;
+}
+
+.btn span {
+    font-size: 20px;
+}
+
+/* CONTEUDO PRINCIPAL */
 main {
     display: flex;
 }
@@ -38,7 +96,7 @@ main {
     padding-left: 20px;
     width: 15%;
     height: 100vh;
-    border: 1px solid var(--cinza-escuro);
+    border-right: 1px solid var(--cinza-escuro);
 }
 
 .div-menu-editar div {
@@ -61,29 +119,37 @@ main {
 
 /* conteudo EDIÇÃO */
 .div-content {
+    margin-top: 60px;
     width: 100%;
     right: 30%;
     padding: 20px;
+}
+.div-content h1{
+    margin-left: 50px;
 }
 
 .div-editar-informacoes {
     display: flex;
     flex-direction: column;
     padding: 20px;
-    margin-right: 10%;
+    margin-right: 7%;
     margin-left: 3%;
-    margin-top: 6%;
-    height: 75vh;
+    margin-top: 2%;
+    height: 65vh;
     border: 1px solid var(--cinza-escuro);
+    border-radius: 10px;
 }
-.div-editar-informacoes h2{
+
+.div-editar-informacoes h2 {
     margin-bottom: 20px;
 }
-.div-formulario{
+
+.div-formulario {
     display: flex;
     flex-direction: column;
     padding: 25px;
 }
+
 .div-editar-informacoes span {
     margin-top: 30px;
     font-weight: 600;
@@ -99,25 +165,33 @@ main {
     border-radius: 10px;
     padding-left: 20px;
 }
-button{
+
+button {
     width: 120px;
     height: 40px;
     border-radius: 10px;
     transition: 0.2s;
     margin-left: 30px;
     margin-top: 30px;
+    font-size: 18px;
 }
-.btn-salvar{
+
+.btn-salvar {
     color: white;
     background-color: var(--azul-claro);
 }
-.btn-salvar:hover{
+
+.btn-salvar:hover {
     background-color: var(--roxo-claro);
 }
-.btn-cancelar{
+
+.btn-cancelar {
     background-color: rgb(205, 205, 205);
-    border: 1px solid rgb(205, 205, 205);;
+    border: 1px solid rgb(205, 205, 205);
+    ;
 }
-.btn-cancelar:hover{
-    background-color: rgb(229, 228, 228);;
+
+.btn-cancelar:hover {
+    background-color: rgb(229, 228, 228);
+    ;
 }

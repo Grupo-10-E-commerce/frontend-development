@@ -15,7 +15,14 @@
 <body>
     <side-Bar></side-Bar>
     <main>
-
+        <header class="header">
+            <div class="btn">
+                <button id="btn_notificacao" class="btn_sino" onclick="notificacao()">
+                    <img src="img/notification-bell.png" alt="Notificacoes">
+                </button>
+                <span id="span_bem_vindo"></span>
+            </div>
+        </header>
         <div class="div-menu-editar">
             <div>
                 <img src="./img/lapis-icone.png" width="25px" alt="">
@@ -28,9 +35,6 @@
         </div>
 
         <div class="div-content">
-            <div>
-
-            </div>
 
             <h1>Editar Perfil</h1>
             <div class="div-editar-informacoes">
@@ -60,5 +64,7 @@
     </main>
 
 </body>
-
 </html>
+<script>
+    span_bem_vindo.innerHTML = `Bem vindo(a), ${sessionStorage.NOME_USUARIO}!`;
+</script>

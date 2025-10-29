@@ -35,6 +35,12 @@ class SideBarComponent extends HTMLElement {
             item.classList.remove('active');
         });
         event.currentTarget.classList.add('active');
+        
+        // Navegar para a página correspondente
+        const page = event.currentTarget.getAttribute('data-page');
+        if (page) {
+            window.location.href = `${page}.html`;
+        }
     }
 
     render() {
@@ -196,28 +202,28 @@ class SideBarComponent extends HTMLElement {
                 </div>
 
                 <nav class="menu">
-                    <div class="menu-item active" data-page="home">
+                    <div class="menu-item" data-page="centralAnaliseFraude">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
                         </svg>
-                        <span>Início</span>
+                        <span>Central de Análise de Fraude</span>
                     </div>
 
-                    <div class="menu-item" data-page="dashboard">
+                    <div class="menu-item" data-page="painelPerformanceRisco">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+                            <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/>
                         </svg>
-                        <span>Dashboard</span>
+                        <span>Performance de Risco</span>
                     </div>
 
-                    <div class="menu-item" data-page="docs">
+                    <div class="menu-item" data-page="alertasPersonalizados">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                            <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/>
                         </svg>
                         <span>Alertas Personalizados</span>
                     </div>
 
-                    <div class="menu-item" data-page="profile">
+                    <div class="menu-item" data-page="editarPerfil">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
                         </svg>
@@ -234,6 +240,20 @@ class SideBarComponent extends HTMLElement {
         `;
 
         this.applyRoleRules();
+        this.setActivePage();
+    }
+
+    setActivePage() {
+        // Detectar a página atual e marcar como ativa
+        const currentPage = window.location.pathname.split('/').pop().replace('.html', '');
+        const menuItems = this.shadowRoot.querySelectorAll('.menu-item');
+        
+        menuItems.forEach(item => {
+            const itemPage = item.getAttribute('data-page');
+            if (itemPage === currentPage) {
+                item.classList.add('active');
+            }
+        });
     }
 
     applyRoleRules() {

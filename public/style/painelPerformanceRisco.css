@@ -75,12 +75,44 @@ body {
 }
 
 .containers .KPI {
+    align-items: left;
     border: 2px solid #333;
     border-radius: 5px;
     width: 23%;
+    display: flex;
+    flex-direction: column;
 }
 
-.containers .KPI span {
+.containers .KPI .title-KPI {
+    font-size: 25px;
+    margin: 10px;
+    font-weight: bold;
+}
+
+.containers .valor {
+    display: flex;
+    text-align: left;
+    justify-content: space-around;
+}
+
+.valor .image img {
+    width: 50px;
+    height: 50px;
+}
+
+.containers .KPI .valor-KPI {
+    font-size: 35px;
+    margin: 10px;
+    font-weight: bold;
+    width: 70%;
+}
+
+.containers img {
+    width: 40%;
+    height: 40%;
+}
+
+.containers .KPI .legenda-KPI {
     font-size: 25px;
     margin: 10px;
     font-weight: bold;
@@ -92,7 +124,7 @@ body {
     /* border: 1px solid blue; */
     display: flex;
     justify-content: space-around;
-    height: 15rem;
+    height: 23rem;
     margin: 10px;
 }
 

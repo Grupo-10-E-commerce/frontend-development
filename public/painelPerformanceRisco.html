@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="./script/sideBar.js"></script>
     <link rel="stylesheet" href="./style/painelPerformanceRisco.css">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <title>Painel de Performance e Risco</title>
 </head>
 <body>
@@ -21,45 +22,216 @@
         </div>
 
         <div class="metricas">
+
             <div class="containers">
                 <div class="KPI">
-                    <span>Lucros Totais</span>
-                    <span>R$000,00</span>
-                    <span>Aumento de x%</span>
+                    <span class="title-KPI">Lucros Totais</span>
+                    <div class="valor">
+                        <span class="valor-KPI">R$000,00</span>
+                        <div class="image">
+                            <img src="./img/Group.svg" alt="lucros">
+                        </div>
+                    </div>
+                    <span class="legenda-KPI">Aumento de x%</span>
+                </div>
+
+                <div class="KPI">
+                    <span class="title-KPI">Perdas Totais</span>
+                    <div class="valor">
+                        <span class="valor-KPI">R$000,00</span>
+                        <div class="image">
+                            <img src="./img/Group2.svg" alt="lucros">
+                        </div>
+                    </div>
+                    <span class="legenda-KPI">Decréscimo de x%</span>
                 </div>
                 <div class="KPI">
-                    <span>Perdas Totais</span>
-                    <span>R$000,00</span>
-                    <span>Decréscimo de x%</span>
+                    <span class="title-KPI">Fraudes Evitadas</span>
+                    <div class="valor">
+                        <span class="valor-KPI">00</span>
+                        <div class="image">
+                            <img src="./img/Vector.svg" alt="lucros">
+                        </div>
+                    </div>      
                 </div>
                 <div class="KPI">
-                    <span>Fraudes Evitadas</span>
-                    <span>00</span>    
-                </div>
-                <div class="KPI">
-                    <span>Total de Fraudes</span>
-                    <span>00</span>    
+                    <span class="title-KPI">Total de Fraudes</span>
+                    <div class="valor">
+                        <span class="valor-KPI">00</span>
+                        <div class="image">
+                            <img src="./img/Group3.svg" alt="lucros">
+                        </div>
+                    </div>  
                 </div>
             </div>
 
             <div class="containers2"> 
                 <div class="grafico1">
                     <span>Quantidade de Fraudes por Mês</span>
+                    <div id="chart"></div>
                 </div>
                 <div class="grafico2">
                     <span>Atividade de Vendas</span>
+                    <div id="chart2"></div>
                 </div>
             </div>
 
             <div class="containers3">
                 <div class="grafico3">
                     <span>Cidades Com Mais Fraudes</span>
+                    <div id="chart3"></div>
                 </div>
                 <div class="grafico4">
                     <span>Lucros</span>
+                    <div id="chart4"></div>
                 </div>
             </div>
         </div>
 
 </body>
 </html>
+<script>
+    var options = {
+        chart: {
+        type: 'bar',
+        height: 340,
+        toolbar: {
+            show: false,
+        }, 
+    }, 
+        colors: ['#655ADF'],
+        series: [{
+            data: [{
+            x: 'Jan',
+            y: 19
+            }, {
+            x: 'Fev',
+            y: 28
+            }, {
+            x: 'Mar',
+            y: 24
+            }, {
+            x: 'Abr',
+            y: 14
+            }, {
+            x: 'Mai',
+            y: 11
+            }, {
+            x: 'Jun',
+            y: 19
+            }, {
+            x: 'Jul',
+            y: 17
+            }, {
+            x: 'Ago',
+            y: 15
+            }, {
+            x: 'Set',
+            y: 4
+            }, {
+            x: 'Out',
+            y: 20
+            }, {
+            x: 'Nov',
+            y: 25
+            }, {
+            x: 'Dez',
+            y: 23
+            }]
+        }]
+}
+
+    var chart = new ApexCharts(document.querySelector("#chart"),options)
+    chart.render();
+
+    var options = {
+  chart: {
+    height: 340,
+    type: "area",
+    toolbar: {
+      show: false
+    },
+    sparkline: {
+      enabled: false
+    }
+  },
+  dataLabels: {
+    enabled: false
+  },
+  series: [{
+    name: "",
+    data: [2, 3, 5, 6, 19, 16, 18, 21]
+  }],
+  stroke: {
+    curve: 'smooth',
+    width: 2
+  },
+  fill: {
+    type: "gradient",
+    gradient: {
+      shadeIntensity: 1,
+      opacityFrom: 0.9,
+      opacityTo: 0.8,
+      stops: [0, 100]
+    }
+  },
+  colors: ['#1F1B56'],
+  xaxis: {
+    categories: [
+      "10:00",
+      "12:00",
+      "14:00",
+      "16:00",
+      "18:00",
+      "20:00",
+      "22:00",
+      "00:00"
+    ],
+    labels: {
+      style: {
+        colors: '#666',
+        fontSize: '12px'
+      }
+    },
+    axisBorder: {
+      show: false
+    },
+    axisTicks: {
+      show: false
+    }
+  },
+  yaxis: {
+    show: true,
+    labels: {
+      style: {
+        colors: '#666',
+        fontSize: '12px'
+      }
+    },
+    min: 0,
+    max: 25
+  },
+  grid: {
+    show: true,
+    borderColor: '#f1f1f1',
+    strokeDashArray: 0,
+    xaxis: {
+      lines: {
+        show: false
+      }
+    },
+    yaxis: {
+      lines: {
+        show: true
+      }
+    }
+  },
+  tooltip: {
+    enabled: true
+  }
+};
+
+    var chart = new ApexCharts(document.querySelector("#chart2"), options);
+    chart.render();
+
+</script>

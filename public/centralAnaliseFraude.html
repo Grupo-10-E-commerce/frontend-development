@@ -84,43 +84,43 @@
                             <tr>
                                 <td>ID 01010101<br>Cliente: Fulana</td>
                                 <td>01/01/25</td>
-                                <td>R$XXX</td>
+                                <td>R$800</td>
                                 <td><button>Ver Mais</button></td>
                             </tr>
                             <tr>
                                 <td>ID 01010101<br>Cliente: Fulana</td>
                                 <td>01/02/25</td>
-                                <td>R$XXX</td>
+                                <td>R$1000</td>
                                 <td><button>Ver Mais</button></td>
                             </tr>
                             <tr>
                                 <td>ID 01010101<br>Cliente: Fulana</td>
                                 <td>01/03/25</td>
-                                <td>R$XXX</td>
+                                <td>R$900</td>
                                 <td><button>Ver Mais</button></td>
                             </tr>
                             <tr>
                                 <td>ID 01010101<br>Cliente: Fulana</td>
                                 <td>01/04/25</td>
-                                <td>R$XXX</td>
+                                <td>R$850</td>
                                 <td><button>Ver Mais</button></td>
                             </tr>
                             <tr>
                                 <td>ID 01010101<br>Cliente: Fulana</td>
                                 <td>01/05/25</td>
-                                <td>R$XXX</td>
+                                <td>R$950</td>
                                 <td><button>Ver Mais</button></td>
                             </tr>
                             <tr>
                                 <td>ID 01010101<br>Cliente: Fulana</td>
                                 <td>01/06/25</td>
-                                <td>R$XXX</td>
+                                <td>R$850</td>
                                 <td><button>Ver Mais</button></td>
                             </tr>
                             <tr>
                                 <td>ID 01010101<br>Cliente: Fulana</td>
                                 <td>01/07/25</td>
-                                <td>R$XXX</td>
+                                <td>R$900</td>
                                 <td><button>Ver Mais</button></td>
                             </tr>
                         </tbody>
@@ -170,15 +170,48 @@
     var barOptions = {
         chart: {
             type: 'bar',
-            height: 250
-        },
+            height: 300,
+            toolbar: {
+                show: false  
+            }
+        }, 
         series: [{
             name: 'Fraudes',
             data: [15, 25, 22, 20, 18]
         }],
+        dataLabels: {
+                enabled: true,
+                style: {
+                    fontSize: '18px',
+                    fontWeight: 'bolder',
+                    colors: ['#fff'], 
+                },
+            },
+        plotOptions: {
+                bar: {
+                columnWidth: '70%', 
+                dataLabels: {
+                    position: 'top',
+                }
+                }
+            },
         xaxis: {
-            categories: ['Cartão de Crédito', 'Identidade Falsa', 'ChargeBack', 'Fraude Amigável', 'Outro']
+            categories: ['Cartão de Crédito', 'Identidade Falsa', 'ChargeBack', 'Fraude Amigável', 'Outro'],
+            labels: {
+            style: {
+                    colors: '#333',
+                    fontSize: '13px'
+            }
+        }
         },
+        yaxis: {
+        labels: {
+            style: {
+                colors: '#333',
+                fontSize: '13px'
+            }
+        }
+    },
         colors: ['#a48bff'],
     };
     new ApexCharts(document.querySelector("#barChart"), barOptions).render();

@@ -78,7 +78,7 @@ body {
 
 .containers .KPI {
     align-items: left;
-    border: 2px solid #919191;
+    border: 2px solid #ddd;
     border-radius: 5px;
     width: 23%;
     display: flex;
@@ -135,7 +135,7 @@ body {
 }
 
 .grafico1 {
-    border: 2px solid #919191;
+    border: 2px solid #ddd;
     border-radius: 5px;
     width: 48%;
     background-color: white;
@@ -214,7 +214,7 @@ body {
 }
 
 .grafico2 {
-    border: 2px solid #919191;
+    border: 2px solid #ddd;
     border-radius: 5px;
     width: 48%;
     background-color: white;
@@ -268,7 +268,7 @@ body {
 }
 
 .grafico3 {
-    border: 2px solid #919191;
+    border: 2px solid #ddd;
     border-radius: 5px;
     width: 30.5%;
     background-color: white;
@@ -283,7 +283,7 @@ body {
 }
 
 .grafico4 {
-    border: 2px solid #919191;
+    border: 2px solid #ddd;
     border-radius: 5px;
     width: 63%;
     background-color: white;

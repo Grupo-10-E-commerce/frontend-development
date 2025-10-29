@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./script/sideBar.js"></script>
+    <link rel="stylesheet" href="./style/centralAnaliseFraude.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Konkhmer+Sleokchher&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap ">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <title>Central de análise de fraude</title>
+</head>
+
+<body>
+    <side-Bar></side-Bar>
+    <div class="header">
+        <div class="title">Central de análise de fraude</div>
+        <div class="btn">
+            <button id="btn_relatorio" class="btn_emitir_relatorio" onclick="emitirRelatorio()">Emitir
+                Relatório</button>
+            <button id="btn_notificacao" class="btn_sino" onclick="notificacao()">
+                <img src="img/notification-bell.png" alt="Notificacoes">
+            </button>
+            <span id="span_bem_vindo"></span>
+        </div>
+    </div>
+
+    <main class="container">
+        <section class="top-cards">
+            <div class="card">
+                <p class="titulo">Nº de Fraudes</p>
+                <div class="valor">0</div>
+                <div class="icone">⚠️</div>
+            </div>
+            <div class="card">
+                <p class="titulo">Porcentagem de Fraudes</p>
+                <div class="valor">0%</div>
+                <p class="sub">Em relação a 0 Vendas</p>
+                <div class="icone">⚠️</div>
+            </div>
+                <div class="grafico-card">
+                    <h3>Fraudes por Região</h3>
+                    <img src="./img/grafico-regiao.png" alt="">
+                    <div class="legenda">
+                        <span class="cor roxo"></span> Muitas Fraudes
+                        <span class="cor claro"></span> Poucas Fraudes
+                    </div>
+                </div>
+
+                <div class="alertas">
+                    <h3>Últimos alertas de Fraude</h3>
+                    <div class="alerta">
+                        ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às XX:XX horas
+                    </div>
+                    <div class="alerta">
+                        ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às XX:XX horas
+                    </div>
+                    <div class="alerta">
+                        ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às XX:XX horas
+                    </div>
+                    <div class="alerta">
+                        ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às XX:XX horas
+                    </div>
+                </div>
+        </section>
+
+
+        <section class="conteudo">
+            <div class="left">
+                <div class="compras-card">
+                    <h3>Lista de Compras Suspeitas</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Compras</th>
+                                <th>Data</th>
+                                <th>Valores</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ID 01010101<br>Cliente: Fulana</td>
+                                <td>01/01/25</td>
+                                <td>R$XXX</td>
+                                <td><button>Ver Mais</button></td>
+                            </tr>
+                            <tr>
+                                <td>ID 01010101<br>Cliente: Fulana</td>
+                                <td>01/02/25</td>
+                                <td>R$XXX</td>
+                                <td><button>Ver Mais</button></td>
+                            </tr>
+                            <tr>
+                                <td>ID 01010101<br>Cliente: Fulana</td>
+                                <td>01/03/25</td>
+                                <td>R$XXX</td>
+                                <td><button>Ver Mais</button></td>
+                            </tr>
+                            <tr>
+                                <td>ID 01010101<br>Cliente: Fulana</td>
+                                <td>01/04/25</td>
+                                <td>R$XXX</td>
+                                <td><button>Ver Mais</button></td>
+                            </tr>
+                            <tr>
+                                <td>ID 01010101<br>Cliente: Fulana</td>
+                                <td>01/05/25</td>
+                                <td>R$XXX</td>
+                                <td><button>Ver Mais</button></td>
+                            </tr>
+                            <tr>
+                                <td>ID 01010101<br>Cliente: Fulana</td>
+                                <td>01/06/25</td>
+                                <td>R$XXX</td>
+                                <td><button>Ver Mais</button></td>
+                            </tr>
+                            <tr>
+                                <td>ID 01010101<br>Cliente: Fulana</td>
+                                <td>01/07/25</td>
+                                <td>R$XXX</td>
+                                <td><button>Ver Mais</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="grafico-card-bar">
+                <h3>Distribuição de Fraudes</h3>
+                <div id="barChart"></div>
+            </div>
+
+
+            </div>
+        </section>
+    </main>
+
+</body>
+
+</html>
+<script>
+    span_bem_vindo.innerHTML = `Bem vindo(a), ${sessionStorage.NOME_USUARIO}!`;
+
+    // Gráfico de Fraudes por Região (Mapa)
+    var mapOptions = {
+        chart: {
+            type: 'heatmap',
+            height: 250
+        },
+        dataLabels: { enabled: false },
+        series: [{
+            name: 'Fraudes',
+            data: [
+                { x: 'Sul', y: 10 },
+                { x: 'Sudeste', y: 40 },
+                { x: 'Centro-Oeste', y: 20 },
+                { x: 'Nordeste', y: 30 },
+                { x: 'Norte', y: 15 }
+            ]
+        }],
+        colors: ['#5c4df5'],
+        title: { text: '' },
+    };
+    new ApexCharts(document.querySelector("#mapChart"), mapOptions).render();
+
+    // Gráfico de Barras — Distribuição de Fraudes
+    var barOptions = {
+        chart: {
+            type: 'bar',
+            height: 250
+        },
+        series: [{
+            name: 'Fraudes',
+            data: [15, 25, 22, 20, 18]
+        }],
+        xaxis: {
+            categories: ['Cartão de Crédito', 'Identidade Falsa', 'ChargeBack', 'Fraude Amigável', 'Outro']
+        },
+        colors: ['#a48bff'],
+    };
+    new ApexCharts(document.querySelector("#barChart"), barOptions).render();
+</script>

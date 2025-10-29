@@ -114,7 +114,17 @@
                     <div id="chart3"></div>
                 </div>
                 <div class="grafico4">
-                    <span>Lucros</span>
+                    <div class="grafico-header-lucros">
+                        <div class="titulo-info">
+                            <h3 class="grafico-titulo">Lucros</h3>
+                            <p class="grafico-subtitulo">Lucros Totais</p>
+                        </div>
+                        <select class="ano-select">
+                            <option value="2024" selected>2024</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                        </select>
+                    </div>
                     <div id="chart4"></div>
                 </div>
             </div>
@@ -171,19 +181,35 @@
             y: 23
             }]
         }],
+            dataLabels: {
+                enabled: true,
+                style: {
+                    fontSize: '18px',
+                    fontWeight: 'bolder',
+                    colors: ['#fff'], 
+                },
+            },
+            plotOptions: {
+                bar: {
+                columnWidth: '70%', 
+                dataLabels: {
+                    position: 'top'
+                }
+                }
+            },
     xaxis: {
         labels: {
             style: {
-                colors: '#999',
-                fontSize: '11px',
+                colors: '#333',
+                fontSize: '18px',
             }
         }
     },
     yaxis: {
         labels: {
             style: {
-                colors: '#999',
-                fontSize: '11px'
+                colors: '#333',
+                fontSize: '18px'
             }
         }
     }
@@ -237,8 +263,8 @@
     ],
         labels: {
         style: {
-        colors: '#666',
-        fontSize: '12px'
+        colors: '#333',
+        fontSize: '18px'
       }
     },
         axisBorder: {
@@ -252,8 +278,8 @@
         show: true,
         labels: {
             style: {
-                colors: '#666',
-                fontSize: '12px'
+                colors: '#333',
+                fontSize: '18px'
       }
     },
     min: 0,
@@ -285,10 +311,10 @@
     var optionsDonut = {
     chart: {
         type: 'donut',
-        height: 300
+        height: 330
     },
     series: [55, 45],
-    labels: ['Produto X', 'Produto Y'],
+    labels: ['Lamburgh', 'West Ashley'],
     colors: ['#332C66', '#9193DE'],
     dataLabels: {
         enabled: false
@@ -302,10 +328,43 @@
     },
     legend: {
         position: 'bottom',
-        fontSize: '19'
+        fontSize: '20px',
+        labels: {
+            colors: '#333'
+        }
     },
     stroke: {
         show: false
+    },
+    tooltip: {
+    custom: function({series, seriesIndex, w}) {
+        return `
+            <div style="
+                background: #5B51A8;
+                color: #ffffff;
+                padding: 12px 18px;
+                border-radius: 8px;
+                font-family: Arial, sans-serif;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            ">
+                <span style="
+                    color: #ffffff; 
+                    font-weight: 600;
+                    font-size: 18px;
+                ">
+                    ${w.config.labels[seriesIndex]}:
+                </span>
+                <span style="
+                    color: #ffffff; 
+                    margin-left: 10px; 
+                    font-size: 18px; 
+                    font-weight: bold;
+                ">
+                    ${series[seriesIndex]}
+                </span>
+            </div>
+        `;
+    }
     }
 };
 
@@ -315,17 +374,17 @@ chartDonut.render();
     var optionsLucros = {
     chart: {
         type: 'line',
-        height: 340,
+        height: 300,
         toolbar: {
             show: false
         }
     },
     series: [{
-        name: 'Mar 14 2025',
-        data: [95, 85, 78, 92, 105, 98, 87, 82, 75, 88, 102, 110]
+        name: 'Mar 2025',
+        data: [60, 85, 52, 92, 75,105, 62, 58, 48, 88, 72, 78]
     }, {
-        name: 'Mar 14 2024',
-        data: [65, 58, 52, 68, 75, 70, 62, 58, 48, 62, 72, 78]
+        name: 'Mar 2024',
+        data: [95, 58, 78, 68, 70, 98, 87, 82, 75, 32, 102, 110]
     }],
     stroke: {
         curve: 'smooth',
@@ -333,7 +392,13 @@ chartDonut.render();
     },
     colors: ['#2E3A59', '#9FA8DA'],
     xaxis: {
-        categories: ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
+        categories: ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'],
+        labels: {
+            style: {
+                    colors: '#333',
+                    fontSize: '18px'
+            }
+        }
     },
     yaxis: {
         labels: {
@@ -342,11 +407,22 @@ chartDonut.render();
                 if (val >= 50) return '50M';
                 if (val >= 10) return '10M';
                 return val;
+            },
+            style: {
+                colors: '#333',
+                fontSize: '18px'
             }
         }
     },
     dataLabels: {
         enabled: false
+    },
+    legend: {
+        position: 'bottom',
+        fontSize: '20px',
+        labels: {
+            colors: '#333'
+        }
     }
 };
 

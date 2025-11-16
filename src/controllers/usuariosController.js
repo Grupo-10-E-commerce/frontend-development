@@ -37,7 +37,8 @@ function cadastrar(req, res){
     usuariosModel.cadastrar(nome, email, senha).then(function(resposta){
         res.status(200).send("Usuário cadastrado com sucesso!");
     }).catch(function(erro){
-        res.status(500).json(erro.sqlMessage);
+        console.log("ERRO NO CADASTRO:", erro);
+        res.status(500).json(erro.sqlMessage || erro.message || erro);
     })
 }
 

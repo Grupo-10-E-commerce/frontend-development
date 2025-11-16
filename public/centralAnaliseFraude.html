@@ -215,4 +215,61 @@
         colors: ['#a48bff'],
     };
     new ApexCharts(document.querySelector("#barChart"), barOptions).render();
+
+    let slackNotificationsEnabled = JSON.parse(localStorage.getItem("slackNotificationsEnabled") || "true");
+
+    function atualizarIconeSlack() {
+        const botao = document.getElementById("btn_notificacao");
+
+        if(slackNotificationsEnabled) {
+            botao.style.opacity = "1";
+            botao.title = "Notificações do Slack: Ligadas";
+        } else {
+            botao.style.opacity = "0.3";
+            botao.title = "Notificações do Slack: Desligadas";
+        }
+    }
+
+    function notificacao(){
+        slackNotificationsEnabled = !slackNotificationsEnabled;
+
+        localStorage.setItem("slackNotificationsEnabled", JSON.stringify(slackNotificationsEnabled));
+
+        atualizarIconeSlack();
+
+        const usuario = sessionStorage.NOME_USUARIO;
+        let mensagem = "";
+
+        if(slackNotificationsEnabled) {
+            mensagem = "🔔 Notificações do Slack ATIVADAS pelo usuário " + usuario + ".";
+        } else {
+            mensagem = "🔔 Notificações do Slack DESATIVADAS pelo usuário " + usuario + ".";
+        }
+
+        enviarNotificacaoSlack(mensagem, true);
+    }
+
+    window.addEventListener("load", atualizarIconeSlack);
+
+    async function enviarNotificacaoSlack(texto, ignorarEstado = false) {
+
+        if (!ignorarEstado && !slackNotificationsEnabled) {
+        console.log("Slack desligado. Notificação não será enviada.");
+        return;
+    }
+
+        try {
+            const resposta = await fetch("/slack/notificar", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({text: texto})
+            });
+
+            if(!resposta.ok) {
+                console.error("Erro ao enviar notificações para o Slack:", resposta.status);
+            }
+        } catch (erro) {
+            console.error("Erro ao enviar notificação:", erro);
+        }
+    }
 </script>

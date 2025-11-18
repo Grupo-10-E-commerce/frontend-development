@@ -125,6 +125,7 @@
 
                 if (resposta.ok) {
                     console.log("Cadastro da empresa realizado")
+
                 } else {
                     throw "Houve um erro ao tentar realizar cadastro!"
                 }
@@ -133,34 +134,6 @@
                 console.log(`#ERRO: ${resposta}`);
             });
 
-        // // buscar id empresa
-        // fetch("/empresas/buscar", {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //     },
-        //     body: JSON.stringify({
-        //         cnpj: cnpj
-        //     }),
-        // })
-        //     .then(function (resposta) {
-        //         console.log("resposta: ", resposta);
-
-        //         if (resposta.ok) {
-        //             resposta.json().then(json => {
-        //                 console.log(json);
-        //                 console.log(JSON.stringify(json));
-        //                 var id_empresa = json[0].id_empresa;
-        //             });
-        //             console.log("id empresa: " + id_empresa)
-
-        //         } else {
-        //             throw "Houve um erro ao tentar realizar cadastro!"
-        //         }
-        //     })
-        //     .catch(function (resposta) {
-        //         console.log(`#ERRO: ${resposta}`);
-        //     });
 
         setTimeout(() => {
             fetch("/usuarios/cadastrar", {
@@ -193,8 +166,39 @@
 
 
             return false;
-        }, 2000);
+        }, 1000);
+    }
 
+    function buscarIdEmpresa() {
+        // buscar id empresa
+        console.log("Buscando id_empresa...")
+        fetch("/empresas/buscar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                cnpj: cnpj
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+                    resposta.json().then(json => {
+                        console.log(json);
+                        console.log(JSON.stringify(json));
+                        var id_empresa = json[0].id_empresa;
+                    });
+                    console.log("id empresa: " + id_empresa)
+
+                } else {
+                    throw "Houve um erro ao tentar realizar cadastro!"
+                }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
     }
 
     function entrar() {

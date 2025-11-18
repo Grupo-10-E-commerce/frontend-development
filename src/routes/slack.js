@@ -7,4 +7,12 @@ router.post("/notificar", function (req,res) {
     slackController.notificar(req, res);
 });
 
+router.get("/status/:idEmpresa", function(req, res){
+    slackController.buscarStatus(req,res);
+});
+
+router.post("/status/:idEmpresa", function(req, res){
+    slackController.atualizarStatus(req, res);
+});
+
 module.exports = router;

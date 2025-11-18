@@ -247,6 +247,16 @@
         }
 
         enviarNotificacaoSlack(mensagem, true);
+
+        const idEmpresa = sessionStorage.ID_EMPRESA;
+
+        fetch("/slack/status/" + idEmpresa, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ativo: slackNotificationsEnabled})
+        }).catch(erro => {
+            console.error("Erro ao atualizar status do Slack no backend:", erro);
+        });
     }
 
     window.addEventListener("load", atualizarIconeSlack);

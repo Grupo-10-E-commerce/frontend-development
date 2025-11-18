@@ -1,7 +1,9 @@
+var database = require("../database/config");
+
 function enviarNotificacao(texto) {
     const webhookUrl = process.env.SLACK_WEBHOOK_URL;
 
-if (!webhookUrl) {
+    if (!webhookUrl) {
         return Promise.reject("SLACK_WEBHOOK_URL não configurada no .env.dev");
     }
 
@@ -19,6 +21,27 @@ if (!webhookUrl) {
     });
 }
 
+function atualizarStatus(idEmpresa, ativo) {
+
+    var instrucao = `
+    UPDATE empresa SET slack_notificacoes_ativas = ${ativo ? 1 : 0} WHERE id_empresa = ${idEmpresa};
+    `;
+
+    console.log("Executando SQL (atualizarStatus):\n" + instrucao);
+    return database.executar(instrucao);
+}
+
+function buscarStatus(idEmpresa) {
+    var instrucao = `
+    SELECT slack_notificacoes_ativas from empresa where id_empresa = ${idEmpresa};
+    `;
+
+    console.log("Executando SQL (buscarStatus):\n" + instrucao);
+    return database.executar(instrucao);
+}
+
 module.exports = {
-    enviarNotificacao
+    enviarNotificacao,
+    atualizarStatus,
+    buscarStatus
 };

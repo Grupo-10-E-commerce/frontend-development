@@ -5,14 +5,16 @@ function login(req, res){
     var {email, senha} = req.body;
 
     if(!email || !senha){
-        return res.status(400)("Email e senha são obrigatórios");
+        return res.status(400).send("Email e senha são obrigatórios");
     }
 
     usuariosModel.efetuarLogin(email, senha).then(function (resultado){
-        if(resultado .length == 1){
+        if(resultado.length == 1){
             res.status(200).json(resultado[0]);
+        } else if(resultado.length == 0) {
+            res.status(401).send("Erro no login. Usuário não encontrado.")
         } else {
-            res.status(500).send("Erro no login. Usuário não encontrado.")
+            res.status(500).send("erro no login. tem mais de um usuario")
         }
     })
 
@@ -37,7 +39,8 @@ function cadastrar(req, res){
     usuariosModel.cadastrar(nome, email, senha).then(function(resposta){
         res.status(200).send("Usuário cadastrado com sucesso!");
     }).catch(function(erro){
-        res.status(500).json(erro.sqlMessage);
+        console.log("ERRO NO CADASTRO:", erro);
+        res.status(500).json(erro.sqlMessage || erro.message || erro);
     })
 }
 

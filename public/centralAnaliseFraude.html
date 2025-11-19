@@ -246,8 +246,6 @@
             mensagem = "🔔 Notificações do Slack DESATIVADAS pelo usuário " + usuario + ".";
         }
 
-        enviarNotificacaoSlack(mensagem, true);
-
         const idEmpresa = sessionStorage.ID_EMPRESA;
 
         fetch("/slack/status/" + idEmpresa, {
@@ -257,6 +255,9 @@
         }).catch(erro => {
             console.error("Erro ao atualizar status do Slack no backend:", erro);
         });
+
+        enviarNotificacaoSlack(mensagem, true);
+
     }
 
     window.addEventListener("load", atualizarIconeSlack);

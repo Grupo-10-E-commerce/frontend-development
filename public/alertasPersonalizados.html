@@ -91,6 +91,8 @@
     const modal = document.getElementById("modal");
     const btnCancelar = document.getElementById("btnCancelar");
     const btnCriarAlerta = document.getElementById("btnCriarAlerta");
+    let alertasCarregados = [];
+    let alertaEmEdicaoId = null;
 
     let slackNotificationsEnabled = JSON.parse(localStorage.getItem("slackNotificationsEnabled") || "true");
 
@@ -181,6 +183,11 @@
 
     // Mostrar modal
     btnAdd.addEventListener("click", () => {
+        alertaEmEdicaoId = null;
+        limparCamposModal();
+        document.querySelector("#modal h2").textContent = "Alerta personalizado";
+        document.getElementById("btnCriarAlerta").textContent = "Criar alerta";
+        
         modal.classList.add("active");
     });
 
@@ -229,9 +236,13 @@
             ativo: ativoAl
         };
 
+        const criando = (alertaEmEdicaoId == null);
+        const url = criando ? "/alertaPersonalizado" : `/alertaPersonalizado/${alertaEmEdicaoId}`;
+        const metodoHttp = criando ? "POST" : "PUT";
+
         try {
             const resposta = await fetch("/alertaPersonalizado", {
-                method: "POST",
+                method: metodoHttp,
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(dados)
             });
@@ -243,8 +254,11 @@
                 return;
             }
 
-            alert("Alerta criado com sucesso!");
+            alert(criando ? "Alerta criado com sucesso" : "Alerta atualizado com sucesso");
             modal.classList.remove("active");
+
+            limparCamposModal();
+            alertaEmEdicaoId = null;
 
             document.getElementById("nomeAlerta").value = "";
             document.getElementById("valorMinimo").value = "";
@@ -309,6 +323,8 @@
 
         const alertas = await resposta.json();
 
+        alertasCarregados = alertas;
+
         if (!alertas || alertas.length === 0) {
             listaAlertasDiv.innerHTML = `<p style="color: #777;">Você ainda não criou nenhum alerta</p>`;
             return;
@@ -347,12 +363,59 @@
 
 
     function exibirAlerta(idAlerta) {
-        alert("Exibir alerta " + idAlerta + " (a implementar)");
+        const id = Number(idAlerta);
+
+        const alerta = alertasCarregados.find(al => al.id_alerta == id);
+
+        if(!alerta) {
+            alert("Alerta não encontrado na lista");
+            return;
+        }
+
+        const statusTexto = alerta.ativo ? "Ativo" : "Inativo";
+        const descricaoFiltros = montarDescricaoAlerta(alerta);
+
+        const mensagem = `📝 Alerta: ${alerta.nome_alerta}\n` +
+        `Status: ${statusTexto}\n` +
+        `Filtros: ${descricaoFiltros}`;
+
+        alert(mensagem);
     }
 
     function editarAlerta(idAlerta) {
-        alert("Editar alerta " + idAlerta + " (a implementar)");
-    }
+        const id = Number(idAlerta);
+
+        const alerta = alertasCarregados.find(al => al.id_alerta == id);
+
+        if(!alerta){
+            alert("Alerta não encontrado na lista");
+        }
+
+        alertaEmEdicaoId = id;
+
+        document.getElementById("nomeAlerta").value = alerta.nome_alerta || "";
+        document.getElementById("valorMinimo").value = alerta.valor_minimo != null ? alerta.valor_minimo : "";
+        document.getElementById("metodoPagamento").value = alerta.metodo_pagamento || "";
+        document.getElementById("cidadeAlerta").value = alerta.cidade || "";
+        document.getElementById("mesAlerta").value = alerta.mes != null ? alerta.mes : "";
+        document.getElementById("anoAlerta").value = alerta.ano != null ? alerta.ano : "";
+        document.getElementById("ativoAlerta").checked = alerta.ativo == 1 || alerta.ativo == true;
+
+        document.querySelector("#modal h2").textContent = "Editar alerta";
+        document.getElementById("btnCriarAlerta").textContent = "Salvar alterações";
+
+        modal.classList.add("active");
+        }
+
+    function limparCamposModal() {
+    document.getElementById("nomeAlerta").value = "";
+    document.getElementById("valorMinimo").value = "";
+    document.getElementById("metodoPagamento").value = "";
+    document.getElementById("cidadeAlerta").value = "";
+    document.getElementById("mesAlerta").value = "";
+    document.getElementById("anoAlerta").value = "";
+    document.getElementById("ativoAlerta").checked = true;
+}
 
     function excluirAlerta(idAlerta) {
         alert("Excluir alerta " + idAlerta + " (a implementar)");

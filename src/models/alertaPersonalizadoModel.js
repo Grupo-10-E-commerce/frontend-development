@@ -36,7 +36,37 @@ function listarPorEmpresa(idEmpresa) {
     return database.executar(instrucao);
 }
 
+function atualizar(idAlerta, idEmpresa, idUsuario, nomeAlerta, metodoPagamento, valorMinimo, cidade, mes, ano, ativo) {
+    
+    const metodoSql = metodoPagamento ? `'${metodoPagamento.replace("'", "''")}'` : "NULL";
+    const valorMinSql = valorMinimo !== null && valorMinimo !== undefined ? valorMinimo : "NULL";
+    const cidadeSql = cidade ? `'${cidade.replace("'", "''")}'` : "NULL";
+    const mesSql = mes !== null && mes !== undefined ? mes : "NULL";
+    const anoSql = ano !== null && ano !== undefined ? ano : "NULL";
+    const ativoSql = ativo ? 1 : 0;
+
+    var instrucao = `
+        UPDATE alerta_personalizado
+        SET
+            id_usuario = ${idUsuario},
+            nome_alerta = '${nomeAlerta.replace("'", "''")}',
+            metodo_pagamento = ${metodoSql},
+            valor_minimo = ${valorMinSql},
+            cidade = ${cidadeSql},
+            mes = ${mesSql},
+            ano = ${anoSql},
+            ativo = ${ativoSql}
+        WHERE id_alerta = ${idAlerta}
+          AND id_empresa = ${idEmpresa};
+    `;
+
+    console.log("Executando SQL (atualizar alerta):\n" + instrucao);
+    return database.executar(instrucao);
+
+}
+
 module.exports = {
     cadastrar,
-    listarPorEmpresa
+    listarPorEmpresa,
+    atualizar
 };

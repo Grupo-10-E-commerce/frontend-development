@@ -11,4 +11,8 @@ router.get("/empresa/:idEmpresa", function (req, res){
     alertaController.listarPorEmpresa(req, res);
 });
 
+router.put("/:idAlerta", function(req, res){
+    alertaController.atualizar(req, res);
+});
+
 module.exports = router;

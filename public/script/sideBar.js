@@ -22,7 +22,7 @@ class SideBarComponent extends HTMLElement {
     toggleMenu() {
         const sidebar = this.shadowRoot.querySelector('.sidebar');
         sidebar.classList.toggle('collapsed');
-        document.body.style.marginLeft = sidebar.classList.contains('collapsed') ? '250px' : '80px';
+        document.body.style.marginLeft = sidebar.classList.contains('collapsed') ? '280px' : '80px';
     }
 
     toggleOptions() {
@@ -68,7 +68,7 @@ class SideBarComponent extends HTMLElement {
                 }
 
                 .sidebar.collapsed {
-                    width: 250px;
+                    width: 280px;
                 }
 
                 .toggleMenu {
@@ -146,6 +146,13 @@ class SideBarComponent extends HTMLElement {
                     fill: currentColor;
                 }
 
+                .menu-item img {
+                    width: 28px;
+                    height: 28px;
+                    object-fit: contain;
+                    mix-blend-mode: screen; 
+                }
+
                 .menu-item span {
                     display: none;
                     margin-left: 15px;
@@ -202,32 +209,35 @@ class SideBarComponent extends HTMLElement {
                 </div>
 
                 <nav class="menu">
+
                     <div class="menu-item" data-page="centralAnaliseFraude">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
-                        </svg>
+                        <img src="img/centralicon.png" class="menu-icon">
                         <span>Central de Análise de Fraude</span>
                     </div>
 
                     <div class="menu-item" data-page="painelPerformanceRisco">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/>
-                        </svg>
+                        <img src="img/painelicon.png" class="menu-icon">
                         <span>Performance de Risco</span>
                     </div>
 
                     <div class="menu-item" data-page="alertasPersonalizados">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/>
-                        </svg>
+                        <img src="img/alertaIcon.png" class="menu-icon">
                         <span>Alertas Personalizados</span>
                     </div>
 
                     <div class="menu-item" data-page="editarPerfil">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
-                        </svg>
+                        <img src="img/editarIcon.png" class="menu-icon">
                         <span>Editar Perfil</span>
+                    </div>
+
+                    <div class="menu-item" data-page="avaliacao">
+                        <img src="img/avaliacaoicon.png" class="menu-icon">
+                        <span>Avaliação</span>
+                    </div>
+
+                    <div class="menu-item" data-page="frabot">
+                        <img src="img/chaticon.png" class="menu-icon">
+                    <span>Frabot</span>
                     </div>
 
                 </nav>

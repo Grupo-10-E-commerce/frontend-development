@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./script/sideBar.js"></script>
+    <link rel="stylesheet" href="style/avaliacao.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Konkhmer+Sleokchher&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap ">
+    <title>Avaliar Plataforma Fraux</title>
+</head>
+<body>
+
+    <side-Bar></side-Bar>
+
+    <div class="header">
+        <div class="btn">
+            <button id="btn_relatorio" class="btn_emitir_relatorio" onclick="emitirRelatorio()">Emitir
+                Relatório</button>
+            <button id="btn_notificacao" class="btn_sino" onclick="notificacao()">
+                <img src="img/notification-bell.png" alt="Notificacoes">
+            </button>
+            <span id="span_bem_vindo"></span>
+        </div>
+    </div>
+<div class="container">
+    <div class="container-avaliacao">
+       
+        <div class="titulo-logo">
+            <img width="60px" src="./img/fraux-logo.png">
+            <h1>FRAUX</h1>
+        </div>
+
+        <div class="mensagem">
+            <span>Conte-nos como foi usar nossa aplicação, seu feedback nos ajuda a melhorar.</span>
+        </div>
+
+         <div class="campo">
+                    <ul class="avaliacao" id="1">
+                        <li class="star-icon" data-avaliacao="1"></li>
+                        <li class="star-icon" data-avaliacao="2"></li>
+                        <li class="star-icon" data-avaliacao="3"></li>
+                        <li class="star-icon" data-avaliacao="4"></li>
+                        <li class="star-icon" data-avaliacao="5"></li>
+                    </ul>
+        </div>
+
+        <div class="comentario">
+            <textarea placeholder="Observações" id="coment" rows=5 cols=25></textarea>
+        </div>
+
+        <div class="botao-feedback">
+            <button class="btn-avaliar" onclick="avaliar()">Enviar Feedback</button>
+        </div>
+
+    </div>
+</div>
+    
+</body>
+</html>
+<script>
+
+    const avaliacoes = document.querySelectorAll('.avaliacao');
+    const notas = [];
+    const comente = [];
+
+    for (var i = 0; i < avaliacoes.length; i++) {
+        const stars = avaliacoes[i].querySelectorAll('.star-icon');
+        console.log(stars)
+
+        for (var a = 0; a < stars.length; a++) {
+
+            stars[a].addEventListener('click', function (e) {
+                const starsGroup = this.parentElement.querySelectorAll('.star-icon');
+                
+                const comentario = this.parentNode.parentNode.querySelector("textarea").value
+
+                for (var b = 0; b < starsGroup.length; b++) {
+                    starsGroup[b].classList.remove('ativo');
+                }
+                this.classList.add('ativo');
+            })
+        }
+    }
+
+</script>

@@ -237,12 +237,11 @@
         };
 
         const criando = (alertaEmEdicaoId == null);
-        const url = criando ? "/alertaPersonalizado" : `/alertaPersonalizado/${alertaEmEdicaoId}`;
-        const metodoHttp = criando ? "POST" : "PUT";
+        const url = criando ? "/alertaPersonalizado" : `/alertaPersonalizado/atualizar/${alertaEmEdicaoId}`;
 
         try {
-            const resposta = await fetch("/alertaPersonalizado", {
-                method: metodoHttp,
+            const resposta = await fetch(url, {
+                method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(dados)
             });
@@ -389,6 +388,7 @@
 
         if(!alerta){
             alert("Alerta não encontrado na lista");
+            return;
         }
 
         alertaEmEdicaoId = id;

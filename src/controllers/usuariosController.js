@@ -30,13 +30,14 @@ function cadastrar(req, res){
     var nome = req.body.nome;
     var email = req.body.email;
     var senha = req.body.senha;
+    var id_empresa = req.body.id_empresa;
 
     if(nome == undefined){
         res.status(400).send("Seu nome está undefined!");
     }
 
 
-    usuariosModel.cadastrar(nome, email, senha).then(function(resposta){
+    usuariosModel.cadastrar(nome, email, senha, id_empresa).then(function(resposta){
         res.status(200).send("Usuário cadastrado com sucesso!");
     }).catch(function(erro){
         console.log("ERRO NO CADASTRO:", erro);

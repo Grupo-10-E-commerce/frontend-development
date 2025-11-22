@@ -5,9 +5,9 @@ function buscarPorCnpj(req, res) {
 
   empresaModel.buscarPorCnpj(cnpj).then((resultado) => {
     res.status(200).json(resultado);
-    res.json({
-            id_empresa: resultado[0].id_empresa,
-        });
+    // res.json({
+    //         id_empresa: resultado[0].id_empresa,
+    //     });
   });
 }
 

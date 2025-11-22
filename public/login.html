@@ -14,6 +14,7 @@
 
 <body>
     <i class='bx  bx-home' style='color:#ffffff' onclick="voltarTelaInicial()"></i>
+
     <!--============== LOGO ==============-->
     <div id="div_titulo" class="div-titulo">
         <div class="div-logo">
@@ -42,7 +43,8 @@
 
                 <div>
                     <span id="span_cnpj">CNPJ</span>
-                    <input placeholder="00.000.000/0000-00" type="number" name="" id="input_cnpj">
+                    <input placeholder="00.000.000/0000-00" type="number" name="" id="input_cnpj"
+                        oninput="limitarCaracteresCnpj()">
                 </div>
             </div>
             <!-- Cadastro usuário administrador -->
@@ -80,6 +82,19 @@
 
 </html>
 <script>
+    function limitarCaracteresCnpj() {
+        let cnpjVerificar = input_cnpj.value;
+
+        if (cnpjVerificar.length > 14) {
+            input_cnpj.value = "";
+
+            for (let i = 0; i < 14; i++) {
+                input_cnpj.value += cnpjVerificar[i];
+            }
+        }
+
+    }
+
     function cadastrar() {
 
         var razaoSocial = input_razao_social.value;
@@ -108,6 +123,10 @@
             alert("Por favor, insira um email válido.");
             return;
         }
+        if (cnpj.length != 14) {
+            alert("Por favor, insira um CNPJ válido.");
+            return;
+        }
 
         // cadastrar empresa
         fetch("/empresas/cadastrar", {
@@ -124,7 +143,72 @@
                 console.log("resposta: ", resposta);
 
                 if (resposta.ok) {
-                    console.log("Cadastro da empresa realizado")
+                    console.log("Cadastro da empresa realizado!")
+                    buscarIdEmpresa(cnpj, nome, email, senha); // Buscar id da empresa cadastrada
+
+                } else {
+                    throw "Houve um erro ao tentar realizar cadastro!"
+                }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+    }
+
+    function buscarIdEmpresa(cnpj, nome, email, senha) {
+        console.log("Buscando id_empresa...")
+        fetch("/empresas/buscar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                cnpj: cnpj
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+                    resposta.json().then(json => {
+                        console.log(json);
+                        console.log(JSON.stringify(json));
+                        let id_empresa = json[0].id_empresa;
+                        console.log("fk da empresa adquirido: " + id_empresa)
+                        cadastrarUsuario(nome, email, senha, id_empresa); // cadastrar usuário
+                    });
+
+                } else {
+                    throw "Houve um erro ao tentar realizar cadastro!"
+                }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+    }
+
+    function cadastrarUsuario(nome, email, senha, id_empresa) {
+        console.log("Acessando function cadastrarUsuario()...");
+        fetch("/usuarios/cadastrar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                nome: nome,
+                email: email,
+                senha: senha,
+                id_empresa: id_empresa,
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+                    setTimeout(() => {
+                        alert("Cadastro feito com sucesso!");
+                        window.location = "login.html";
+                    }, "2000");
                 } else {
                     throw "Houve um erro ao tentar realizar cadastro!"
                 }
@@ -133,68 +217,7 @@
                 console.log(`#ERRO: ${resposta}`);
             });
 
-        // // buscar id empresa
-        // fetch("/empresas/buscar", {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //     },
-        //     body: JSON.stringify({
-        //         cnpj: cnpj
-        //     }),
-        // })
-        //     .then(function (resposta) {
-        //         console.log("resposta: ", resposta);
-
-        //         if (resposta.ok) {
-        //             resposta.json().then(json => {
-        //                 console.log(json);
-        //                 console.log(JSON.stringify(json));
-        //                 var id_empresa = json[0].id_empresa;
-        //             });
-        //             console.log("id empresa: " + id_empresa)
-
-        //         } else {
-        //             throw "Houve um erro ao tentar realizar cadastro!"
-        //         }
-        //     })
-        //     .catch(function (resposta) {
-        //         console.log(`#ERRO: ${resposta}`);
-        //     });
-
-        setTimeout(() => {
-            fetch("/usuarios/cadastrar", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    nome: nome,
-                    email: email,
-                    senha: senha
-                }),
-            })
-                .then(function (resposta) {
-                    console.log("resposta: ", resposta);
-
-                    if (resposta.ok) {
-                        setTimeout(() => {
-                            alert("Cadastro feito com sucesso!");
-                            window.location = "login.html";
-                        }, "2000");
-                    } else {
-                        throw "Houve um erro ao tentar realizar cadastro!"
-                    }
-                })
-                .catch(function (resposta) {
-                    console.log(`#ERRO: ${resposta}`);
-                });
-
-
-
-            return false;
-        }, 2000);
-
+        return false;
     }
 
     function entrar() {

@@ -110,7 +110,7 @@
         return Swal.fire({
             icon: 'info',
             title: titulo || 'Informação',
-            text: mensagem || '',
+            html: mensagem || '',
             confirmButtonColor: '#3085d6'
         });
     }
@@ -420,7 +420,7 @@
         const descricaoFiltros = montarDescricaoAlerta(alerta);
 
         const mensagem =
-        `Status: ${statusTexto}\n` +
+        `Status: ${statusTexto}<br>` +
         `Filtros: ${descricaoFiltros}`;
 
     swalInfo(`📝 ${alerta.nome_alerta}`, mensagem);

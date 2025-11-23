@@ -3,7 +3,7 @@ var database = require("../database/config");
 function atualizarStatus(idEmpresa, ativo) {
 
     var instrucao = `
-    UPDATE empresa SET slack_notificacoes_ativas = ${ativo ? 1 : 0} WHERE id_empresa = ${idEmpresa};
+    INSERT INTO slack_config (id_empresa, notificacoes_ativas) VALUES (${idEmpresa}, ${ativo}) ON DUPLICATE KEY UPDATE notificacoes_ativas = ${ativo};
     `;
 
     console.log("Executando SQL (atualizarStatus):\n" + instrucao);
@@ -12,7 +12,7 @@ function atualizarStatus(idEmpresa, ativo) {
 
 function buscarStatus(idEmpresa) {
     var instrucao = `
-    SELECT slack_notificacoes_ativas from empresa where id_empresa = ${idEmpresa};
+        SELECT notificacoes_ativas FROM slack_config WHERE id_empresa = ${idEmpresa};
     `;
 
     console.log("Executando SQL (buscarStatus):\n" + instrucao);

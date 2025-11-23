@@ -62,11 +62,20 @@ function atualizar(idAlerta, idEmpresa, idUsuario, nomeAlerta, metodoPagamento, 
 
     console.log("Executando SQL (atualizar alerta):\n" + instrucao);
     return database.executar(instrucao);
+}
 
+function excluir(idAlerta, idEmpresa) {
+    var instrucao = `
+    DELETE FROM alerta_personalizado WHERE id_alerta = ${idAlerta} AND id_empresa = ${idEmpresa};
+    `;
+
+    console.log("Executando SQL (excluir alerta):\n" + instrucao);
+    return database.executar(instrucao);
 }
 
 module.exports = {
     cadastrar,
     listarPorEmpresa,
-    atualizar
+    atualizar,
+    excluir
 };

@@ -15,4 +15,8 @@ router.post("/atualizar/:idAlerta", function (req, res) {
     alertaController.atualizar(req, res);
 });
 
+router.post("/excluir/:idAlerta", function (req, res) {
+    alertaController.excluir(req, res);
+});
+
 module.exports = router;

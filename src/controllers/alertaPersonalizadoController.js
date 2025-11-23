@@ -1,4 +1,5 @@
 var alertaModel = require("../models/alertaPersonalizadoModel");
+const { param } = require("../routes");
 
 function cadastrar(req, res) {
     const {
@@ -90,8 +91,29 @@ function atualizar(req, res) {
     })
 }
 
+function excluir(req, res) {
+    const idAlerta= req.params.idAlerta;
+    const {idEmpresa} = req.body;
+
+    if(!idAlerta || !idEmpresa){
+        return res.status(400).json({
+            erro: "idAlerta (params) e idEmpresa (body) são obrigatórios para exluir"
+        });
+    }
+
+    alertaModel.excluir(idAlerta, idEmpresa) 
+        .then(() => {
+            res.status(204).send();
+        })
+        .catch((erro) => {
+            console.log("Erro ao excluir alerta personalizado", erro);
+            res.status(500).json({erro: "Erro ao excluir alerta"});
+        });
+}
+
 module.exports = {
     cadastrar,
     listarPorEmpresa,
-    atualizar
+    atualizar,
+    excluir
 }

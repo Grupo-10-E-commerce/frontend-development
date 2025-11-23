@@ -81,10 +81,55 @@
       </div>
   </div>
 </div>
-</body>
-
-</html>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    function swalSucesso(titulo, mensagem) {
+        return Swal.fire({
+            icon: 'success',
+            title: titulo || 'Sucesso',
+            text: mensagem || '',
+            confirmButtonColor: '#3085d6'
+        });
+    }
+
+    function swalErro(titulo, mensagem) {
+        return Swal.fire({
+            icon: 'error',
+            title: titulo || 'Erro',
+            text: mensagem || '',
+            confirmButtonColor: '#d33'
+        });
+    }
+
+    function swalInfo(titulo, mensagem) {
+        if (mensagem === undefined) {
+            mensagem = titulo;
+            titulo = 'Informação';
+        }
+
+        return Swal.fire({
+            icon: 'info',
+            title: titulo || 'Informação',
+            text: mensagem || '',
+            confirmButtonColor: '#3085d6'
+        });
+    }
+
+    async function swalConfirmar(titulo, mensagem) {
+        const confirmar = await Swal.fire({
+            title: titulo || 'Tem certeza?',
+            text: mensagem || '',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sim',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6'
+        });
+
+        return confirmar.isConfirmed;
+    }
+
     span_bem_vindo.innerHTML = `Bem vindo(a), ${sessionStorage.NOME_USUARIO}!`;
 
     const btnAdd = document.getElementById("btnAddAlerta");
@@ -216,7 +261,7 @@
         const idUsuario = sessionStorage.ID_USUARIO;
 
         if (!nomeAlerta) {
-            alert("Informe um nome para o alerta");
+            await swalInfo("Campo obrigatório", "Informe um nome para o alerta");
             return;
         }
 
@@ -249,11 +294,11 @@
             if (!resposta.ok) {
                 const corpo = await resposta.text();
                 console.error("Erro ao cadastrar alerta.", corpo);
-                alert("Erro ao criar alerta.");
+                await swalErro("Erro", "Erro ao criar alerta.");
                 return;
             }
 
-            alert(criando ? "Alerta criado com sucesso" : "Alerta atualizado com sucesso");
+            await swalSucesso("Sucesso", criando ? "Alerta criado com sucesso." : "Alerta atualizado com sucesso.");
             modal.classList.remove("active");
 
             limparCamposModal();
@@ -269,7 +314,7 @@
             carregarAlertas();
         } catch (erro) {
             console.error("Erro na req para criar alerta", erro);
-            alert("Erro na comunicação com o servidor");
+            await swalInfo("Erro na comunicação com o servidor");
         }
     });
 
@@ -302,7 +347,7 @@
             return "Sem filtros (todas as informações)";
         }
 
-        return partes.join(" • ");
+        return partes.join("<br>");
     }
 
     async function carregarAlertas() {
@@ -367,18 +412,19 @@
         const alerta = alertasCarregados.find(al => al.id_alerta == id);
 
         if(!alerta) {
-            alert("Alerta não encontrado na lista");
+            swalErro("Alerta não encontrado na lista");
             return;
         }
 
         const statusTexto = alerta.ativo ? "Ativo" : "Inativo";
         const descricaoFiltros = montarDescricaoAlerta(alerta);
 
-        const mensagem = `📝 Alerta: ${alerta.nome_alerta}\n` +
+        const mensagem =
         `Status: ${statusTexto}\n` +
         `Filtros: ${descricaoFiltros}`;
 
-        alert(mensagem);
+    swalInfo(`📝 ${alerta.nome_alerta}`, mensagem);
+
     }
 
     function editarAlerta(idAlerta) {
@@ -387,7 +433,7 @@
         const alerta = alertasCarregados.find(al => al.id_alerta == id);
 
         if(!alerta){
-            alert("Alerta não encontrado na lista");
+            swalErro("Erro", "Alerta não encontrado na lista");
             return;
         }
 
@@ -417,7 +463,40 @@
     document.getElementById("ativoAlerta").checked = true;
 }
 
-    function excluirAlerta(idAlerta) {
-        alert("Excluir alerta " + idAlerta + " (a implementar)");
+    async function excluirAlerta(idAlerta) {
+
+    const id = Number(idAlerta);
+
+    const confirmado = await swalConfirmar("Tem certeza?", "Essa ação não poderá ser desfeita.");
+
+    if (!confirmado) {
+        return;
     }
+
+    const idEmpresa = sessionStorage.ID_EMPRESA;
+
+    try {
+        const resposta = await fetch(`/alertaPersonalizado/excluir/${id}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({idEmpresa})
+        });
+        if (!resposta.ok) {
+            const corpo = await resposta.text();
+            console.error("Erro ao excluir o alerta", corpo);
+
+            await swalErro("Erro", "Erro ao excluir alerta.");
+            return;
+        }
+
+        await swalSucesso("Excluído!", "O alerta foi excluído com sucesso.");
+        carregarAlertas();
+
+    } catch (erro) {
+        console.error("Erro na req ao tentar excluir o alerta", erro);
+        await swalErro("Erro", "Erro na comunicação com o servidor.");
+    }
+}
 </script>
+</body>
+</html>

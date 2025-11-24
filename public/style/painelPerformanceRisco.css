@@ -3,11 +3,12 @@
     border: 0;
     margin: 0;
     font-family: "DM Sans", serif;
-    color: #919191;
+    color: #333;
 }
 
 body {
     background-color: #f4f3ff;
+    overflow-y: hidden;
 }
 
 /* CABEÇALHO */
@@ -21,7 +22,7 @@ body {
 }
 
 .title {
-    font-size: 35px;
+    font-size: 25px;
     font-weight: 600;
     color: #333;
 }
@@ -38,14 +39,18 @@ body {
     border: 1px solid #919191;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 22px;
+    font-size: 20px;
     transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    font-weight: 800;
 }
 
 .btn_emitir_relatorio:hover {
-    background-color: #9194de91;
-    border-color: #919191;
-    color: #333;
+    background-color: #9193DE;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(124, 122, 184, 0.4);
+    color: #ddd;
+    font-weight: 800;
 }
 
 .btn_sino img,
@@ -53,13 +58,10 @@ body {
     width: 24px;
     height: 24px;
     display: block;
-    background-color: #f4f3ff;
 }
 
 .btn span {
-    font-size: 22px;
-    color: #333;
-    font-weight: bold;
+    font-size: 20px;
 }
 
 .metricas {
@@ -72,7 +74,7 @@ body {
     /* border: 1px solid blue; */
     display: flex;
     justify-content: space-around;
-    height: 10rem;
+    height: 8rem;
     margin: 10px;
 }
 
@@ -84,13 +86,15 @@ body {
     display: flex;
     flex-direction: column;
     background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .containers .KPI .title-KPI {
-    font-size: 25px;
-    margin: 10px;
+    font-size: 22px;
+    margin: 5px;
     font-weight: bold;
     color: #333;
+    padding-left: 8px;
 }
 
 .containers .valor {
@@ -105,8 +109,8 @@ body {
 }
 
 .containers .KPI .valor-KPI {
-    font-size: 35px;
-    margin: 10px;
+    font-size: 26px;
+    margin: 2px;
     font-weight: bold;
     width: 70%;
     color: #333;
@@ -118,10 +122,11 @@ body {
 }
 
 .containers .KPI .legenda-KPI {
-    font-size: 25px;
-    margin: 10px;
+    font-size: 20px;
+    margin: 2px;
     font-weight: bold;
-    color: #333;
+    color: #7e7979;
+    padding-left: 8px;
 }
 
 /* GRAFICOS */
@@ -130,7 +135,7 @@ body {
     /* border: 1px solid blue; */
     display: flex;
     justify-content: space-around;
-    height: 23rem;
+    height: 21rem;
     margin: 10px;
 }
 
@@ -139,6 +144,7 @@ body {
     border-radius: 5px;
     width: 48%;
     background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .grafico1 span {
@@ -218,16 +224,19 @@ body {
     border-radius: 5px;
     width: 48%;
     background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .grafico2 span {
     font-size: 22px;
     font-weight: bold;
     margin: 10px;
+    width: 20rem;
 }
 
 .filtros {
     display: flex;
+    justify-content: end;
     gap: 10px;
     width: 100%;
 }
@@ -266,7 +275,7 @@ body {
     /* border: 1px solid blue; */
     display: flex;
     justify-content: space-around;
-    height: 23rem;
+    height: 21rem;
 }
 
 .grafico3 {
@@ -274,13 +283,13 @@ body {
     border-radius: 5px;
     width: 30.5%;
     background-color: white;
-
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px;
 }
 
 .grafico3 span {
     font-size: 22px;
     font-weight: bold;
-    margin: 10px;
     color: #333;
 }
 
@@ -289,6 +298,7 @@ body {
     border-radius: 5px;
     width: 63%;
     background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .grafico-header-lucros {
@@ -355,4 +365,3 @@ body {
     margin: 10px;
     color: #333;
 }
-

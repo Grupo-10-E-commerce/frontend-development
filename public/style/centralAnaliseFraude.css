@@ -35,17 +35,21 @@ body {
 .btn_emitir_relatorio {
     color: #333;
     padding: 8px 16px;
-    border: 1px solid #333;
+    border: 1px solid #919191;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 20px;
     transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    font-weight: 800;
 }
 
 .btn_emitir_relatorio:hover {
-    background-color: #9194de91;
-    border-color: #333;
-    color: #333;
+    background-color: #9193DE;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(124, 122, 184, 0.4);
+    color: #ddd;
+    font-weight: 800;
 }
 
 .btn_sino img,
@@ -53,7 +57,6 @@ body {
     width: 24px;
     height: 24px;
     display: block;
-    background-color: #f4f3ff;
 }
 
 .btn span {

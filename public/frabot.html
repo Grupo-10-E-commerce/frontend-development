@@ -1,15 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="./script/sideBar.js"></script>
-    <title>Frabot</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Frabot - Assistente Virtual</title>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Konkhmer+Sleokchher&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap">
+    <link rel="stylesheet" href="./style/frabot.css" />
+    <script src="./script/sideBar.js" defer></script>
+    <script src="./script/frabot.js" defer></script>
 </head>
-<body>
 
-    <side-Bar></side-Bar>
-    FRABOT
+<body>
+    <side-bar></side-bar>
+
+    <main class="chat-container">
+        <div class="chat-header">
+            <div class="bot-avatar"></div>
+            <h2>Frabot <a>• Online</a></h2>
+        </div>
+
+        <div id="chat" class="chat-content">
+            <div class="message bot">
+                Olá! 👋 Eu sou o Frabot, seu assistente virtual especializado no Sistema de Análise de Fraude. Estou aqui para responder todas as suas dúvidas e te ajudar a navegar pela plataforma. Como posso te auxiliar hoje?
+            </div>
+        </div>
+
+        <div class="chat-input-container">
+            <input 
+                type="text" 
+                id="userMessage" 
+                placeholder="Digite sua pergunta aqui..." 
+                autocomplete="off"
+            >
+            <button id="sendMessage">Enviar</button>
+        </div>
+    </main>
 
 </body>
 </html>

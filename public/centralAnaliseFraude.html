@@ -13,6 +13,8 @@
     <title>Central de análise de fraude</title>
 </head>
 
+<body onload="buscarMedidas()">
+
 <body>
     <side-Bar></side-Bar>
     <div class="header">
@@ -31,7 +33,7 @@
         <section class="top-cards">
             <div class="card">
                 <p class="titulo">Nº de Fraudes</p>
-                <div class="valor">127</div>
+                <div class="valor" id="div_numeroTotalFraudes">127</div>
                 <div class="icone">⚠️</div>
             </div>
             <div class="card">
@@ -40,30 +42,30 @@
                 <p class="sub">Em relação a 528 Vendas</p>
                 <div class="icone">⚠️</div>
             </div>
-                <div class="grafico-card">
-                    <h3>Fraudes por Região</h3>
-                    <img src="./img/grafico-regiao.png" alt="">
-                    <div class="legenda">
-                        <span class="cor roxo"></span> Muitas Fraudes
-                        <span class="cor claro"></span> Poucas Fraudes
-                    </div>
+            <div class="grafico-card">
+                <h3>Fraudes por Região</h3>
+                <img src="./img/grafico-regiao.png" alt="">
+                <div class="legenda">
+                    <span class="cor roxo"></span> Muitas Fraudes
+                    <span class="cor claro"></span> Poucas Fraudes
                 </div>
+            </div>
 
-                <div class="alertas">
-                    <h3>Últimos alertas de Fraude</h3>
-                    <div class="alerta">
-                        ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às 23:55 horas
-                    </div>
-                    <div class="alerta">
-                        ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às 23:58 horas
-                    </div>
-                    <div class="alerta">
-                        ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às 03:00 horas
-                    </div>
-                    <div class="alerta">
-                        ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às 18:25 horas
-                    </div>
+            <div class="alertas">
+                <h3>Últimos alertas de Fraude</h3>
+                <div class="alerta">
+                    ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às 23:55 horas
                 </div>
+                <div class="alerta">
+                    ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às 23:58 horas
+                </div>
+                <div class="alerta">
+                    ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às 03:00 horas
+                </div>
+                <div class="alerta">
+                    ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às 18:25 horas
+                </div>
+            </div>
         </section>
 
 
@@ -172,56 +174,92 @@
             type: 'bar',
             height: 300,
             toolbar: {
-                show: false  
+                show: false
             }
-        }, 
+        },
         series: [{
             name: 'Fraudes',
             data: [15, 25, 22, 20, 18]
         }],
         dataLabels: {
-                enabled: true,
-                style: {
-                    fontSize: '18px',
-                    fontWeight: 'bolder',
-                    colors: ['#fff'], 
-                },
+            enabled: true,
+            style: {
+                fontSize: '18px',
+                fontWeight: 'bolder',
+                colors: ['#fff'],
             },
+        },
         plotOptions: {
-                bar: {
-                columnWidth: '70%', 
+            bar: {
+                columnWidth: '70%',
                 dataLabels: {
                     position: 'top',
                 }
-                }
-            },
+            }
+        },
         xaxis: {
             categories: ['Cartão de Crédito', 'Identidade Falsa', 'ChargeBack', 'Fraude Amigável', 'Outro'],
             labels: {
-            style: {
+                style: {
                     colors: '#333',
                     fontSize: '13px'
+                }
             }
-        }
         },
         yaxis: {
-        labels: {
-            style: {
-                colors: '#333',
-                fontSize: '13px'
+            labels: {
+                style: {
+                    colors: '#333',
+                    fontSize: '13px'
+                }
             }
-        }
-    },
+        },
         colors: ['#a48bff'],
     };
     new ApexCharts(document.querySelector("#barChart"), barOptions).render();
 
     let slackNotificationsEnabled = JSON.parse(localStorage.getItem("slackNotificationsEnabled") || "true");
 
+    function buscarMedidas() {
+        
+    fetch("/centralAnaliseMedidas/buscarMedidas", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            id_empresa: sessionStorage.ID_EMPRESA
+        }),
+    })
+        .then(function (resposta) {
+            console.log("resposta: ", resposta);
+
+            if (resposta.ok) {
+                resposta.json().then(json => {
+                    console.log(json);
+                    console.log(JSON.stringify(json));
+                    let numeroTotalFraudes = json[0].total_fraudes;
+                    console.log("N FRAUDES: " + numeroTotalFraudes);
+
+                    atualizarMedidas(numeroTotalFraudes);
+                });
+            } else {
+                throw "Houve um erro ao tentar buscar medidas!"
+            }
+        })
+        .catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`);
+        });
+    }
+    function atualizarMedidas(numeroTotalFraudes) {
+        console.log("Atualizando total fraudes " + numeroTotalFraudes)
+        div_numeroTotalFraudes.innerHTML = numeroTotalFraudes;
+    }
+
     function atualizarIconeSlack() {
         const botao = document.getElementById("btn_notificacao");
 
-        if(slackNotificationsEnabled) {
+        if (slackNotificationsEnabled) {
             botao.style.opacity = "1";
             botao.title = "Notificações do Slack: Ligadas";
         } else {
@@ -230,7 +268,7 @@
         }
     }
 
-    function notificacao(){
+    function notificacao() {
         slackNotificationsEnabled = !slackNotificationsEnabled;
 
         localStorage.setItem("slackNotificationsEnabled", JSON.stringify(slackNotificationsEnabled));
@@ -240,7 +278,7 @@
         const usuario = sessionStorage.NOME_USUARIO;
         let mensagem = "";
 
-        if(slackNotificationsEnabled) {
+        if (slackNotificationsEnabled) {
             mensagem = "🔔 Notificações do Slack ATIVADAS pelo usuário " + usuario + ".";
         } else {
             mensagem = "🔔 Notificações do Slack DESATIVADAS pelo usuário " + usuario + ".";
@@ -250,8 +288,8 @@
 
         fetch("/slack/status/" + idEmpresa, {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ativo: slackNotificationsEnabled})
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ativo: slackNotificationsEnabled })
         }).catch(erro => {
             console.error("Erro ao atualizar status do Slack no backend:", erro);
         });
@@ -259,43 +297,43 @@
         enviarNotificacaoSlack(mensagem, true);
 
     }
-    
-    window.addEventListener("load", async () => {
-            const idEmpresa = sessionStorage.ID_EMPRESA;
 
-            try {
-                const resposta = await fetch("/slack/status/" + idEmpresa);
-                if (resposta.ok) {
-                    const dados = await resposta.json();
-                    slackNotificationsEnabled = dados.ativo;
-                    localStorage.setItem("slackNotificationsEnabled", JSON.stringify(slackNotificationsEnabled));
-                } else {
-                    console.error("erro ao buscar status do slack no backend.");
-                    slackNotificationsEnabled = JSON.parse(localStorage.getItem("slackNotificationsEnabled") || "true");
-                }
-            } catch (erro) {
-                console.error("Erro ao buscar status do slack no backend", erro);
+    window.addEventListener("load", async () => {
+        const idEmpresa = sessionStorage.ID_EMPRESA;
+
+        try {
+            const resposta = await fetch("/slack/status/" + idEmpresa);
+            if (resposta.ok) {
+                const dados = await resposta.json();
+                slackNotificationsEnabled = dados.ativo;
+                localStorage.setItem("slackNotificationsEnabled", JSON.stringify(slackNotificationsEnabled));
+            } else {
+                console.error("erro ao buscar status do slack no backend.");
                 slackNotificationsEnabled = JSON.parse(localStorage.getItem("slackNotificationsEnabled") || "true");
             }
+        } catch (erro) {
+            console.error("Erro ao buscar status do slack no backend", erro);
+            slackNotificationsEnabled = JSON.parse(localStorage.getItem("slackNotificationsEnabled") || "true");
+        }
 
-            atualizarIconeSlack();
+        atualizarIconeSlack();
     });
 
     async function enviarNotificacaoSlack(texto, ignorarEstado = false) {
 
         if (!ignorarEstado && !slackNotificationsEnabled) {
-        console.log("Slack desligado. Notificação não será enviada.");
-        return;
-    }
+            console.log("Slack desligado. Notificação não será enviada.");
+            return;
+        }
 
         try {
             const resposta = await fetch("/slack/notificar", {
                 method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({text: texto})
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text: texto })
             });
 
-            if(!resposta.ok) {
+            if (!resposta.ok) {
                 console.error("Erro ao enviar notificações para o Slack:", resposta.status);
             }
         } catch (erro) {

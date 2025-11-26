@@ -20,6 +20,7 @@ var usuarioRouter = require("./src/routes/usuarios");
 var empresasRouter = require("./src/routes/empresas");
 var slackRouter = require("./src/routes/slack");
 var alertaPersonalizadoRouter = require("./src/routes/alertaPersonalizado");
+var centralAnaliseMedidas = require("./src/routes/centralAnaliseMedidas");
 var ragRouter = require("./src/routes/rag")
 // var avisosRouter = require("./src/routes/avisos");
 // var medidasRouter = require("./src/routes/medidas");
@@ -37,6 +38,7 @@ app.use("/empresas", empresasRouter);
 app.use("/slack", slackRouter);
 app.use("/alertaPersonalizado", alertaPersonalizadoRouter);
 app.use("/rag", ragRouter)
+app.use("/centralAnaliseMedidas", centralAnaliseMedidas);
 // app.use("/avisos", avisosRouter);
 // app.use("/medidas", medidasRouter);
 // app.use("/aquarios", aquariosRouter);

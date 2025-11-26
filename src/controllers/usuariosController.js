@@ -1,17 +1,17 @@
 var usuariosModel = require("../models/usuariosModel");
 
-function login(req, res){
+function login(req, res) {
 
-    var {email, senha} = req.body;
+    var { email, senha } = req.body;
 
-    if(!email || !senha){
+    if (!email || !senha) {
         return res.status(400).send("Email e senha são obrigatórios");
     }
 
-    usuariosModel.efetuarLogin(email, senha).then(function (resultado){
-        if(resultado.length == 1){
+    usuariosModel.efetuarLogin(email, senha).then(function (resultado) {
+        if (resultado.length == 1) {
             res.status(200).json(resultado[0]);
-        } else if(resultado.length == 0) {
+        } else if (resultado.length == 0) {
             res.status(401).send("Erro no login. Usuário não encontrado.")
         } else {
             res.status(500).send("erro no login. tem mais de um usuario")
@@ -26,26 +26,48 @@ function login(req, res){
     */
 }
 
-function cadastrar(req, res){
+function cadastrar(req, res) {
     var nome = req.body.nome;
     var email = req.body.email;
     var senha = req.body.senha;
     var id_empresa = req.body.id_empresa;
 
-    if(nome == undefined){
+    if (nome == undefined) {
         res.status(400).send("Seu nome está undefined!");
     }
 
 
-    usuariosModel.cadastrar(nome, email, senha, id_empresa).then(function(resposta){
+    usuariosModel.cadastrar(nome, email, senha, id_empresa).then(function (resposta) {
         res.status(200).send("Usuário cadastrado com sucesso!");
-    }).catch(function(erro){
+    }).catch(function (erro) {
         console.log("ERRO NO CADASTRO:", erro);
         res.status(500).json(erro.sqlMessage || erro.message || erro);
     })
 }
 
+function atualizar(req, res) {
+    var id_usuario = req.body.id_usuario;
+    var nome = req.body.nome;
+    var email = req.body.email;
+    var senhaAtual = req.body.senhaAtual;
+    var novaSenha = req.body.novaSenha;
+
+    if (senhaAtual == "" || novaSenha == "") {
+        console.log("Senhas vazias")
+        usuariosModel.atualizar(nome, email, id_usuario).then(function (resposta) {
+            res.status(200).send("Usuário atualizado com sucesso!");
+        }).catch(function (erro) {
+            console.log("ERRO NO ATUALIZAR:", erro);
+            res.status(500).json(erro.sqlMessage || erro.message || erro);
+        })
+    } else {
+        console.log("Alterando senhas tambem.")
+        
+    }
+}
+
 module.exports = {
     login,
-    cadastrar
+    cadastrar,
+    atualizar
 }

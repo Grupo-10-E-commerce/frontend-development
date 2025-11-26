@@ -9,62 +9,210 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Konkhmer+Sleokchher&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap ">
 
+
     <title>Editar Perfil</title>
 </head>
 
-<body>
-    <side-Bar></side-Bar>
-    <main>
-        <header class="header">
-            <div class="btn">
-                <button id="btn_notificacao" class="btn_sino" onclick="notificacao()">
-                    <img src="img/notification-bell.png" alt="Notificacoes">
-                </button>
-                <span id="span_bem_vindo"></span>
-            </div>
-        </header>
-        <div class="div-menu-editar">
-            <div>
-                <img src="./img/lapis-icone.png" width="25px" alt="">
-                <span>Editar Perfil</span>
-            </div>
-            <div>
-                <img src="./img/lixeira-icone.png" width="25px" alt="">
-                <span>Excluir</span>
-            </div>
-        </div>
+<body onload="carregarDadosUsuario()">
 
-        <div class="div-content">
-
-            <h1>Editar Perfil</h1>
-            <div class="div-editar-informacoes">
-                <h2>Informações</h2>
-
-                <div class="div-formulario">
-                    <span id="span_nome">Nome</span>
-                    <input type="text" name="" id="input_nome">
-
-                    <span id="span_email">E-mail</span>
-                    <input type="text" name="" id="input_email">
-
-                    <span id="span_senha_atual">Senha atual</span>
-                    <input type="text" name="" id="input_senha_atual">
-
-                    <span id="span_nova_senha">Nova senha</span>
-                    <input type="text" name="" id="input_nova_senha">
+    <body>
+        <side-Bar></side-Bar>
+        <main>
+            <header class="header">
+                <div class="btn">
+                    <button id="btn_notificacao" class="btn_sino" onclick="notificacao()">
+                        <img src="img/notification-bell.png" alt="Notificacoes">
+                    </button>
+                    <span id="span_bem_vindo"></span>
+                </div>
+            </header>
+            <div class="div-menu-editar">
+                <div>
+                    <img src="./img/lapis-icone.png" width="25px" alt="">
+                    <span>Editar Perfil</span>
                 </div>
                 <div>
-                    <button class="btn-salvar">Salvar</button>
-                    <button class="btn-cancelar">Cancelar</button>
+                    <img src="./img/lixeira-icone.png" width="25px" alt="">
+                    <span>Excluir</span>
                 </div>
             </div>
-        </div>
 
+            <div class="div-content">
 
-    </main>
+                <h1>Editar Perfil</h1>
+                <div class="div-editar-informacoes">
+                    <h2>Informações</h2>
+                    <p>Preencha os dados que deseja alterar.</p>
 
-</body>
+                    <div class="div-formulario">
+                        <span id="span_nome">Nome</span>
+                        <input type="text" name="" id="input_nome">
+
+                        <span id="span_email">E-mail</span>
+                        <input type="text" name="" id="input_email">
+
+                        <span id="span_senha_atual">Senha atual</span>
+                        <input type="text" name="" id="input_senha_atual"
+                            placeholder="Insira sua senha altual para alterá-la">
+
+                        <span id="span_nova_senha">Nova senha</span>
+                        <input type="text" name="" id="input_nova_senha" placeholder="Insira sua nova senha">
+                    </div>
+                    <div>
+                        <button class="btn-salvar" onclick="verificarDados()">Salvar</button>
+                        <button class="btn-cancelar" onclick="carregarDadosUsuario()">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+    </body>
+
 </html>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     span_bem_vindo.innerHTML = `Bem vindo(a), ${sessionStorage.NOME_USUARIO}!`;
+
+    // formatações da biblioteca sweetalert2
+    function swalSucesso(titulo, mensagem) {
+        return Swal.fire({
+            icon: 'success',
+            title: titulo || 'Sucesso',
+            text: mensagem || '',
+            confirmButtonColor: '#3085d6'
+        });
+    }
+
+    function swalErro(titulo, mensagem) {
+        return Swal.fire({
+            icon: 'error',
+            title: titulo || 'Erro',
+            text: mensagem || '',
+            confirmButtonColor: '#d33'
+        });
+    }
+
+    function swalInfo(titulo, mensagem) {
+        if (mensagem === undefined) {
+            mensagem = titulo;
+            titulo = 'Informação';
+        }
+
+        return Swal.fire({
+            icon: 'info',
+            title: titulo || 'Informação',
+            text: mensagem || '',
+            confirmButtonColor: '#3085d6'
+        });
+    }
+
+    async function swalConfirmar(titulo, mensagem) {
+        const confirmar = await Swal.fire({
+            title: titulo || 'Tem certeza?',
+            text: mensagem || '',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sim',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6'
+        });
+        return confirmar.isConfirmed;
+    }
+
+    function carregarDadosUsuario() {
+        input_nome.value = sessionStorage.NOME_USUARIO;
+        input_email.value = sessionStorage.EMAIL_USUARIO;
+        input_senha_atual.value = "";
+        input_nova_senha.value = "";
+    }
+
+    // function habilitarBtnSalvar() {
+    //     var nome = input_nome.value;
+    //     var email = input_email.value;
+    //     var senhaAtual = input_senha_atual.value;
+    //     var novaSenha = input_nova_senha.value;
+
+    //     if ((nome == sessionStorage.NOME_USUARIO &&
+    //         email == sessionStorage.EMAIL_USUARIO) &&
+    //         (senhaAtual == "" || novaSenha == "")
+    //     ) {
+    //         swalErro("", "Altere algum valor para continuar.");
+    //         return;
+    //     }
+    // }
+    function verificarDados() {
+        var nome = input_nome.value;
+        var email = input_email.value;
+        var senhaAtual = input_senha_atual.value;
+        var novaSenha = input_nova_senha.value;
+
+        if ((nome == sessionStorage.NOME_USUARIO &&
+            email == sessionStorage.EMAIL_USUARIO) &&
+            (senhaAtual == "" || novaSenha == "")
+        ) {
+            swalErro("", "Altere algum valor para continuar.");
+            return;
+        }
+
+        if ((nome != sessionStorage.NOME_USUARIO || email != sessionStorage.EMAIL_USUARIO) &&
+            (senhaAtual == "" && novaSenha == "")) {
+            if (nome == "" || email == "") {
+                swalInfo("Nome e Email devem estar preenchidos.")
+                return;
+            }
+            if (!email.includes("@") || !email.includes(".")) {
+                swalInfo("Por favor, insira um email válido.");
+                return;
+            }
+
+            if (swalConfirmar("Prosseguir?", "Suas informações serão alteradas.")) { alterarNomeEmail(nome, email, senhaAtual, novaSenha) };
+
+        }
+
+        else if (input_nova_senha.value.length < 8) {
+            swalInfo("Sua nova senha deve ter pelo menos 8 digitos.");
+            return;
+        } else {
+            console.log("Salvando dados...")
+
+        }
+
+    }
+
+    function alterarNomeEmail(nome, email, senhaAtual, novaSenha) {
+        console.log("Acessando function alterarNomeEmail()");
+        fetch("/usuarios/atualizar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                id_usuario: sessionStorage.ID_USUARIO,
+                nome: nome,
+                email: email,
+                senhaAtual: senhaAtual,
+                novaSenha: novaSenha,
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+                    swalSucesso("Sucesso", "Dados atualizadas com sucesso!");
+
+                } else {
+                    throw "Houve um erro ao tentar Atualizar!"
+                }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+
+        return false;
+
+    }
+
+
 </script>

@@ -1,0 +1,11 @@
+langchain-google-genai 
+langchain-community
+langchain-chroma
+chromadb 
+pypdf 
+python-dotenv
+streamlit
+sentence-transformers
+fastapi
+pydantic
+typing

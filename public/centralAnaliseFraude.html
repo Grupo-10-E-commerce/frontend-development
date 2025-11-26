@@ -259,8 +259,27 @@
         enviarNotificacaoSlack(mensagem, true);
 
     }
+    
+    window.addEventListener("load", async () => {
+            const idEmpresa = sessionStorage.ID_EMPRESA;
 
-    window.addEventListener("load", atualizarIconeSlack);
+            try {
+                const resposta = await fetch("/slack/status/" + idEmpresa);
+                if (resposta.ok) {
+                    const dados = await resposta.json();
+                    slackNotificationsEnabled = dados.ativo;
+                    localStorage.setItem("slackNotificationsEnabled", JSON.stringify(slackNotificationsEnabled));
+                } else {
+                    console.error("erro ao buscar status do slack no backend.");
+                    slackNotificationsEnabled = JSON.parse(localStorage.getItem("slackNotificationsEnabled") || "true");
+                }
+            } catch (erro) {
+                console.error("Erro ao buscar status do slack no backend", erro);
+                slackNotificationsEnabled = JSON.parse(localStorage.getItem("slackNotificationsEnabled") || "true");
+            }
+
+            atualizarIconeSlack();
+    });
 
     async function enviarNotificacaoSlack(texto, ignorarEstado = false) {
 

@@ -36,66 +36,203 @@
 
             <section class="lista-alertas">
                 <h3>Seus Alertas Personalizados:</h3>
-                <div class="cards">
-                    <div class="alerta-card">
-                        <div class="card-header">
-                            <span>...</span>
-                            <span class="icon">🔔</span>
-                        </div>
-                        <p class="alerta-titulo">Alerta 1</p>
-                        <button>Exibir Alerta</button>
-                        <button>Modificar Alerta</button>
-                        <button>Excluir Alerta</button>
+                <div class="cards" id="listaAlertas">
+                    <!-- os cards vao ser gerados aqui -->
                     </div>
-
-                    <div class="alerta-card">
-                        <div class="card-header">
-                            <span>...</span>
-                            <span class="icon">🔔</span>
-                        </div>
-                        <p class="alerta-titulo">Alerta 2</p>
-                        <button>Exibir Alerta</button>
-                        <button>Modificar Alerta</button>
-                        <button>Excluir Alerta</button>
-                    </div>
-                </div>
             </section>
         </div>
     </main>
 
     <!-- Modal -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <h2>Alerta Personalizado</h2>
+<div id="modal" class="modal">
+  <div class="modal-content">
+      <h2>Alerta Personalizado</h2>
 
-            <label for="nomeAlerta">Nome do Alerta</label>
-            <input type="text" id="nomeAlerta" placeholder="Digite aqui...">
+      <label for="nomeAlerta">Nome do Alerta</label>
+      <input type="text" id="nomeAlerta" placeholder="Ex: Fraudes acima de 300 em São Paulo">
 
-            <div class="regras">
-                <label>Regras do Alerta</label>
-                <p>Me alertar quando o valor for maior que</p>
-                <input type="text" placeholder="R$">
-                <button class="add-regra">Adicionar mais uma regra +</button>
-            </div>
+      <div class="regras">
+          <label>Regras do Alerta</label>
 
-            <div class="modal-actions">
-                <button id="btnCancelar" class="cancelar">Cancelar</button>
-                <button class="criar">Criar Alerta</button>
-            </div>
-        </div>
-    </div>
-</body>
+          <p>Me alertar quando o valor for maior que</p>
+          <input type="number" id="valorMinimo" placeholder="R$">
 
-</html>
+          <p>Método de pagamento (opcional)</p>
+    <input type="text" id="metodoPagamento" placeholder="Ex: Crédito ou Débito">
+
+          <p>Filtrar por cidade (opcional)</p>
+          <input type="text" id="cidadeAlerta" placeholder="Ex: São Paulo">
+
+          <p>Filtrar por mês (opcional, 1–12)</p>
+          <input type="number" id="mesAlerta" min="1" max="12" placeholder="Ex: 12">
+
+          <p>Filtrar por ano (opcional)</p>
+          <input type="number" id="anoAlerta" placeholder="Ex: 2022">
+
+          <div style="margin-top: 10px;">
+              <input type="checkbox" id="ativoAlerta" checked>
+              <label for="ativoAlerta">Alerta ativo</label>
+          </div>
+      </div>
+
+      <div class="modal-actions">
+          <button id="btnCancelar" class="cancelar">Cancelar</button>
+          <button id="btnCriarAlerta" class="criar">Criar Alerta</button>
+      </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    function swalSucesso(titulo, mensagem) {
+        return Swal.fire({
+            icon: 'success',
+            title: titulo || 'Sucesso',
+            text: mensagem || '',
+            confirmButtonColor: '#3085d6'
+        });
+    }
+
+    function swalErro(titulo, mensagem) {
+        return Swal.fire({
+            icon: 'error',
+            title: titulo || 'Erro',
+            text: mensagem || '',
+            confirmButtonColor: '#d33'
+        });
+    }
+
+    function swalInfo(titulo, mensagem) {
+        if (mensagem === undefined) {
+            mensagem = titulo;
+            titulo = 'Informação';
+        }
+
+        return Swal.fire({
+            icon: 'info',
+            title: titulo || 'Informação',
+            html: mensagem || '',
+            confirmButtonColor: '#3085d6'
+        });
+    }
+
+    async function swalConfirmar(titulo, mensagem) {
+        const confirmar = await Swal.fire({
+            title: titulo || 'Tem certeza?',
+            text: mensagem || '',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sim',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6'
+        });
+
+        return confirmar.isConfirmed;
+    }
+
     span_bem_vindo.innerHTML = `Bem vindo(a), ${sessionStorage.NOME_USUARIO}!`;
 
     const btnAdd = document.getElementById("btnAddAlerta");
     const modal = document.getElementById("modal");
     const btnCancelar = document.getElementById("btnCancelar");
+    const btnCriarAlerta = document.getElementById("btnCriarAlerta");
+    let alertasCarregados = [];
+    let alertaEmEdicaoId = null;
+
+    let slackNotificationsEnabled = JSON.parse(localStorage.getItem("slackNotificationsEnabled") || "true");
+
+    function atualizarIconeSlack() {
+        const botao = document.getElementById("btn_notificacao");
+
+        if (slackNotificationsEnabled) {
+            botao.style.opacity = "1";
+            botao.title = "Notificações do Slack: Ligadas";
+        } else {
+            botao.style.opacity = "0.3";
+            botao.title = "Notificações do Slack: Desligadas";
+        }
+    }
+
+    function notificacao() {
+        slackNotificationsEnabled = !slackNotificationsEnabled;
+
+        localStorage.setItem("slackNotificationsEnabled", JSON.stringify(slackNotificationsEnabled));
+
+        atualizarIconeSlack();
+
+        const usuario = sessionStorage.NOME_USUARIO;
+        let mensagem = "";
+
+        if (slackNotificationsEnabled) {
+            mensagem = "🔔 Notificações do Slack ATIVADAS pelo usuário " + usuario + ".";
+        } else {
+            mensagem = "🔔 Notificações do Slack DESATIVADAS pelo usuário " + usuario + ".";
+        }
+
+        const idEmpresa = sessionStorage.ID_EMPRESA;
+
+        fetch("/slack/status/" + idEmpresa, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ativo: slackNotificationsEnabled })
+        }).catch(erro => {
+            console.error("Erro ao atualizar status do Slack no backend:", erro);
+        });
+
+        enviarNotificacaoSlack(mensagem, true);
+    }
+
+    window.addEventListener("load", async () => {
+        const idEmpresa = sessionStorage.ID_EMPRESA;
+
+        try {
+            const resposta = await fetch("/slack/status/" + idEmpresa);
+            if (resposta.ok) {
+                const dados = await resposta.json();
+                slackNotificationsEnabled = dados.ativo;
+                localStorage.setItem("slackNotificationsEnabled", JSON.stringify(slackNotificationsEnabled));
+            } else {
+                console.error("erro ao buscar status do slack no backend.");
+                slackNotificationsEnabled = JSON.parse(localStorage.getItem("slackNotificationsEnabled") || "true");
+            }
+        } catch (erro) {
+            console.error("Erro ao buscar status do slack no backend", erro);
+            slackNotificationsEnabled = JSON.parse(localStorage.getItem("slackNotificationsEnabled") || "true");
+        }
+
+        atualizarIconeSlack();
+        carregarAlertas();
+    });
+
+    async function enviarNotificacaoSlack(texto, ignorarEstado = false) {
+
+        if (!ignorarEstado && !slackNotificationsEnabled) {
+            console.log("Slack desligado. Notificação não será enviada.");
+            return;
+        }
+
+        try {
+            const resposta = await fetch("/slack/notificar", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text: texto })
+            });
+
+            if (!resposta.ok) {
+                console.error("Erro ao enviar notificações para o Slack:", resposta.status);
+            }
+        } catch (erro) {
+            console.error("Erro ao enviar notificação:", erro);
+        }
+    }
 
     // Mostrar modal
     btnAdd.addEventListener("click", () => {
+        alertaEmEdicaoId = null;
+        limparCamposModal();
+        document.querySelector("#modal h2").textContent = "Alerta personalizado";
+        document.getElementById("btnCriarAlerta").textContent = "Criar alerta";
+        
         modal.classList.add("active");
     });
 
@@ -111,4 +248,255 @@
         }
     });
 
+    btnCriarAlerta.addEventListener("click", async () => {
+        const nomeAlerta = document.getElementById("nomeAlerta").value.trim();
+        const valorMinimoAl = document.getElementById("valorMinimo").value.trim();
+        const metodoPagamentoAl = document.getElementById("metodoPagamento").value.trim();
+        const cidade = document.getElementById("cidadeAlerta").value.trim();
+        const mesAl = document.getElementById("mesAlerta").value.trim();
+        const anoAl = document.getElementById("anoAlerta").value.trim();
+        const ativoAl = document.getElementById("ativoAlerta").checked;
+
+        const idEmpresa = sessionStorage.ID_EMPRESA;
+        const idUsuario = sessionStorage.ID_USUARIO;
+
+        if (!nomeAlerta) {
+            await swalInfo("Campo obrigatório", "Informe um nome para o alerta");
+            return;
+        }
+
+        const valorMinimo = valorMinimoAl ? Number(valorMinimoAl) : null;
+        const mes = mesAl ? Number(mesAl) : null;
+        const ano = anoAl ? Number(anoAl) : null;
+
+        const dados = {
+            idEmpresa,
+            idUsuario,
+            nomeAlerta,
+            metodoPagamento: metodoPagamentoAl || null,
+            valorMinimo,
+            cidade: cidade || null,
+            mes,
+            ano,
+            ativo: ativoAl
+        };
+
+        const criando = (alertaEmEdicaoId == null);
+        const url = criando ? "/alertaPersonalizado" : `/alertaPersonalizado/atualizar/${alertaEmEdicaoId}`;
+
+        try {
+            const resposta = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(dados)
+            });
+
+            if (!resposta.ok) {
+                const corpo = await resposta.text();
+                console.error("Erro ao cadastrar alerta.", corpo);
+                await swalErro("Erro", "Erro ao criar alerta.");
+                return;
+            }
+
+            await swalSucesso("Sucesso", criando ? "Alerta criado com sucesso." : "Alerta atualizado com sucesso.");
+            modal.classList.remove("active");
+
+            limparCamposModal();
+            alertaEmEdicaoId = null;
+
+            document.getElementById("nomeAlerta").value = "";
+            document.getElementById("valorMinimo").value = "";
+            document.getElementById("cidadeAlerta").value = "";
+            document.getElementById("mesAlerta").value = "";
+            document.getElementById("anoAlerta").value = "";
+            document.getElementById("ativoAlerta").checked = true;
+
+            carregarAlertas();
+        } catch (erro) {
+            console.error("Erro na req para criar alerta", erro);
+            await swalInfo("Erro na comunicação com o servidor");
+        }
+    });
+
+    function montarDescricaoAlerta(alerta) {
+        let partes = [];
+
+        // essas variaveis em snake-case vem do sql
+
+        if (alerta.valor_minimo != null) {
+            partes.push(`valor ≥ R$ ${Number(alerta.valor_minimo).toFixed(2)}`);
+        }
+
+        if (alerta.metodo_pagamento) {
+            partes.push(`método = ${alerta.metodo_pagamento}`);
+        }
+
+        if (alerta.cidade) {
+            partes.push(`cidade = ${alerta.cidade}`);
+        }
+
+        if (alerta.mes != null) {
+            partes.push(`mês = ${alerta.mes}`);
+        }
+
+        if (alerta.ano != null) {
+            partes.push(`ano = ${alerta.ano}`);
+        }
+
+        if (partes.length == 0) {
+            return "Sem filtros (todas as informações)";
+        }
+
+        return partes.join("<br>");
+    }
+
+    async function carregarAlertas() {
+    const listaAlertasDiv = document.getElementById("listaAlertas");
+    const idEmpresa = sessionStorage.ID_EMPRESA;
+
+    listaAlertasDiv.innerHTML = `<p style="color: #777;">Carregando alertas...</p>`;
+
+    try {
+        const resposta = await fetch(`/alertaPersonalizado/empresa/${idEmpresa}`);
+
+        if (!resposta.ok) {
+            console.error("Erro ao buscar os alertas:", resposta.status);
+            listaAlertasDiv.innerHTML = `<p style="color: red;">Erro ao carregar alertas</p>`;
+            return;
+        }
+
+        const alertas = await resposta.json();
+
+        alertasCarregados = alertas;
+
+        if (!alertas || alertas.length === 0) {
+            listaAlertasDiv.innerHTML = `<p style="color: #777;">Você ainda não criou nenhum alerta</p>`;
+            return;
+        }
+
+        listaAlertasDiv.innerHTML = "";
+
+        alertas.forEach(alerta => {
+            const card = document.createElement("div");
+            card.className = "alerta-card";
+
+            const descricaoFiltros = montarDescricaoAlerta(alerta);
+            const statusTexto = alerta.ativo ? "Ativo" : "Inativo";
+
+            card.innerHTML = `
+                <div class="card-header">
+                    <span>${statusTexto}</span>
+                    <span class="icon">🔔</span>
+                </div>
+                <p class="alerta-titulo">${alerta.nome_alerta}</p>
+                <p class="alerta-descricao">${descricaoFiltros}</p>
+                <div class="botoes-alerta">
+                    <button onclick="exibirAlerta(${alerta.id_alerta})">Exibir</button>
+                    <button onclick="editarAlerta(${alerta.id_alerta})">Modificar</button>
+                    <button onclick="excluirAlerta(${alerta.id_alerta})">Excluir</button>
+                </div>
+            `;
+
+            listaAlertasDiv.appendChild(card);
+        });
+    } catch (erro) {
+        console.error("Erro ao carregar os alertas", erro);
+        listaAlertasDiv.innerHTML = `<p style="color: red;">Erro ao carregar alertas.</p>`;
+    }
+}
+
+
+    function exibirAlerta(idAlerta) {
+        const id = Number(idAlerta);
+
+        const alerta = alertasCarregados.find(al => al.id_alerta == id);
+
+        if(!alerta) {
+            swalErro("Alerta não encontrado na lista");
+            return;
+        }
+
+        const statusTexto = alerta.ativo ? "Ativo" : "Inativo";
+        const descricaoFiltros = montarDescricaoAlerta(alerta);
+
+        const mensagem =
+        `Status: ${statusTexto}<br>` +
+        `Filtros: ${descricaoFiltros}`;
+
+    swalInfo(`📝 ${alerta.nome_alerta}`, mensagem);
+
+    }
+
+    function editarAlerta(idAlerta) {
+        const id = Number(idAlerta);
+
+        const alerta = alertasCarregados.find(al => al.id_alerta == id);
+
+        if(!alerta){
+            swalErro("Erro", "Alerta não encontrado na lista");
+            return;
+        }
+
+        alertaEmEdicaoId = id;
+
+        document.getElementById("nomeAlerta").value = alerta.nome_alerta || "";
+        document.getElementById("valorMinimo").value = alerta.valor_minimo != null ? alerta.valor_minimo : "";
+        document.getElementById("metodoPagamento").value = alerta.metodo_pagamento || "";
+        document.getElementById("cidadeAlerta").value = alerta.cidade || "";
+        document.getElementById("mesAlerta").value = alerta.mes != null ? alerta.mes : "";
+        document.getElementById("anoAlerta").value = alerta.ano != null ? alerta.ano : "";
+        document.getElementById("ativoAlerta").checked = alerta.ativo == 1 || alerta.ativo == true;
+
+        document.querySelector("#modal h2").textContent = "Editar alerta";
+        document.getElementById("btnCriarAlerta").textContent = "Salvar alterações";
+
+        modal.classList.add("active");
+        }
+
+    function limparCamposModal() {
+    document.getElementById("nomeAlerta").value = "";
+    document.getElementById("valorMinimo").value = "";
+    document.getElementById("metodoPagamento").value = "";
+    document.getElementById("cidadeAlerta").value = "";
+    document.getElementById("mesAlerta").value = "";
+    document.getElementById("anoAlerta").value = "";
+    document.getElementById("ativoAlerta").checked = true;
+}
+
+    async function excluirAlerta(idAlerta) {
+
+    const id = Number(idAlerta);
+
+    const confirmado = await swalConfirmar("Tem certeza?", "Essa ação não poderá ser desfeita.");
+
+    if (!confirmado) {
+        return;
+    }
+
+    const idEmpresa = sessionStorage.ID_EMPRESA;
+
+    try {
+        const resposta = await fetch(`/alertaPersonalizado/excluir/${id}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({idEmpresa})
+        });
+        if (!resposta.ok) {
+            const corpo = await resposta.text();
+            console.error("Erro ao excluir o alerta", corpo);
+
+            await swalErro("Erro", "Erro ao excluir alerta.");
+            return;
+        }
+
+        await swalSucesso("Excluído!", "O alerta foi excluído com sucesso.");
+        carregarAlertas();
+
+    } catch (erro) {
+        console.error("Erro na req ao tentar excluir o alerta", erro);
+        await swalErro("Erro", "Erro na comunicação com o servidor.");
+    }
+}
 </script>
+</body>
+</html>

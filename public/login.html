@@ -78,10 +78,57 @@
         </div>
     </div>
 
-</body>
-
-</html>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+
+    // formatações da biblioteca sweetalert2
+    function swalSucesso(titulo, mensagem) {
+        return Swal.fire({
+            icon: 'success',
+            title: titulo || 'Sucesso',
+            text: mensagem || '',
+            confirmButtonColor: '#3085d6'
+        });
+    }
+
+    function swalErro(titulo, mensagem) {
+        return Swal.fire({
+            icon: 'error',
+            title: titulo || 'Erro',
+            text: mensagem || '',
+            confirmButtonColor: '#d33'
+        });
+    }
+
+    function swalInfo(titulo, mensagem) {
+        if (mensagem === undefined) {
+            mensagem = titulo;
+            titulo = 'Informação';
+        }
+
+        return Swal.fire({
+            icon: 'info',
+            title: titulo || 'Informação',
+            text: mensagem || '',
+            confirmButtonColor: '#3085d6'
+        });
+    }
+
+    async function swalConfirmar(titulo, mensagem) {
+        const confirmar = await Swal.fire({
+            title: titulo || 'Tem certeza?',
+            text: mensagem || '',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sim',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6'
+        });
+
+        return confirmar.isConfirmed;
+    }
+
     function limitarCaracteresCnpj() {
         let cnpjVerificar = input_cnpj.value;
 
@@ -105,26 +152,26 @@
         var confirmarSenha = input_confirmarSenha.value;
 
         if (nome == "" || email == "" || senha == "" || razaoSocial == "" || cnpj == "") {
-            alert("Preencha todos os campos necessários para cadastro.")
+            swalInfo("Preencha todos os campos necessários para cadastro.")
             return;
         }
 
         if (senha.length < 8) {
-            alert("A senha deve conter no mínimo 8 caracteres.");
+            swalInfo("A senha deve conter no mínimo 8 caracteres.");
             return;
         }
 
         if (senha != confirmarSenha) {
-            alert("As senhas não coincidem.");
+            swalInfo("As senhas não coincidem.");
             return;
         }
 
         if (!email.includes("@") || !email.includes(".")) {
-            alert("Por favor, insira um email válido.");
+            swalInfo("Por favor, insira um email válido.");
             return;
         }
         if (cnpj.length != 14) {
-            alert("Por favor, insira um CNPJ válido.");
+            swalInfo("Por favor, insira um CNPJ válido.");
             return;
         }
 
@@ -205,8 +252,8 @@
                 console.log("resposta: ", resposta);
 
                 if (resposta.ok) {
-                    setTimeout(() => {
-                        alert("Cadastro feito com sucesso!");
+                    setTimeout(async () => {
+                      await swalSucesso("Sucesso", "Cadastro feito com sucesso!");
                         window.location = "login.html";
                     }, "2000");
                 } else {
@@ -226,17 +273,17 @@
         var senha = input_senha.value;
 
         if (senha == "" || email == "") {
-            alert("Insira todos os campos para logar.");
+            swalInfo("Insira todos os campos para logar.");
             return;
         }
 
         if (!email.includes("@") || !email.includes(".")) {
-            alert("Insira um email válido.");
+            swalInfo("Insira um email válido.");
             return;
         }
 
         if (senha.length < 8) {
-            alert("Senha inválida.");
+            swalInfo("Senha inválida.");
             return;
         }
 
@@ -263,8 +310,8 @@
                     sessionStorage.ID_USUARIO = json.id_usuario;
                     sessionStorage.ID_EMPRESA = json.id_empresa;
 
-                    setTimeout(function () {
-                        alert("Login efetuado com sucesso!");
+                    setTimeout(async function () {
+                        await swalSucesso("Login efetuado com sucesso!");
                         window.location = "centralAnaliseFraude.html";
                     }, 1000);
                 });
@@ -416,3 +463,5 @@
         window.location.href = "./index.html";
     }
 </script>
+</body>
+</html>

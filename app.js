@@ -19,6 +19,7 @@ var indexRouter = require("./src/routes/index");
 var usuarioRouter = require("./src/routes/usuarios");
 var empresasRouter = require("./src/routes/empresas");
 var slackRouter = require("./src/routes/slack");
+var alertaPersonalizadoRouter = require("./src/routes/alertaPersonalizado");
 var ragRouter = require("./src/routes/rag")
 // var avisosRouter = require("./src/routes/avisos");
 // var medidasRouter = require("./src/routes/medidas");
@@ -34,6 +35,7 @@ app.use("/", indexRouter);
 app.use("/usuarios", usuarioRouter);
 app.use("/empresas", empresasRouter);
 app.use("/slack", slackRouter);
+app.use("/alertaPersonalizado", alertaPersonalizadoRouter);
 app.use("/rag", ragRouter)
 // app.use("/avisos", avisosRouter);
 // app.use("/medidas", medidasRouter);

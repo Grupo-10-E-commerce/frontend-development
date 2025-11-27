@@ -68,7 +68,7 @@ class SideBarComponent extends HTMLElement {
                 }
 
                 .sidebar.collapsed {
-                    width: 280px;
+                    width: 295px;
                 }
 
                 .toggleMenu {

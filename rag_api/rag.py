@@ -38,14 +38,16 @@ llm = ChatGoogleGenerativeAI(
 vector_store = Chroma (
     collection_name='chroma-database-01',
     embedding_function=embeddings,
-    persist_directory='./CHROMA-DB'
+    persist_directory='./rag_api/CHROMA-DB'
 )
 
 
 # LINKS DOS DOCUMENTOS
 
 pdf_links = {
-    "Documentacao_fraudes_e-comerce.pdf": "https://bandteccom-my.sharepoint.com/shared?listurl=https%3A%2F%2Fbandteccom%2Esharepoint%2Ecom%2Fsites%2FGrupo10Semestre2%2FShared%20Documents&viewid=15bf6ac3%2Da460%2D4812%2Dad24%2D5be7fc887d23&login_hint=gabriel%2Epietro%40sptech%2Eschool&source=waffle&id=%2Fsites%2FGrupo10Semestre2%2FShared%20Documents%2FDocumenta%C3%A7%C3%A3o%2FDocumentacao%5Ffraudes%5Fe%2Dcomerce%2Epdf&parent=%2Fsites%2FGrupo10Semestre2%2FShared%20Documents%2FDocumenta%C3%A7%C3%A3o"
+    "Documentacao.pdf": "https://bandteccom.sharepoint.com/:w:/r/sites/Grupo10Semestre2/_layouts/15/Doc.aspx?sourcedoc=%7B3571FA9E-4ABE-4F04-8156-258E3C42FA1E%7D&file=Documenta%C3%A7%C3%A3o.docx&action=default&mobileredirect=true",
+    "Principais_Funcionalidades.pdf": "https://bandteccom-my.sharepoint.com/:w:/r/personal/gabriel_pietro_sptech_school/_layouts/15/Doc.aspx?sourcedoc=%7B34098267-EBEB-453A-904C-0C32CFC805CF%7D&file=Funcionalidades%20do%20Sistema.docx&action=default&mobileredirect=true&DefaultItemOpen=1&wdOrigin=MAIL.SHELL%2CAPPHOME-WEB.JUMPBACKIN&wdPreviousSession=a80e8fcc-89f0-4d92-ae6c-fc0677af669b&wdPreviousSessionSrc=AppHomeWeb&ct=1764274613622",
+    "FAQ_Duvidas.pdf": "https://bandteccom-my.sharepoint.com/:w:/r/personal/gabriel_pietro_sptech_school/_layouts/15/Doc.aspx?sourcedoc=%7BBE3E5B2B-D8FC-4EB3-9483-E9287F5210AF%7D&file=Documento.docx&action=editnew&mobileredirect=true&wdPreviousSession=c04bdebe-2dd6-dc62-f4b0-eb660a23c3df&wdNewAndOpenCt=1764275167705&wdo=4&wdOrigin=wacFileNew&wdPreviousCorrelation=ff076fea-f001-40a2-8d4b-bdb5fb78222b&wdnd=1"
 }
 
 
@@ -92,6 +94,8 @@ Se não souber a resposta e a pergunta for algo mais técnico ou sério diga alg
 'Desculpa, mas essa informação foge da minha base de conhecimentos!', 
 já se for algo mais abrangente como 'Me fale uma receita de bolo' ou coisas do genero que não façam parte da Fraux pode responder em um tom
 mais humorado como 'Ei ei ei! Isso não faz parte do meu ramo de trabalho! Eu respondo a dúvidas referentes a Fraux, tente outra pergunta' mas não todas de todas as respostas iguais, pode variar, seja engraçado e criativo.
+
+Observação: Mande as respostas sem negrito ou formatações do tipo (mas pode colocar emogis se for interessante para a resposta)
 
 Contexto:
 {contexto}
@@ -143,3 +147,5 @@ def rag(user_query: str, chat_history: list[dict]) -> str:
 
 def run_rag_api(pergunta: str, historico: list[dict]) -> str:
     return rag(pergunta, historico)
+
+run_rag_api("Quais funcionalidades o sistema possui?", [])

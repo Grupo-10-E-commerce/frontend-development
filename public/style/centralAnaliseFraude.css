@@ -32,7 +32,7 @@ body {
     gap: 15px;
 }
 
-.btn_emitir_relatorio {
+.btn_sino {
     color: #333;
     padding: 8px 16px;
     border: 1px solid #919191;
@@ -42,13 +42,13 @@ body {
     transition: all 0.3s;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     font-weight: 800;
+    background-image: none;
 }
 
-.btn_emitir_relatorio:hover {
+.btn_sino:hover {
     background-color: #9193DE;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(124, 122, 184, 0.4);
-    color: #ddd;
     font-weight: 800;
 }
 
@@ -57,6 +57,7 @@ body {
     width: 24px;
     height: 24px;
     display: block;
+    background-color: none;
 }
 
 .btn span {
@@ -69,7 +70,7 @@ body {
 
 /* METRICAS */
 .container {
-    padding: 50px;
+    padding: 20px;
 }
 
 .top-cards {
@@ -85,6 +86,7 @@ body {
     border-radius: 10px;
     border: 1px solid #ddd;
     position: relative;
+    box-shadow: 0 4px 12px rgba(124, 122, 184, 0.4);
 }
 
 .card .titulo {
@@ -124,6 +126,7 @@ body {
     margin-top: -200px;
     border: 1px solid #ddd;
     height: 60vh;
+    box-shadow: 0 4px 12px rgba(124, 122, 184, 0.4);
 }
 
 .compras-card h3 {
@@ -155,6 +158,7 @@ button {
     border-radius: 6px;
     font-size: 12px;
     cursor: pointer;
+    box-shadow: 0 4px 12px rgba(124, 122, 184, 0.4);
 }
 
 button:hover {
@@ -167,6 +171,7 @@ button:hover {
     border-radius: 10px;
     border: 1px solid #ddd;
     padding: 15px;
+    box-shadow: 0 4px 12px rgba(124, 122, 184, 0.4);
 }
 
 .grafico-card h3 {
@@ -204,6 +209,7 @@ button:hover {
     border-radius: 10px;
     border: 1px solid #ddd;
     padding: 15px;
+    box-shadow: 0 4px 12px rgba(124, 122, 184, 0.4);
 }
 
 .alertas h3 {
@@ -226,4 +232,5 @@ button:hover {
     border-radius: 10px;
     border: 1px solid #ddd;
     padding: 15px;
+    box-shadow: 0 4px 12px rgba(124, 122, 184, 0.4);
 }

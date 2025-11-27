@@ -16,8 +16,6 @@
         <div class="header">
         <div class="title">Painel de Performance e Risco</div>
         <div class="btn">
-            <button id="btn_relatorio" class="btn_emitir_relatorio" onclick="emitirRelatorio()">Emitir
-                Relatório</button>
             <button id="btn_notificacao" class="btn_sino" onclick="notificacao()">
                 <img src="img/notification-bell.png" alt="Notificacoes">
             </button>
@@ -83,7 +81,6 @@
                         <select class="ano-select1" id="ano-fraudes">
                             <option value="2024" selected>2024</option>
                             <option value="2023">2023</option>
-                            <option value="2022">2022</option>
                         </select>
                     </div>
                     <div id="chart"></div>
@@ -140,11 +137,17 @@
     var options = {
         chart: {
         type: 'bar',
-        width: 950,
+        width: 930,
         height: 285,
         toolbar: {
-            show: false,
-        }, 
+            show: true,
+            tools: {
+                download: true
+            },
+        },
+        export: {
+            svg: false
+        }
     }, 
         colors: ['#9193DE'],
         series: [{
@@ -222,6 +225,7 @@
     }
 }
 
+
     var chart = new ApexCharts(document.querySelector("#chart"),options)
     chart.render();
 
@@ -231,8 +235,20 @@
         height: 275,
         type: "area",
         toolbar: {
-        show: false
+            show: true,
+            tools: {
+                download: true,
+                selection: false,
+                zoom: true,
+                zoomin: false,
+                zoomout: true,
+                pan: false,
+                reset: false
+            }
     },
+        export: {
+            svg: false
+        },
         sparkline: {
         enabled: false
     }
@@ -319,7 +335,17 @@
     var optionsDonut = {
     chart: {
         type: 'donut',
+        width: 600,
         height: 275,
+        toolbar: {
+            show: true,
+            tools: {
+                download: true,
+            }
+    },
+        export: {
+            svg: false
+        },
     },
     series: [55, 45],
     labels: ['Lamburgh', 'West Ashley'],
@@ -385,7 +411,19 @@ chartDonut.render();
         width: 1200,
         height: 250,
         toolbar: {
-            show: false
+            show: true,
+            tools: {
+                download: true,
+                selection: false,
+                zoom: true,
+                zoomin: false,
+                zoomout: true,
+                pan: false,
+                reset: false
+            }
+        },
+        export: {
+            svg: false
         }
     },
     series: [{

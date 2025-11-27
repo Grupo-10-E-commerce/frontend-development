@@ -20,8 +20,6 @@
     <div class="header">
         <div class="title">Central de análise de fraude</div>
         <div class="btn">
-            <button id="btn_relatorio" class="btn_emitir_relatorio" onclick="emitirRelatorio()">Emitir
-                Relatório</button>
             <button id="btn_notificacao" class="btn_sino" onclick="notificacao()">
                 <img src="img/notification-bell.png" alt="Notificacoes">
             </button>
@@ -144,29 +142,50 @@
 
 </html>
 <script>
-    span_bem_vindo.innerHTML = `Bem vindo(a), ${sessionStorage.NOME_USUARIO}!`;
+    span_bem_vindo.innerHTML = `Bem-vindo(a), ${sessionStorage.NOME_USUARIO}!`;
 
-    // Gráfico de Fraudes por Região (Mapa)
-    var mapOptions = {
-        chart: {
-            type: 'heatmap',
-            height: 250
-        },
-        dataLabels: { enabled: false },
-        series: [{
-            name: 'Fraudes',
-            data: [
-                { x: 'Sul', y: 10 },
-                { x: 'Sudeste', y: 40 },
-                { x: 'Centro-Oeste', y: 20 },
-                { x: 'Nordeste', y: 30 },
-                { x: 'Norte', y: 15 }
-            ]
+    var options = {
+          series: [{
+          data: [44, 55, 41, 64, 22, 43, 21]
+        }, {
+          data: [53, 32, 33, 52, 13, 44, 32]
         }],
-        colors: ['#5c4df5'],
-        title: { text: '' },
-    };
-    new ApexCharts(document.querySelector("#mapChart"), mapOptions).render();
+          chart: {
+          type: 'bar',
+          height: 430
+        },
+        plotOptions: {
+          bar: {
+            horizontal: true,
+            dataLabels: {
+              position: 'top',
+            },
+          }
+        },
+        dataLabels: {
+          enabled: true,
+          offsetX: -6,
+          style: {
+            fontSize: '12px',
+            colors: ['#fff']
+          }
+        },
+        stroke: {
+          show: true,
+          width: 1,
+          colors: ['#fff']
+        },
+        tooltip: {
+          shared: true,
+          intersect: false
+        },
+        xaxis: {
+          categories: [2001, 2002, 2003, 2004, 2005, 2006, 2007],
+        },
+        };
+        
+        new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
 
     // Gráfico de Barras — Distribuição de Fraudes
     var barOptions = {

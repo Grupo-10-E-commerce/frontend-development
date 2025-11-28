@@ -18,7 +18,7 @@
 <body>
     <side-Bar></side-Bar>
     <div class="header">
-        <div class="title">Central de análise de fraude</div>
+        <div class="title">Central de Análise de Fraude</div>
         <div class="btn">
             <button id="btn_notificacao" class="btn_sino" onclick="notificacao()">
                 <img src="img/notification-bell.png" alt="Notificacoes">
@@ -108,20 +108,8 @@
                 </div>
             </div>
 
-            <div class="alertas">
-                <h3>Últimos alertas de Fraude</h3>
-                <div class="alerta">
-                    ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às 23:55 horas
-                </div>
-                <div class="alerta">
-                    ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às 23:58 horas
-                </div>
-                <div class="alerta">
-                    ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às 03:00 horas
-                </div>
-                <div class="alerta">
-                    ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às 18:25 horas
-                </div>
+            <div class="slack">
+                Mensagem Slack
             </div>
 
             <div class="log">
@@ -139,8 +127,8 @@
     // Gráfico de Barras — Cidades com maior número de fraudes top 10
    var options = {
           series: [{
-          name: 'Fraudes',
-          data: [45, 38, 32, 28, 24, 21, 18, 15, 12, 8]
+          name: 'Taxa de Fraudes',
+          data: [32.5, 28.7, 26.3, 24.8, 22.1, 19.5, 17.8, 15.2, 13.6, 11.4]
         }],
           chart: {
           height: 350,
@@ -158,11 +146,11 @@
         dataLabels: {
           enabled: true,
           formatter: function (val) {
-            return val;
+            return val + "%";
           },
           offsetY: -20,
           style: {
-            fontSize: '12px',
+            fontSize: '16px',
             colors: ["#304758"],
             fontWeight: 'bold'
           }
@@ -179,7 +167,8 @@
           },
           labels: {
             style: {
-                fontSize: '11px'
+                fontSize: '12px',
+                fontWeight: 'bold'
             }
           },
           crosshairs: {
@@ -206,26 +195,45 @@
             show: false,
           },
           labels: {
-            show: false,
+            show: true,
             formatter: function (val) {
-              return val;
+              return val + "%";
+            },
+            style: {
+                fontSize: '16px',
+                fontWeight: 'bold'
             }
-          }
-        
+          },
+          max:35
         },
         title: {
-          text: 'Top 10 Cidades com Mais Fraudes',
+          text: 'Cidades com Maior Taxa de Fraudes',
           floating: false,
           offsetY: 0,
           align: 'center',
           style: {
             color: '#444',
-            fontSize: '16px',
+            fontSize: '22px',
             fontWeight: 'bold'
           }
         },
+        subtitle: {
+            text: 'Proporção de Fraudes por Vendas (%)',
+            align: 'center',
+            style: {
+            color: '#666',
+            fontSize: '18px'
+            }
+        },
         legend: {
             show: false
+        },
+        tooltip: {
+            y: {
+            formatter: function(val) {
+                return val + "% de fraudes"
+            }
+            }
         }
         };
 

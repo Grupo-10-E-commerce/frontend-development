@@ -46,21 +46,23 @@
 
                     <div class="div-formulario">
                         <span id="span_nome">Nome</span>
-                        <input type="text" name="" id="input_nome">
+                        <input type="text" name="" id="input_nome" oninput="habilitarDesabilitarBtn()">
 
                         <span id="span_email">E-mail</span>
-                        <input type="text" name="" id="input_email">
+                        <input type="text" name="" id="input_email" oninput="habilitarDesabilitarBtn()">
 
                         <span id="span_senha_atual">Senha atual</span>
                         <input type="text" name="" id="input_senha_atual"
-                            placeholder="Insira sua senha altual para alterá-la">
+                            placeholder="Insira sua senha altual para alterá-la" oninput="habilitarDesabilitarBtn()">
 
                         <span id="span_nova_senha">Nova senha</span>
-                        <input type="text" name="" id="input_nova_senha" placeholder="Insira sua nova senha">
+                        <input type="text" name="" id="input_nova_senha" placeholder="Insira sua nova senha"
+                            oninput="habilitarDesabilitarBtn()">
                     </div>
-                    <div>
-                        <button class="btn-salvar" onclick="verificarDados()">Salvar</button>
-                        <button class="btn-cancelar" onclick="carregarDadosUsuario()">Cancelar</button>
+                    <div class="div-btn">
+                        <button class="btn-salvar" id="btn_salvar" onclick="verificarDados()">Salvar</button>
+                        <button class="btn-cancelar" id="btn_cancelar"
+                            onclick="carregarDadosUsuario()">Cancelar</button>
                     </div>
                 </div>
             </div>
@@ -126,62 +128,70 @@
         input_email.value = sessionStorage.EMAIL_USUARIO;
         input_senha_atual.value = "";
         input_nova_senha.value = "";
+
+        btn_salvar.style.display = "none";
+        btn_cancelar.style.display = "none";
     }
 
-    // function habilitarBtnSalvar() {
-    //     var nome = input_nome.value;
-    //     var email = input_email.value;
-    //     var senhaAtual = input_senha_atual.value;
-    //     var novaSenha = input_nova_senha.value;
+    function habilitarDesabilitarBtn() {
+        let nome = input_nome.value;
+        let email = input_email.value;
+        let senhaAtual = input_senha_atual.value;
+        let novaSenha = input_nova_senha.value;
 
-    //     if ((nome == sessionStorage.NOME_USUARIO &&
-    //         email == sessionStorage.EMAIL_USUARIO) &&
-    //         (senhaAtual == "" || novaSenha == "")
-    //     ) {
-    //         swalErro("", "Altere algum valor para continuar.");
-    //         return;
-    //     }
-    // }
-    function verificarDados() {
-        var nome = input_nome.value;
-        var email = input_email.value;
-        var senhaAtual = input_senha_atual.value;
-        var novaSenha = input_nova_senha.value;
-
-        if ((nome == sessionStorage.NOME_USUARIO &&
-            email == sessionStorage.EMAIL_USUARIO) &&
-            (senhaAtual == "" || novaSenha == "")
-        ) {
-            swalErro("", "Altere algum valor para continuar.");
+        if (nome == sessionStorage.NOME_USUARIO && email == sessionStorage.EMAIL_USUARIO && senhaAtual == "" && novaSenha == "") {
+            btn_salvar.style.display = "none";
+            btn_cancelar.style.display = "none";
             return;
         }
+        btn_salvar.style.display = "block";
+        btn_cancelar.style.display = "block";
+    }
 
-        if ((nome != sessionStorage.NOME_USUARIO || email != sessionStorage.EMAIL_USUARIO) &&
-            (senhaAtual == "" && novaSenha == "")) {
-            if (nome == "" || email == "") {
-                swalInfo("Nome e Email devem estar preenchidos.")
+    function verificarDados() {
+        let nome = input_nome.value;
+        let email = input_email.value;
+        let senhaAtual = input_senha_atual.value;
+        let novaSenha = input_nova_senha.value;
+
+        if (senhaAtual != "" || novaSenha != "") {
+
+            if (novaSenha < 8) {
+                swalInfo("Sua nova senha deve ter pelo menos 8 digitos.");
+                return;
+            } else if (novaSenha == "") {
+                swalInfo("Você precisa inserir sua nova senha para aterá-la.");
+                return;
+            } else if (senhaAtual == "") {
+                swalInfo("Você precisa informar sua senha atual para alterá-la");
+                return;
+            }
+            else {
+                swalConfirmar("Deseja salvar suas alterações?").then(function (resposta) {
+                    if (resposta) { alterarNomeEmail(nome, sessionStorage.EMAIL_USUARIO, email, senhaAtual, novaSenha) };
+                });
+            }
+        }
+        else if (nome == sessionStorage.NOME_USUARIO && email == sessionStorage.EMAIL_USUARIO) {
+            swalErro("", "Altere algum valor para continuar.");
+            return;
+        } else {
+            if (nome == "") {
+                swalInfo("Seu nome não pode estar em branco.")
                 return;
             }
             if (!email.includes("@") || !email.includes(".")) {
                 swalInfo("Por favor, insira um email válido.");
                 return;
             }
-
-            if (swalConfirmar("Prosseguir?", "Suas informações serão alteradas.")) { alterarNomeEmail(nome, email, senhaAtual, novaSenha) };
-
-        }
-
-        else if (input_nova_senha.value.length < 8) {
-            swalInfo("Sua nova senha deve ter pelo menos 8 digitos.");
-            return;
-        } else {
-            console.log("Salvando dados...")
-
+            swalConfirmar("Deseja salvar suas alterações?").then(function (resposta) {
+                if (resposta) { alterarNomeEmail(nome, sessionStorage.EMAIL_USUARIO, email, senhaAtual, novaSenha) };
+            });
         }
 
     }
 
-    function alterarNomeEmail(nome, email, senhaAtual, novaSenha) {
+    function alterarNomeEmail(nome, emailAtual, email, senhaAtual, novaSenha) {
         console.log("Acessando function alterarNomeEmail()");
         fetch("/usuarios/atualizar", {
             method: "POST",
@@ -191,6 +201,7 @@
             body: JSON.stringify({
                 id_usuario: sessionStorage.ID_USUARIO,
                 nome: nome,
+                emailAtual: emailAtual,
                 email: email,
                 senhaAtual: senhaAtual,
                 novaSenha: novaSenha,
@@ -201,8 +212,10 @@
 
                 if (resposta.ok) {
                     swalSucesso("Sucesso", "Dados atualizadas com sucesso!");
+                    buscarDadosAtualizados();
 
                 } else {
+                    swalErro("Senha incorreta", "Tente inserir sua senha atual novamente.");
                     throw "Houve um erro ao tentar Atualizar!"
                 }
             })
@@ -212,6 +225,39 @@
 
         return false;
 
+    }
+
+    function buscarDadosAtualizados() {
+        console.log("Buscando dados atualizados");
+        fetch("/usuarios/buscarDados", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                id_usuario: sessionStorage.ID_USUARIO
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+                    console.log("Dados atualizadas buscados com sucesso!");
+
+                    resposta.json().then(json => {
+                        console.log(JSON.stringify(json));
+                        sessionStorage.NOME_USUARIO = json[0].nome;
+                        sessionStorage.EMAIL_USUARIO = json[0].email;
+                    });
+                    window.location.reload();
+
+                } else {
+                    throw "Houve um erro ao tentar Atualizar!"
+                }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
     }
 
 

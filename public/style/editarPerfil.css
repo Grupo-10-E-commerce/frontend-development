@@ -166,7 +166,9 @@ main {
     border-radius: 10px;
     padding-left: 20px;
 }
-
+.div-btn{
+    display: flex;
+}
 button {
     width: 120px;
     height: 40px;
@@ -179,7 +181,8 @@ button {
 }
 
 .btn-salvar {
-    background-color: rgb(205, 205, 205);
+    color: white;
+    background-color: var(--azul-claro);
 }
 
 .btn-salvar:hover {

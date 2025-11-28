@@ -41,29 +41,9 @@
                 <div class="icone">⚠️</div>
             </div>
             <div class="grafico-card">
-                <h3>Fraudes por Região</h3>
-                <img src="./img/grafico-regiao.png" alt="">
-                <div class="legenda">
-                    <span class="cor roxo"></span> Muitas Fraudes
-                    <span class="cor claro"></span> Poucas Fraudes
-                </div>
+                <div id="chartBar"></div>
             </div>
 
-            <div class="alertas">
-                <h3>Últimos alertas de Fraude</h3>
-                <div class="alerta">
-                    ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às 23:55 horas
-                </div>
-                <div class="alerta">
-                    ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às 23:58 horas
-                </div>
-                <div class="alerta">
-                    ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às 03:00 horas
-                </div>
-                <div class="alerta">
-                    ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às 18:25 horas
-                </div>
-            </div>
         </section>
 
 
@@ -128,12 +108,24 @@
                 </div>
             </div>
 
-            <div class="grafico-card-bar">
-                <h3>Distribuição de Fraudes</h3>
-                <div id="barChart"></div>
+            <div class="alertas">
+                <h3>Últimos alertas de Fraude</h3>
+                <div class="alerta">
+                    ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às 23:55 horas
+                </div>
+                <div class="alerta">
+                    ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às 23:58 horas
+                </div>
+                <div class="alerta">
+                    ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às 03:00 horas
+                </div>
+                <div class="alerta">
+                    ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às 18:25 horas
+                </div>
             </div>
 
-
+            <div class="log">
+                <span>LOG</span>
             </div>
         </section>
     </main>
@@ -144,99 +136,102 @@
 <script>
     span_bem_vindo.innerHTML = `Bem-vindo(a), ${sessionStorage.NOME_USUARIO}!`;
 
-    var options = {
+    // Gráfico de Barras — Cidades com maior número de fraudes top 10
+   var options = {
           series: [{
-          data: [44, 55, 41, 64, 22, 43, 21]
-        }, {
-          data: [53, 32, 33, 52, 13, 44, 32]
+          name: 'Fraudes',
+          data: [45, 38, 32, 28, 24, 21, 18, 15, 12, 8]
         }],
           chart: {
+          height: 350,
           type: 'bar',
-          height: 430
         },
         plotOptions: {
           bar: {
-            horizontal: true,
+            borderRadius: 10,
             dataLabels: {
               position: 'top',
             },
           }
         },
+        colors: ['#9193DE'],
         dataLabels: {
           enabled: true,
-          offsetX: -6,
+          formatter: function (val) {
+            return val;
+          },
+          offsetY: -20,
           style: {
             fontSize: '12px',
-            colors: ['#fff']
+            colors: ["#304758"],
+            fontWeight: 'bold'
           }
         },
-        stroke: {
-          show: true,
-          width: 1,
-          colors: ['#fff']
-        },
-        tooltip: {
-          shared: true,
-          intersect: false
-        },
-        xaxis: {
-          categories: [2001, 2002, 2003, 2004, 2005, 2006, 2007],
-        },
-        };
         
-        new ApexCharts(document.querySelector("#chart"), options);
-        chart.render();
-
-    // Gráfico de Barras — Distribuição de Fraudes
-    var barOptions = {
-        chart: {
-            type: 'bar',
-            height: 300,
-            toolbar: {
-                show: false
-            }
-        },
-        series: [{
-            name: 'Fraudes',
-            data: [15, 25, 22, 20, 18]
-        }],
-        dataLabels: {
-            enabled: true,
-            style: {
-                fontSize: '18px',
-                fontWeight: 'bolder',
-                colors: ['#fff'],
-            },
-        },
-        plotOptions: {
-            bar: {
-                columnWidth: '70%',
-                dataLabels: {
-                    position: 'top',
-                }
-            }
-        },
         xaxis: {
-            categories: ['Cartão de Crédito', 'Identidade Falsa', 'ChargeBack', 'Fraude Amigável', 'Outro'],
-            labels: {
-                style: {
-                    colors: '#333',
-                    fontSize: '13px'
-                }
+          categories:["São Paulo", "Rio de Janeiro", "Belo Horizonte", "Brasília", "Curitiba", "Porto Alegre", "Salvador", "Recife", "Fortaleza", "Manaus"],
+          position: 'bottom',
+          axisBorder: {
+            show: false
+          },
+          axisTicks: {
+            show: false
+          },
+          labels: {
+            style: {
+                fontSize: '11px'
             }
+          },
+          crosshairs: {
+            fill: {
+              type: 'gradient',
+              gradient: {
+                colorFrom: '#D8E3F0',
+                colorTo: '#BED1E6',
+                stops: [0, 100],
+                opacityFrom: 0.4,
+                opacityTo: 0.5,
+              }
+            }
+          },
+          tooltip: {
+            enabled: true,
+          }
         },
         yaxis: {
-            labels: {
-                style: {
-                    colors: '#333',
-                    fontSize: '13px'
-                }
+          axisBorder: {
+            show: false
+          },
+          axisTicks: {
+            show: false,
+          },
+          labels: {
+            show: false,
+            formatter: function (val) {
+              return val;
             }
+          }
+        
         },
-        colors: ['#a48bff'],
-    };
-    new ApexCharts(document.querySelector("#barChart"), barOptions).render();
+        title: {
+          text: 'Top 10 Cidades com Mais Fraudes',
+          floating: false,
+          offsetY: 0,
+          align: 'center',
+          style: {
+            color: '#444',
+            fontSize: '16px',
+            fontWeight: 'bold'
+          }
+        },
+        legend: {
+            show: false
+        }
+        };
 
+        var chart = new ApexCharts(document.querySelector("#chartBar"), options);
+        chart.render();
+    
     let slackNotificationsEnabled = JSON.parse(localStorage.getItem("slackNotificationsEnabled") || "true");
 
     function buscarMedidas() {

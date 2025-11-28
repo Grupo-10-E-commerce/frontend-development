@@ -80,8 +80,8 @@ body {
 
 .card {
     background: #fff;
-    width: 20%;
-    height: 80px;
+    width: 41vh;
+    height: 110px;
     padding: 20px;
     border-radius: 10px;
     border: 1px solid #ddd;
@@ -123,9 +123,9 @@ body {
     background: #fff;
     border-radius: 10px;
     padding: 15px;
-    margin-top: -200px;
+    margin-top: -250px;
     border: 1px solid #ddd;
-    height: 60vh;
+    height: 65vh;
     box-shadow: 0 4px 12px rgba(124, 122, 184, 0.4);
 }
 
@@ -166,7 +166,7 @@ button:hover {
 }
 
 .grafico-card {
-    width: 25%;
+    width: 112vh;
     background: #fff;
     border-radius: 10px;
     border: 1px solid #ddd;
@@ -204,7 +204,7 @@ button:hover {
 }
 
 .alertas {
-    width: 20%;
+    width: 25%;
     background: #fff;
     border-radius: 10px;
     border: 1px solid #ddd;
@@ -227,10 +227,19 @@ button:hover {
 }
 
 .grafico-card-bar {
-    width: 22vw;
+    width: 25%;
     background: #fff;
     border-radius: 10px;
     border: 1px solid #ddd;
     padding: 15px;
     box-shadow: 0 4px 12px rgba(124, 122, 184, 0.4);
+}
+
+.log {
+    width: 25%;
+    background: #fff;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(124, 122, 184, 0.4); 
 }

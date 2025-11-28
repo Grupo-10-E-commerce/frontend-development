@@ -13,9 +13,7 @@
     <title>Central de análise de fraude</title>
 </head>
 
-<body onload="buscarMedidas()">
-
-<body>
+<body onload="buscarMedidas(); buscarPorcentagem();">
     <side-Bar></side-Bar>
     <div class="header">
         <div class="title">Central de Análise de Fraude</div>
@@ -36,8 +34,8 @@
             </div>
             <div class="card">
                 <p class="titulo">Porcentagem de Fraudes</p>
-                <div class="valor">24%</div>
-                <p class="sub">Em relação a 528 Vendas</p>
+                <div class="valor" id="div_porcentagemFraudes">24%</div>
+                <p class="sub" id="porcentagemRelacaoVendas">Em relação a 528 Vendas</p>
                 <div class="icone">⚠️</div>
             </div>
             <div class="grafico-card">
@@ -273,9 +271,50 @@
             console.log(`#ERRO: ${resposta}`);
         });
     }
+
+    function buscarPorcentagem(){
+        fetch("/centralAnaliseMedidas/buscarPercentual", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            id_empresa: sessionStorage.ID_EMPRESA
+        }),
+    })
+        .then(function (resposta) {
+            console.log("resposta da porcentagem", resposta);
+
+            if(resposta.ok){
+                resposta.json().then(json => {
+                    console.log("JSON porcentagem", json);
+                    console.log(JSON.stringify(json));
+
+                    let linha = json[0];
+                    let porcFraudes = linha.porcentagem_fraudes || 0;
+                    let totalVendas = linha.total_vendas || 0;
+
+                    atualizarPorcentagem(porcFraudes, totalVendas);
+                });
+            } else {
+                throw "Erro ao buscar a porcentagem";
+            }
+        })
+        .catch(function (resposta){
+            console.log(`Erro ao buscar porcentagem: ${resposta}`);
+        });
+}
+
+
     function atualizarMedidas(numeroTotalFraudes) {
-        console.log("Atualizando total fraudes " + numeroTotalFraudes)
+        console.log("Atualizando total fraudes, porcentageme total das vendas " + numeroTotalFraudes)
         div_numeroTotalFraudes.innerHTML = numeroTotalFraudes;
+    }
+
+    function atualizarPorcentagem(porcFraudes, totalVendas){
+        console.log("Atualizando porcentagem das fraudes e total das vendas: " + porcFraudes, totalVendas)
+        div_porcentagemFraudes.innerHTML = `${Number(porcFraudes).toFixed(2)}%`;
+        porcentagemRelacaoVendas.innerHTML = `Em relação ao total de ${totalVendas} vendas`;
     }
 
     function atualizarIconeSlack() {

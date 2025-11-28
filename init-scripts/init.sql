@@ -19,6 +19,14 @@ CREATE TABLE IF NOT EXISTS empresa (
     PRIMARY KEY (id_empresa)
 );
 
+CREATE TABLE IF NOT EXISTS controle_importacao (
+    id_empresa INT PRIMARY KEY,
+    ultima_linha_processada INT NOT NULL
+);
+
+INSERT INTO controle_importacao (id_empresa, ultima_linha_processada)
+SELECT 1, 0 WHERE NOT EXISTS (SELECT * FROM controle_importacao WHERE id_empresa = 1);
+
 CREATE TABLE IF NOT EXISTS usuario (
     id_usuario INT NOT NULL AUTO_INCREMENT,
     nome VARCHAR(255) NOT NULL,
@@ -60,14 +68,6 @@ CREATE TABLE IF NOT EXISTS compra (
     fraude TINYINT NOT NULL,
     PRIMARY KEY (id_compra),
     FOREIGN KEY (id_empresa) REFERENCES empresa(id_empresa)
-);
-
-CREATE TABLE IF NOT EXISTS alerta_fraude (
-    id_alerta_fraude INT NOT NULL AUTO_INCREMENT,
-    data_hora_alerta DATETIME NOT NULL,
-    id_compra INT NOT NULL,
-    PRIMARY KEY (id_alerta_fraude),
-    FOREIGN KEY (id_compra) REFERENCES compra(id_compra)
 );
 
 CREATE TABLE IF NOT EXISTS alerta_personalizado (

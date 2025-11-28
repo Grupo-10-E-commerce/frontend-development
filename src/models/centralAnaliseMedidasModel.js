@@ -2,13 +2,31 @@ var database = require("../database/config");
 
 function buscarMedidas(id_empresa) {
     var instrucao = `
-    SELECT COUNT(fraude) AS total_fraudes FROM compra
-	WHERE fraude = 1;
+        SELECT COUNT(fraude) AS total_fraudes 
+        FROM compra
+        WHERE fraude = 1 AND id_empresa = ${id_empresa};
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
 }
 
+function buscarPorcentagem(id_empresa) {
+    var instrucao = `
+        SELECT 
+            SUM(CASE WHEN fraude = 1 THEN 1 ELSE 0 END) AS total_fraudes,
+            COUNT(*) AS total_vendas,
+            ROUND(
+                (SUM(CASE WHEN fraude = 1 THEN 1 ELSE 0 END) / NULLIF(COUNT(*), 0)) * 100,
+                2
+            ) AS porcentagem_fraudes
+        FROM compra
+        WHERE id_empresa = ${id_empresa};
+    `;
+    console.log("Executando instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
 module.exports = {
-    buscarMedidas
+    buscarMedidas,
+    buscarPorcentagem
 }

@@ -9,7 +9,21 @@ function buscarMedidas(req, res) {
   });
 }
 
+function buscarPorcentagem(req, res){
+  var id_empresa = req.body.id_empresa;
+
+  centralAnaliseMedidasModel.buscarPorcentagem(id_empresa)
+    .then((resultado) =>{
+      res.status(200).json(resultado);
+    })
+    .catch((erro) => {
+      console.log("Erro ao buscar a porcentagem: ", erro);
+      res.status(500).json(erro);
+    })
+}
+
 
 module.exports = {
-    buscarMedidas
+    buscarMedidas,
+    buscarPorcentagem
 }

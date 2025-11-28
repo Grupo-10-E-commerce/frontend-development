@@ -48,6 +48,7 @@ function cadastrar(req, res) {
 function atualizar(req, res) {
     var id_usuario = req.body.id_usuario;
     var nome = req.body.nome;
+    var emailAtual = req.body.emailAtual;
     var email = req.body.email;
     var senhaAtual = req.body.senhaAtual;
     var novaSenha = req.body.novaSenha;
@@ -61,13 +62,41 @@ function atualizar(req, res) {
             res.status(500).json(erro.sqlMessage || erro.message || erro);
         })
     } else {
-        console.log("Alterando senhas tambem.")
-        
+        console.log("Tentando alterar senha... " + emailAtual )
+
+        usuariosModel.efetuarLogin(emailAtual, senhaAtual).then(function (resposta) {
+            
+            if (resposta.length == 1) {
+                usuariosModel.atualizarSenha(nome, email, id_usuario, novaSenha).then(function (resposta) {
+                    res.status(200).send("Usuário atualizado (com senha) com sucesso!");
+                }).catch(function (erro) {
+                    console.log("ERRO NO ATUALIZAR:", erro);
+                    res.status(500).json(erro.sqlMessage || erro.message || erro);
+                })
+
+            } else if (resposta.length == 0) {
+                res.status(401).send("Erro no login. Usuário não encontrado.")
+            } else {
+                res.status(500).send("erro no login. tem mais de um usuario")
+            }
+        })
     }
+}
+
+function buscarDados(req, res) {
+    var id_usuario = req.body.id_usuario;
+
+    usuariosModel.buscarDados(id_usuario).then(function (resposta) {
+        res.status(200).send(resposta);
+    }).catch(function (erro) {
+        console.log("ERRO NO BUSCAR:", erro);
+        res.status(500).json(erro.sqlMessage || erro.message || erro);
+    })
 }
 
 module.exports = {
     login,
     cadastrar,
-    atualizar
+    atualizar,
+    buscarDados
 }

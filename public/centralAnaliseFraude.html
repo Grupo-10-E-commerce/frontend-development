@@ -13,7 +13,7 @@
     <title>Central de análise de fraude</title>
 </head>
 
-<body onload="buscarMedidas(); buscarPorcentagem();">
+<body onload="buscarMedidas(); buscarPorcentagem(); buscarTopCidades()">
     <side-Bar></side-Bar>
     <div class="header">
         <div class="title">Central de Análise de Fraude</div>
@@ -107,7 +107,8 @@
             </div>
 
             <div class="slack">
-                Mensagem Slack
+                <h3>Últimos alertas de Fraude</h3>
+                <div id="div_mensagemSlack"></div>
             </div>
 
             <div class="log">
@@ -123,121 +124,141 @@
     span_bem_vindo.innerHTML = `Bem-vindo(a), ${sessionStorage.NOME_USUARIO}!`;
 
     // Gráfico de Barras — Cidades com maior número de fraudes top 10
-   var options = {
-          series: [{
-          name: 'Taxa de Fraudes',
-          data: [32.5, 28.7, 26.3, 24.8, 22.1, 19.5, 17.8, 15.2, 13.6, 11.4]
-        }],
-          chart: {
-          height: 350,
-          type: 'bar',
-        },
-        plotOptions: {
-          bar: {
-            borderRadius: 10,
-            dataLabels: {
-              position: 'top',
-            },
-          }
-        },
-        colors: ['#9193DE'],
-        dataLabels: {
-          enabled: true,
-          formatter: function (val) {
-            return val + "%";
-          },
-          offsetY: -20,
-          style: {
-            fontSize: '16px',
-            colors: ["#304758"],
-            fontWeight: 'bold'
-          }
-        },
-        
-        xaxis: {
-          categories:["São Paulo", "Rio de Janeiro", "Belo Horizonte", "Brasília", "Curitiba", "Porto Alegre", "Salvador", "Recife", "Fortaleza", "Manaus"],
-          position: 'bottom',
-          axisBorder: {
-            show: false
-          },
-          axisTicks: {
-            show: false
-          },
-          labels: {
-            style: {
-                fontSize: '12px',
-                fontWeight: 'bold'
-            }
-          },
-          crosshairs: {
-            fill: {
-              type: 'gradient',
-              gradient: {
-                colorFrom: '#D8E3F0',
-                colorTo: '#BED1E6',
-                stops: [0, 100],
-                opacityFrom: 0.4,
-                opacityTo: 0.5,
-              }
-            }
-          },
-          tooltip: {
-            enabled: true,
-          }
-        },
-        yaxis: {
-          axisBorder: {
-            show: false
-          },
-          axisTicks: {
-            show: false,
-          },
-          labels: {
-            show: true,
-            formatter: function (val) {
-              return val + "%";
-            },
-            style: {
-                fontSize: '16px',
-                fontWeight: 'bold'
-            }
-          },
-          max:35
-        },
-        title: {
-          text: 'Cidades com Maior Taxa de Fraudes',
-          floating: false,
-          offsetY: 0,
-          align: 'center',
-          style: {
-            color: '#444',
-            fontSize: '22px',
-            fontWeight: 'bold'
-          }
-        },
-        subtitle: {
-            text: 'Proporção de Fraudes por Vendas (%)',
-            align: 'center',
-            style: {
-            color: '#666',
-            fontSize: '18px'
-            }
-        },
-        legend: {
-            show: false
-        },
-        tooltip: {
-            y: {
-            formatter: function(val) {
-                return val + "% de fraudes"
-            }
-            }
+
+    function buscarTopCidades() {
+    fetch("/centralAnaliseMedidas/buscarTopCidades", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id_empresa: sessionStorage.ID_EMPRESA })
+    })
+    .then(res => {
+        if (!res.ok) {
+            console.log("Erro ao buscar cidades com mais fraudes");
+            throw "Erro ao buscar cidades com mais fraudes";
         }
+        return res.json();
+    })
+    .then(dados => {
+        console.log("Dados top cidades:", dados);
+
+        const categorias = dados.map(linha => linha.cidade);
+        const totaisFraudes = dados.map(linha => Number(linha.total_fraudes));
+
+        var options = {
+            series: [{
+                name: 'Total de fraudes',
+                data: totaisFraudes
+            }],
+            chart: {
+                height: 350,
+                type: 'bar',
+            },
+            plotOptions: {
+                bar: {
+                    borderRadius: 10,
+                    dataLabels: {
+                        position: 'top',
+                    },
+                }
+            },
+            colors: ['#9193DE'],
+            dataLabels: {
+                enabled: true,
+                formatter: function (val) {
+                    return val;
+                },
+                offsetY: -20,
+                style: {
+                    fontSize: '16px',
+                    colors: ["#304758"],
+                    fontWeight: 'bold'
+                }
+            },
+            xaxis: {
+                categories: categorias,
+                position: 'bottom',
+                axisBorder: {
+                    show: false
+                },
+                axisTicks: {
+                    show: false
+                },
+                labels: {
+                    style: {
+                        fontSize: '12px',
+                        fontWeight: 'bold'
+                    }
+                },
+                crosshairs: {
+                    fill: {
+                        type: 'gradient',
+                        gradient: {
+                            colorFrom: '#D8E3F0',
+                            colorTo: '#BED1E6',
+                            stops: [0, 100],
+                            opacityFrom: 0.4,
+                            opacityTo: 0.5
+                        }
+                    }
+                },
+                tooltip: {
+                    enabled: true,
+                }
+            },
+            yaxis: {
+                axisBorder: {
+                    show: false
+                },
+                axisTicks: {
+                    show: false,
+                },
+                labels: {
+                    show: true,
+                    formatter: function (val) {
+                        return val;
+                    },
+                    style: {
+                        fontSize: '16px',
+                        fontWeight: 'bold'
+                    }
+                }
+            },
+            title: {
+                text: 'Cidades com maior número de fraudes',
+                floating: false,
+                offsetY: 0,
+                align: 'center',
+                style: {
+                    color: '#444',
+                    fontSize: '22px',
+                    fontWeight: 'bold'
+                }
+            },
+            subtitle: {
+                text: 'Total de fraudes por cidade',
+                align: 'center',
+                style: {
+                    color: '#666',
+                    fontSize: '18px'
+                }
+            },
+            legend: {
+                show: false
+            },
+            tooltip: {
+                y: {
+                    formatter: function (val) {
+                        return val + " fraudes";
+                    }
+                }
+            }
         };
 
         var chart = new ApexCharts(document.querySelector("#chartBar"), options);
         chart.render();
-    
+    })
+    .catch(erro => console.error(erro));
+}
     let slackNotificationsEnabled = JSON.parse(localStorage.getItem("slackNotificationsEnabled") || "true");
 
     function buscarMedidas() {
@@ -273,7 +294,7 @@
     }
 
     function buscarPorcentagem(){
-        fetch("/centralAnaliseMedidas/buscarPercentual", {
+        fetch("/centralAnaliseMedidas/buscarPorcentagem", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

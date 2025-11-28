@@ -22,8 +22,22 @@ function buscarPorcentagem(req, res){
     })
 }
 
+function buscarTopCidades(req, res){
+  var id_empresa = req.body.id_empresa;
+
+  centralAnaliseMedidasModel.buscarTopCidades(id_empresa)
+    .then((resultado) => {
+      res.status(200).json(resultado);
+    })
+    .catch((erro) => {
+      console.log("Erro ao buscar cidades com mais fraudes", erro);
+      res.status(500).json(erro);
+    })
+}
+
 
 module.exports = {
     buscarMedidas,
-    buscarPorcentagem
+    buscarPorcentagem,
+    buscarTopCidades
 }

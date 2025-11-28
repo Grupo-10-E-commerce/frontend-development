@@ -26,7 +26,29 @@ function buscarPorcentagem(id_empresa) {
     return database.executar(instrucao);
 }
 
+function buscarTopCidades(id_empresa){
+    var instrucao = `
+    SELECT 
+            cidade,
+            SUM(CASE WHEN fraude = 1 THEN 1 ELSE 0 END) AS total_fraudes,
+            COUNT(*) AS total_vendas,
+            ROUND(
+                (SUM(CASE WHEN fraude = 1 THEN 1 ELSE 0 END) / NULLIF(COUNT(*), 0)) * 100,
+                2
+            ) AS taxa_fraudes
+        FROM compra
+        WHERE id_empresa = ${id_empresa}
+        GROUP BY cidade
+        HAVING total_vendas > 0
+        ORDER BY taxa_fraudes DESC
+        LIMIT 10;
+    `;
+    console.log("Executando instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
 module.exports = {
     buscarMedidas,
-    buscarPorcentagem
+    buscarPorcentagem,
+    buscarTopCidades
 }

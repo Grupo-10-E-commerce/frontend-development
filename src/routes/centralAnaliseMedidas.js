@@ -11,4 +11,8 @@ router.post("/buscarPorcentagem", function(req, res) {
     centralAnaliseMedidasController.buscarPorcentagem(req, res);
 })
 
+router.post("/buscarTopCidades", function(req, res){
+    centralAnaliseMedidasController.buscarTopCidades(req, res);
+})
+
 module.exports = router;

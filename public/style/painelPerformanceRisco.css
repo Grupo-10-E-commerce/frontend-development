@@ -82,7 +82,7 @@ body {
 .containers .KPI {
     align-items: left;
     border: 2px solid #ddd;
-    border-radius: 5px;
+    border-radius: 10px;
     width: 23%;
     display: flex;
     flex-direction: column;
@@ -142,7 +142,7 @@ body {
 
 .grafico1 {
     border: 2px solid #ddd;
-    border-radius: 5px;
+    border-radius: 10px;
     width: 48%;
     background-color: white;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -222,7 +222,7 @@ body {
 
 .grafico2 {
     border: 2px solid #ddd;
-    border-radius: 5px;
+    border-radius: 10px;
     width: 48%;
     background-color: white;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -281,7 +281,7 @@ body {
 
 .grafico3 {
     border: 2px solid #ddd;
-    border-radius: 5px;
+    border-radius: 10px;
     width: 30.5%;
     background-color: white;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -296,7 +296,7 @@ body {
 
 .grafico4 {
     border: 2px solid #ddd;
-    border-radius: 5px;
+    border-radius: 10px;
     width: 63%;
     background-color: white;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);

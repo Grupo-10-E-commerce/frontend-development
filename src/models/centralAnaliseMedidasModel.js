@@ -47,8 +47,26 @@ function buscarTopCidades(id_empresa){
     return database.executar(instrucao);
 }
 
+function listarComprasFraudes(id_empresa){
+    var instrucao = `
+        SELECT 
+            id_compra,
+            DATE_FORMAT(data_hora_transacao, '%d/%m/%Y %H:%i') AS data_compra,
+            valor_transacao,
+            tipo_transacao,
+            cidade
+        FROM compra
+        WHERE fraude = 1 
+          AND id_empresa = ${id_empresa}
+        ORDER BY data_hora_transacao DESC;
+    `;
+    console.log("Executando instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
 module.exports = {
     buscarMedidas,
     buscarPorcentagem,
-    buscarTopCidades
+    buscarTopCidades,
+    listarComprasFraudes
 }

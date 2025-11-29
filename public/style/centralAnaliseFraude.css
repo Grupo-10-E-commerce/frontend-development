@@ -128,16 +128,39 @@ body {
     border: 1px solid #ddd;
     height: 65vh;
     box-shadow: 0 4px 12px rgba(124, 122, 184, 0.4);
+    display: flex;
+    flex-direction: column;
 }
 
 .compras-card h3 {
     margin-bottom: 10px;
     font-size: 25px;
+    flex: 0 0 auto;
 }
 
-table {
+.compras-card table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed;
+    flex: 1 1 auto;
+}
+
+.compras-card thead {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.compras-card tbody {
+    display: block;
+    height: calc(65vh - 90px);
+    overflow-y: auto;
+}
+
+.compras-card tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
 }
 
 th {
@@ -177,12 +200,31 @@ button:hover {
 }
 
 .slack {
-    width: 25%;
+    width: 30vw;
     background: #fff;
     border-radius: 10px;
     border: 1px solid #ddd;
     padding: 15px;
     box-shadow: 0 4px 12px rgba(124, 122, 184, 0.4);
+}
+
+
+.slack h3 {
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.alerta {
+    background: #fff5f5;
+    border: 1px solid #f1c0c0;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    font-size: 13px;
+}
+
+.alerta strong {
+    font-weight: 600;
 }
 
 .grafico-card-bar {

@@ -35,9 +35,22 @@ function buscarTopCidades(req, res){
     })
 }
 
+function listarComprasFraudes(req, res){
+  var id_empresa = req.body.id_empresa;
+  centralAnaliseMedidasModel.listarComprasFraudes(id_empresa)
+  .then((resultado) =>{
+    res.status(200).json(resultado);
+  })
+  .catch((erro) =>{
+    console.log("Erro ao tentar listar compras fraudulentas", erro);
+    res.status(500).json(erro);
+  })
+}
+
 
 module.exports = {
     buscarMedidas,
     buscarPorcentagem,
-    buscarTopCidades
+    buscarTopCidades,
+    listarComprasFraudes
 }

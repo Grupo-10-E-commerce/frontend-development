@@ -9,11 +9,13 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Konkhmer+Sleokchher&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap ">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <title>Central de análise de fraude</title>
 </head>
 
-<body onload="buscarMedidas(); buscarPorcentagem(); buscarTopCidades()">
+<body onload="buscarMedidas(); buscarPorcentagem(); buscarTopCidades(); listarComprasFraudes()">
     <side-Bar></side-Bar>
     <div class="header">
         <div class="title">Central de Análise de Fraude</div>
@@ -58,49 +60,8 @@
                                 <th></th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>ID 01934209<br></td>
-                                <td>01/01/25</td>
-                                <td>R$800</td>
-                                <td><button>Ver Mais</button></td>
-                            </tr>
-                            <tr>
-                                <td>ID 08926543<br></td>
-                                <td>03/01/25</td>
-                                <td>R$1000</td>
-                                <td><button>Ver Mais</button></td>
-                            </tr>
-                            <tr>
-                                <td>ID 08354678<br></td>
-                                <td>13/01/25</td>
-                                <td>R$900</td>
-                                <td><button>Ver Mais</button></td>
-                            </tr>
-                            <tr>
-                                <td>ID 06273849<br></td>
-                                <td>25/01/25</td>
-                                <td>R$850</td>
-                                <td><button>Ver Mais</button></td>
-                            </tr>
-                            <tr>
-                                <td>ID 09337731<br></td>
-                                <td>04/02/25</td>
-                                <td>R$950</td>
-                                <td><button>Ver Mais</button></td>
-                            </tr>
-                            <tr>
-                                <td>ID 02738491<br></td>
-                                <td>05/02/25</td>
-                                <td>R$850</td>
-                                <td><button>Ver Mais</button></td>
-                            </tr>
-                            <tr>
-                                <td>ID 01845620<br></td>
-                                <td>16/02/25</td>
-                                <td>R$900</td>
-                                <td><button>Ver Mais</button></td>
-                            </tr>
+                        <tbody id="comprasSuspeitas">
+                            
                         </tbody>
                     </table>
                 </div>
@@ -337,6 +298,103 @@
         div_porcentagemFraudes.innerHTML = `${Number(porcFraudes).toFixed(2)}%`;
         porcentagemRelacaoVendas.innerHTML = `Em relação ao total de ${totalVendas} vendas`;
     }
+
+    function listarComprasFraudes(){
+        fetch("/centralAnaliseMedidas/listarComprasFraudes", {
+            method: "POST",
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify({id_empresa: sessionStorage.ID_EMPRESA})
+        })
+        .then(function(resposta) {
+            console.log("resposta compras suspeitas: ", resposta);
+
+            if(resposta.ok){
+                resposta.json().then(lista => {
+                    console.log("JSON compras suspeitas/fraudulentas", lista);
+                    preencherListaCompras(lista);
+                });
+            } else {
+                throw "Erro ao buscar compras suspeitas"
+            }
+        })
+        .catch(function (erro){
+            console.log(`Erro ao buscar compras suspeitas: ${erro}`);
+        })
+    }
+
+    function preencherListaCompras(lista){
+        const tbody = document.getElementById("comprasSuspeitas");
+        tbody.innerHTML="";
+
+        if(!lista || lista.length == 0){
+            tbody.innerHTML = `
+            <tr>
+                <td colspan="4">Nenhuma compra suspeita encontrada.</td>
+            </tr>
+            `;
+            return;
+        }
+        lista.forEach(linha => {
+        const valorFormatado = Number(linha.valor_transacao)
+            .toFixed(2)
+            .replace(".", ",");
+
+        const tr = document.createElement("tr");
+
+        const tdCompra = document.createElement("td");
+        tdCompra.textContent = `ID ${linha.id_compra}`;
+
+        const tdData = document.createElement("td");
+        tdData.textContent = linha.data_compra;
+
+        const tdValor = document.createElement("td");
+        tdValor.textContent = `R$ ${valorFormatado}`;
+
+        const tdBotao = document.createElement("td");
+        const btn = document.createElement("button");
+        btn.textContent = "Ver Mais";
+
+        btn.addEventListener("click", () => {
+            verMaisComprasSweetAlert(linha);
+        });
+
+        tdBotao.appendChild(btn);
+
+        tr.appendChild(tdCompra);
+        tr.appendChild(tdData);
+        tr.appendChild(tdValor);
+        tr.appendChild(tdBotao);
+
+        tbody.appendChild(tr);
+    });
+    }
+
+function verMaisComprasSweetAlert(compra) {
+    const valorFormatado = Number(compra.valor_transacao)
+        .toFixed(2)
+        .replace(".", ",");
+
+    let tipoLegivel = compra.tipo_transacao;
+    if (tipoLegivel === "purchase") tipoLegivel = "Compra";
+    if (tipoLegivel === "refund")   tipoLegivel = "Estorno";
+
+    Swal.fire({
+        title: `Compra ID ${compra.id_compra}`,
+        html: `
+            <p><strong>Data e hora:</strong> ${compra.data_compra}</p>
+            <p><strong>Valor:</strong> R$ ${valorFormatado}</p>
+            <p><strong>Tipo de transação:</strong> ${tipoLegivel}</p>
+            <p><strong>Cidade:</strong> ${compra.cidade}</p>
+            <p><strong>Status:</strong> Fraude detectada</p>
+        `,
+        icon: 'info',             
+        confirmButtonText: 'Fechar',
+        confirmButtonColor: '#9193DE',
+        customClass: {
+            popup: 'swal2-popup-fraude'
+        }
+    });
+}
 
     function atualizarIconeSlack() {
         const botao = document.getElementById("btn_notificacao");

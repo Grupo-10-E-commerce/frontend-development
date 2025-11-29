@@ -15,4 +15,8 @@ router.post("/buscarTopCidades", function(req, res){
     centralAnaliseMedidasController.buscarTopCidades(req, res);
 })
 
+router.post("/listarComprasFraudes", function(req, res){
+    centralAnaliseMedidasController.listarComprasFraudes(req, res);
+})
+
 module.exports = router;

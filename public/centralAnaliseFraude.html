@@ -15,7 +15,7 @@
     <title>Central de análise de fraude</title>
 </head>
 
-<body onload="buscarMedidas(); buscarPorcentagem(); buscarTopCidades(); listarComprasFraudes()">
+<body onload="buscarMedidas(); buscarPorcentagem(); buscarTopCidades(); listarComprasFraudes(); listarAlertasSlack(); listarLogCron()">
     <side-Bar></side-Bar>
     <div class="header">
         <div class="title">Central de Análise de Fraude</div>
@@ -73,7 +73,8 @@
             </div>
 
             <div class="log">
-                <span>LOG</span>
+                <h3>CRON</h3>
+                <div id="div_logCron"></div>
             </div>
         </section>
     </main>
@@ -393,6 +394,164 @@ function verMaisComprasSweetAlert(compra) {
         customClass: {
             popup: 'swal2-popup-fraude'
         }
+    });
+}
+
+function listarAlertasSlack() {
+    fetch("/centralAnaliseMedidas/listarAlertasSlack", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({id_empresa: sessionStorage.ID_EMPRESA})
+    })
+    .then(res => {
+        console.log("Resposta alertas slack: ", res);
+        if(!res.ok){
+            throw "erro ao buscar alertas do slack"
+        }
+        return res.json();
+    })
+    .then(lista => {
+        console.log("JSON alertas slack", lista);
+        preencherListaAlertasSlack(lista);
+    })
+    .catch(erro => {
+        console.log("Erro ao listar alertas do slack", erro);
+    });
+}
+
+function normalizarAlertaSlack(linha) {
+    const msg = linha.mensagem || "";
+    const resultado = {
+        data: linha.data_alerta,
+        filtros: "Nenhum",
+        fraudes: null,
+        prejuizo: null,
+        cidade: null
+    };
+
+    if (linha.acao === "RESUMO_ALERTA") {
+
+        const filtrosMatch = msg.match(/Filtros:\s*(.*)/i);
+        if (filtrosMatch) {
+            resultado.filtros = filtrosMatch[1].trim();
+        }
+
+        const fraudesMatch = msg.match(/Total de fraudes:\s*(\d+)/i);
+        if (fraudesMatch) {
+            resultado.fraudes = fraudesMatch[1];
+        }
+
+        const prejuizoMatch = msg.match(/Preju[ií]zo total:\s*R\$\s*([\d.,]+)/i);
+        if (prejuizoMatch) {
+            resultado.prejuizo = prejuizoMatch[1];
+        }
+
+        const cidadeMatch = msg.match(/cidade\s*=\s*([A-Za-zÀ-ú\s]+)/i);
+        if (cidadeMatch) {
+            resultado.cidade = cidadeMatch[1].trim();
+        }
+    }
+
+    else if (linha.acao === "RESUMO_FRAUDES_GERAL") {
+        const fraudesMatch = msg.match(/Quantidade de fraudes detectadas:\s*(\d+)/i);
+        if (fraudesMatch) {
+            resultado.fraudes = fraudesMatch[1];
+        }
+
+        const prejuizoMatch = msg.match(/Preju[ií]zo total:\s*R\$\s*([\d.,]+)/i);
+        if (prejuizoMatch) {
+            resultado.prejuizo = prejuizoMatch[1];
+        }
+
+    }
+
+    return resultado;
+}
+
+function preencherListaAlertasSlack(lista) {
+    const div = document.getElementById("div_mensagemSlack");
+    div.innerHTML = "";
+
+    if (!lista || lista.length === 0) {
+        div.innerHTML = "<p>Nenhum alerta de fraude enviado para o Slack.</p>";
+        return;
+    }
+
+    lista.forEach(linha => {
+        const alerta = document.createElement("div");
+        alerta.classList.add("alerta");
+
+        const info = normalizarAlertaSlack(linha);
+
+        const filtrosTexto = info.filtros && info.filtros.trim() !== "" ? info.filtros : "Nenhum";
+
+        let linhaCidade = "";
+        if (info.cidade) {
+            linhaCidade = `<br><span><strong>Cidade:</strong> ${info.cidade}</span>`;
+        }
+
+        alerta.innerHTML = `
+            ⚠️ <strong>Notificação do Slack</strong><br>
+            <span>Enviado em ${info.data}</span><br>
+            <span><strong>Filtros:</strong> ${filtrosTexto}</span><br>
+            <span><strong>Fraudes:</strong> ${info.fraudes ?? "-"}</span>
+            <span style="margin-left: 10px;">
+                <strong>Prejuízo total:</strong> 
+                ${info.prejuizo ? "R$ " + info.prejuizo : "-"}
+            </span>
+            ${linhaCidade}
+        `;
+
+        div.appendChild(alerta);
+    });
+}
+
+    function listarLogCron() {
+    fetch("/centralAnaliseMedidas/listarLogCron", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id_empresa: sessionStorage.ID_EMPRESA })
+    })
+    .then(res => {
+        console.log("Resposta log cron: ", res);
+        if (!res.ok) {
+            throw "Erro ao buscar log de execuções do cron";
+        }
+        return res.json();
+    })
+    .then(lista => {
+        console.log("JSON log cron", lista);
+        preencherLogCron(lista);
+    })
+    .catch(erro => {
+        console.log("Erro ao listar log cron:", erro);
+    });
+}
+
+function preencherLogCron(lista) {
+    const div = document.getElementById("div_logCron");
+    div.innerHTML = "";
+
+    if (!lista || lista.length === 0) {
+        div.innerHTML = "<p>Nenhuma execução programada registrada.</p>";
+        return;
+    }
+
+    lista.forEach((linha, index) => {
+        const card = document.createElement("div");
+        card.classList.add("alerta", "alerta-log");
+
+        const titulo = index === 0 ? "Última execução programada da aplicação": `Execução programada anterior`;
+
+        const mensagem = linha.mensagem || `Executado às: ${linha.data_execucao}`;
+
+        card.innerHTML = `
+            ⏱️ <strong>${titulo}</strong><br>
+            <span>Executado em: ${linha.data_execucao}</span><br>
+            <span>Mensagem: ${mensagem}</span>
+        `;
+
+        div.appendChild(card);
     });
 }
 

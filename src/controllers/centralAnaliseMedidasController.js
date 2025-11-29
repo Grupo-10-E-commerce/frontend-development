@@ -47,10 +47,37 @@ function listarComprasFraudes(req, res){
   })
 }
 
+function listarAlertasSlack(req, res){
+  var id_empresa = req.body.id_empresa;
+  centralAnaliseMedidasModel.listarAlertasSlack(id_empresa)
+  .then((resultado) => {
+    res.status(200).json(resultado);
+  })
+  .catch((erro) => {
+    console.log("Erro ao tentar listar alertas do slack", erro);
+    res.status(500).json(erro);
+  })
+}
+
+function listarLogCron(req, res) {
+    var id_empresa = req.body.id_empresa;
+
+    centralAnaliseMedidasModel.listarLogCron(id_empresa)
+        .then((resultado) => {
+            res.status(200).json(resultado);
+        })
+        .catch((erro) => {
+            console.log("Erro ao tentar listar log do cron", erro);
+            res.status(500).json(erro);
+        });
+}
+
 
 module.exports = {
     buscarMedidas,
     buscarPorcentagem,
     buscarTopCidades,
-    listarComprasFraudes
+    listarComprasFraudes,
+    listarAlertasSlack,
+    listarLogCron
 }

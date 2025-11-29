@@ -64,9 +64,41 @@ function listarComprasFraudes(id_empresa){
     return database.executar(instrucao);
 }
 
+function listarAlertasSlack(id_empresa) {
+    var instrucao = `
+        SELECT 
+            DATE_FORMAT(data_hora, '%d/%m/%Y %H:%i') AS data_alerta,
+            acao,
+            mensagem
+        FROM slack_log
+        WHERE id_empresa = ${id_empresa}
+        ORDER BY data_hora DESC
+        LIMIT 4;
+    `;
+    console.log("Executando instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
+function listarLogCron(id_empresa) {
+    var instrucao = `
+        SELECT 
+            DATE_FORMAT(data_hora, '%d/%m/%Y %H:%i:%s') AS data_execucao,
+            mensagem
+        FROM log
+        WHERE id_empresa = ${id_empresa}
+          AND acao = 'CRON_EXECUCAO'
+        ORDER BY data_hora DESC
+        LIMIT 4;
+    `;
+    console.log("Executando instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
 module.exports = {
     buscarMedidas,
     buscarPorcentagem,
     buscarTopCidades,
-    listarComprasFraudes
+    listarComprasFraudes,
+    listarAlertasSlack,
+    listarLogCron
 }

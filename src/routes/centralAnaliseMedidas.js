@@ -19,4 +19,12 @@ router.post("/listarComprasFraudes", function(req, res){
     centralAnaliseMedidasController.listarComprasFraudes(req, res);
 })
 
+router.post("/listarAlertasSlack", function (req, res) {
+    centralAnaliseMedidasController.listarAlertasSlack(req, res);
+});
+
+router.post("/listarLogCron", function (req, res) {
+    centralAnaliseMedidasController.listarLogCron(req, res);
+});
+
 module.exports = router;

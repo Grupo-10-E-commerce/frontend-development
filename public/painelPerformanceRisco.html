@@ -16,6 +16,10 @@
         <div class="header">
         <div class="title">Painel de Performance e Risco</div>
         <div class="btn">
+            <select class="ano-select1" id="ano-fraudes">
+                <option value="2024" selected>2024</option>
+                <option value="2023">2023</option>
+            </select>
             <button id="btn_notificacao" class="btn_sino" onclick="notificacao()">
                 <img src="img/notification-bell.png" alt="Notificacoes">
             </button>
@@ -70,19 +74,6 @@
             <div class="containers2"> 
 
                 <div class="grafico1">
-                    <div class="grafico-header">
-                        <div class="titulo-legenda">
-                            <span class="grafico-titulo">Quantidade de Fraudes por Mês</span>
-                            <div class="legenda">
-                                <span class="legenda-ponto"></span>
-                                <span class="legenda-texto">Fraudes</span>
-                            </div>
-                        </div>
-                        <select class="ano-select1" id="ano-fraudes">
-                            <option value="2024" selected>2024</option>
-                            <option value="2023">2023</option>
-                        </select>
-                    </div>
                     <div id="chart"></div>
                 </div>
 
@@ -95,11 +86,6 @@
                                 <option value="29/08">29/08</option>
                                 <option value="28/08">28/08</option>
                                 <option value="27/08">27/08</option>
-                            </select>
-                            <select class="ano-select1">
-                                <option value="2024" selected>2024</option>
-                                <option value="2023">2023</option>
-                                <option value="2022">2022</option>
                             </select>
                         </div>
                     </div>
@@ -118,11 +104,6 @@
                             <h3 class="grafico-titulo">Lucros</h3>
                             <p class="grafico-subtitulo">Lucros Totais</p>
                         </div>
-                        <select class="ano-select">
-                            <option value="2024" selected>2024</option>
-                            <option value="2023">2023</option>
-                            <option value="2022">2022</option>
-                        </select>
                     </div>
                     <div id="chart4"></div>
                 </div>
@@ -134,8 +115,8 @@
 <script>
     span_bem_vindo.innerHTML = `Bem-vindo(a), ${sessionStorage.NOME_USUARIO}!`;
 
-    function buscarDados() {
-        fetch("/painelPerformanceRisco/buscarDados", {
+    function qtdFraudes() {
+        fetch(`/painelPerformanceRisco/buscarDados`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -173,8 +154,18 @@
                                     svg: false
                                 }
                             }, 
+                            title: {
+                                text: 'Quantidade de Fraudes por Mês',
+                                align: 'left',
+                                style: {
+                                    fontSize: '20px',
+                                    fontWeight: 'bold',
+                                    color: '#333'
+                                }
+                            },
                                 colors: ['#9193DE'],
                                 series: [{
+                                    name: 'Quantidade de Fraudes',
                                     data: dados
                                 }],
                                     dataLabels: {
@@ -196,6 +187,7 @@
                                         }
                                     },
                             xaxis: {
+                                categories: meses,
                                 labels: {
                                     style: {
                                         colors: '#333',
@@ -227,7 +219,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', function(){
-        buscarDados();
+        qtdFraudes();
     })
 
     var options = {

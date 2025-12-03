@@ -35,7 +35,7 @@ class SideBarComponent extends HTMLElement {
             item.classList.remove('active');
         });
         event.currentTarget.classList.add('active');
-        
+
         // Navegar para a página correspondente
         const page = event.currentTarget.getAttribute('data-page');
         if (page) {
@@ -230,6 +230,11 @@ class SideBarComponent extends HTMLElement {
                         <span>Editar Perfil</span>
                     </div>
 
+                    <div class="menu-item" data-page="editarUsuarios">
+                        <img src="img/editarIcon.png" class="menu-icon">
+                        <span>Editar Usuários</span>
+                    </div>
+
                     <div class="menu-item" data-page="avaliacao">
                         <img src="img/avaliacaoicon.png" class="menu-icon">
                         <span>Avaliação</span>
@@ -257,7 +262,7 @@ class SideBarComponent extends HTMLElement {
         // Detectar a página atual e marcar como ativa
         const currentPage = window.location.pathname.split('/').pop().replace('.html', '');
         const menuItems = this.shadowRoot.querySelectorAll('.menu-item');
-        
+
         menuItems.forEach(item => {
             const itemPage = item.getAttribute('data-page');
             if (itemPage === currentPage) {
@@ -268,7 +273,7 @@ class SideBarComponent extends HTMLElement {
 
     applyRoleRules() {
         const role = sessionStorage.getItem('ROLE_USER');
-        
+
         if (role === 'Analista de Dados') {
             const manageUsers = this.shadowRoot.querySelector('.manageUsers');
             const servers = this.shadowRoot.querySelector('.servers');

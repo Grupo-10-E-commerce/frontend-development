@@ -1,0 +1,125 @@
+* {
+    /* background-color: rgb(226, 226, 226); */
+    border: 0;
+    margin: 0;
+    font-family: "DM Sans", serif;
+    color: #333;
+}
+
+body {
+    background-color: #f4f3ff;
+}
+
+:root {
+    --azul: #302961;
+    --azul-escuro: #040332;
+    --azul-claro: #695DD7;
+    --roxo-claro: #9594D8;
+    --amarelo: #D5C284;
+    --vermelho: #CD8A8F;
+    --cyan: #9DC9CB;
+    --cinza-escuro: rgb(113, 113, 113);
+    --cinza-claro: rgb(225, 225, 225);
+}
+
+/* CABEÇALHO */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    /* border: 5px solid red; */
+}
+
+.title {
+    font-size: 25px;
+    font-weight: 600;
+    color: #333;
+}
+
+.btn {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.btn_sino {
+    color: #333;
+    padding: 8px 16px;
+    border: 1px solid #919191;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 20px;
+    transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    font-weight: 800;
+    background-image: none;
+}
+
+.btn_sino:hover {
+    background-color: #9193DE;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(124, 122, 184, 0.4);
+    font-weight: 800;
+}
+
+.btn_sino img,
+.btn_user img {
+    width: 24px;
+    height: 24px;
+    display: block;
+    background-color: none;
+}
+
+.btn span {
+    font-size: 20px;
+}
+
+.metricas {
+    margin: 4px;
+}
+
+/* LISTA USUARIOS */
+main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2.5%;
+}
+.p_descricao{
+    margin-left: -50%;
+    margin-bottom: 30px;
+    font-size: 20px;
+}
+
+.div-pesquisar{
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+}
+
+.div-lista-usuarios{
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    width: 70vw;
+    align-items: center;
+}
+.div-usuario{
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    border: solid 1.5px var(--azul);
+}
+.div-usuario-head{
+    color: var(--azul-claro);
+    font-weight: 800;
+    font-size: 18px;
+}
+.div-icon{
+    display: flex;
+    justify-content: space-around;
+    width: 10%;
+    border-left: solid 1.5px var(--azul);
+}

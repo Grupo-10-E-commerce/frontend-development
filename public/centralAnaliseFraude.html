@@ -9,16 +9,16 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Konkhmer+Sleokchher&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap ">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <title>Central de análise de fraude</title>
 </head>
 
-<body onload="buscarMedidas()">
-
-<body>
+<body onload="buscarMedidas(); buscarPorcentagem(); buscarTopCidades(); listarComprasFraudes(); listarAlertasSlack(); listarLogCron()">
     <side-Bar></side-Bar>
     <div class="header">
-        <div class="title">Central de análise de fraude</div>
+        <div class="title">Central de Análise de Fraude</div>
         <div class="btn">
             <button id="btn_notificacao" class="btn_sino" onclick="notificacao()">
                 <img src="img/notification-bell.png" alt="Notificacoes">
@@ -36,34 +36,14 @@
             </div>
             <div class="card">
                 <p class="titulo">Porcentagem de Fraudes</p>
-                <div class="valor">24%</div>
-                <p class="sub">Em relação a 528 Vendas</p>
+                <div class="valor" id="div_porcentagemFraudes">24%</div>
+                <p class="sub" id="porcentagemRelacaoVendas">Em relação a 528 Vendas</p>
                 <div class="icone">⚠️</div>
             </div>
             <div class="grafico-card">
-                <h3>Fraudes por Região</h3>
-                <img src="./img/grafico-regiao.png" alt="">
-                <div class="legenda">
-                    <span class="cor roxo"></span> Muitas Fraudes
-                    <span class="cor claro"></span> Poucas Fraudes
-                </div>
+                <div id="chartBar"></div>
             </div>
 
-            <div class="alertas">
-                <h3>Últimos alertas de Fraude</h3>
-                <div class="alerta">
-                    ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às 23:55 horas
-                </div>
-                <div class="alerta">
-                    ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às 23:58 horas
-                </div>
-                <div class="alerta">
-                    ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às 03:00 horas
-                </div>
-                <div class="alerta">
-                    ⚠️ <strong>Cuidado! Possível fraude</strong><br>Às 18:25 horas
-                </div>
-            </div>
         </section>
 
 
@@ -80,60 +60,21 @@
                                 <th></th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>ID 01934209<br></td>
-                                <td>01/01/25</td>
-                                <td>R$800</td>
-                                <td><button>Ver Mais</button></td>
-                            </tr>
-                            <tr>
-                                <td>ID 08926543<br></td>
-                                <td>03/01/25</td>
-                                <td>R$1000</td>
-                                <td><button>Ver Mais</button></td>
-                            </tr>
-                            <tr>
-                                <td>ID 08354678<br></td>
-                                <td>13/01/25</td>
-                                <td>R$900</td>
-                                <td><button>Ver Mais</button></td>
-                            </tr>
-                            <tr>
-                                <td>ID 06273849<br></td>
-                                <td>25/01/25</td>
-                                <td>R$850</td>
-                                <td><button>Ver Mais</button></td>
-                            </tr>
-                            <tr>
-                                <td>ID 09337731<br></td>
-                                <td>04/02/25</td>
-                                <td>R$950</td>
-                                <td><button>Ver Mais</button></td>
-                            </tr>
-                            <tr>
-                                <td>ID 02738491<br></td>
-                                <td>05/02/25</td>
-                                <td>R$850</td>
-                                <td><button>Ver Mais</button></td>
-                            </tr>
-                            <tr>
-                                <td>ID 01845620<br></td>
-                                <td>16/02/25</td>
-                                <td>R$900</td>
-                                <td><button>Ver Mais</button></td>
-                            </tr>
+                        <tbody id="comprasSuspeitas">
+                            
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <div class="grafico-card-bar">
-                <h3>Distribuição de Fraudes</h3>
-                <div id="barChart"></div>
+            <div class="slack">
+                <h3>Últimos alertas de Fraude</h3>
+                <div id="div_mensagemSlack"></div>
             </div>
 
-
+            <div class="log">
+                <h3>CRON</h3>
+                <div id="div_logCron"></div>
             </div>
         </section>
     </main>
@@ -144,99 +85,142 @@
 <script>
     span_bem_vindo.innerHTML = `Bem-vindo(a), ${sessionStorage.NOME_USUARIO}!`;
 
-    var options = {
-          series: [{
-          data: [44, 55, 41, 64, 22, 43, 21]
-        }, {
-          data: [53, 32, 33, 52, 13, 44, 32]
-        }],
-          chart: {
-          type: 'bar',
-          height: 430
-        },
-        plotOptions: {
-          bar: {
-            horizontal: true,
+    // Gráfico de Barras — Cidades com maior número de fraudes top 10
+
+    function buscarTopCidades() {
+    fetch("/centralAnaliseMedidas/buscarTopCidades", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id_empresa: sessionStorage.ID_EMPRESA })
+    })
+    .then(res => {
+        if (!res.ok) {
+            console.log("Erro ao buscar cidades com mais fraudes");
+            throw "Erro ao buscar cidades com mais fraudes";
+        }
+        return res.json();
+    })
+    .then(dados => {
+        console.log("Dados top cidades:", dados);
+
+        const categorias = dados.map(linha => linha.cidade);
+        const totaisFraudes = dados.map(linha => Number(linha.total_fraudes));
+
+        var options = {
+            series: [{
+                name: 'Total de fraudes',
+                data: totaisFraudes
+            }],
+            chart: {
+                height: 350,
+                type: 'bar',
+            },
+            plotOptions: {
+                bar: {
+                    borderRadius: 10,
+                    dataLabels: {
+                        position: 'top',
+                    },
+                }
+            },
+            colors: ['#9193DE'],
             dataLabels: {
-              position: 'top',
+                enabled: true,
+                formatter: function (val) {
+                    return val;
+                },
+                offsetY: -20,
+                style: {
+                    fontSize: '16px',
+                    colors: ["#304758"],
+                    fontWeight: 'bold'
+                }
             },
-          }
-        },
-        dataLabels: {
-          enabled: true,
-          offsetX: -6,
-          style: {
-            fontSize: '12px',
-            colors: ['#fff']
-          }
-        },
-        stroke: {
-          show: true,
-          width: 1,
-          colors: ['#fff']
-        },
-        tooltip: {
-          shared: true,
-          intersect: false
-        },
-        xaxis: {
-          categories: [2001, 2002, 2003, 2004, 2005, 2006, 2007],
-        },
-        };
-        
-        new ApexCharts(document.querySelector("#chart"), options);
-        chart.render();
-
-    // Gráfico de Barras — Distribuição de Fraudes
-    var barOptions = {
-        chart: {
-            type: 'bar',
-            height: 300,
-            toolbar: {
+            xaxis: {
+                categories: categorias,
+                position: 'bottom',
+                axisBorder: {
+                    show: false
+                },
+                axisTicks: {
+                    show: false
+                },
+                labels: {
+                    style: {
+                        fontSize: '12px',
+                        fontWeight: 'bold'
+                    }
+                },
+                crosshairs: {
+                    fill: {
+                        type: 'gradient',
+                        gradient: {
+                            colorFrom: '#D8E3F0',
+                            colorTo: '#BED1E6',
+                            stops: [0, 100],
+                            opacityFrom: 0.4,
+                            opacityTo: 0.5
+                        }
+                    }
+                },
+                tooltip: {
+                    enabled: true,
+                }
+            },
+            yaxis: {
+                axisBorder: {
+                    show: false
+                },
+                axisTicks: {
+                    show: false,
+                },
+                labels: {
+                    show: true,
+                    formatter: function (val) {
+                        return val;
+                    },
+                    style: {
+                        fontSize: '16px',
+                        fontWeight: 'bold'
+                    }
+                }
+            },
+            title: {
+                text: 'Cidades com maior número de fraudes',
+                floating: false,
+                offsetY: 0,
+                align: 'center',
+                style: {
+                    color: '#444',
+                    fontSize: '22px',
+                    fontWeight: 'bold'
+                }
+            },
+            subtitle: {
+                text: 'Total de fraudes por cidade',
+                align: 'center',
+                style: {
+                    color: '#666',
+                    fontSize: '18px'
+                }
+            },
+            legend: {
                 show: false
-            }
-        },
-        series: [{
-            name: 'Fraudes',
-            data: [15, 25, 22, 20, 18]
-        }],
-        dataLabels: {
-            enabled: true,
-            style: {
-                fontSize: '18px',
-                fontWeight: 'bolder',
-                colors: ['#fff'],
             },
-        },
-        plotOptions: {
-            bar: {
-                columnWidth: '70%',
-                dataLabels: {
-                    position: 'top',
+            tooltip: {
+                y: {
+                    formatter: function (val) {
+                        return val + " fraudes";
+                    }
                 }
             }
-        },
-        xaxis: {
-            categories: ['Cartão de Crédito', 'Identidade Falsa', 'ChargeBack', 'Fraude Amigável', 'Outro'],
-            labels: {
-                style: {
-                    colors: '#333',
-                    fontSize: '13px'
-                }
-            }
-        },
-        yaxis: {
-            labels: {
-                style: {
-                    colors: '#333',
-                    fontSize: '13px'
-                }
-            }
-        },
-        colors: ['#a48bff'],
-    };
-    new ApexCharts(document.querySelector("#barChart"), barOptions).render();
+        };
 
+        var chart = new ApexCharts(document.querySelector("#chartBar"), options);
+        chart.render();
+    })
+    .catch(erro => console.error(erro));
+}
     let slackNotificationsEnabled = JSON.parse(localStorage.getItem("slackNotificationsEnabled") || "true");
 
     function buscarMedidas() {
@@ -270,10 +254,306 @@
             console.log(`#ERRO: ${resposta}`);
         });
     }
+
+    function buscarPorcentagem(){
+        fetch("/centralAnaliseMedidas/buscarPorcentagem", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            id_empresa: sessionStorage.ID_EMPRESA
+        }),
+    })
+        .then(function (resposta) {
+            console.log("resposta da porcentagem", resposta);
+
+            if(resposta.ok){
+                resposta.json().then(json => {
+                    console.log("JSON porcentagem", json);
+                    console.log(JSON.stringify(json));
+
+                    let linha = json[0];
+                    let porcFraudes = linha.porcentagem_fraudes || 0;
+                    let totalVendas = linha.total_vendas || 0;
+
+                    atualizarPorcentagem(porcFraudes, totalVendas);
+                });
+            } else {
+                throw "Erro ao buscar a porcentagem";
+            }
+        })
+        .catch(function (resposta){
+            console.log(`Erro ao buscar porcentagem: ${resposta}`);
+        });
+}
+
+
     function atualizarMedidas(numeroTotalFraudes) {
-        console.log("Atualizando total fraudes " + numeroTotalFraudes)
+        console.log("Atualizando total fraudes, porcentageme total das vendas " + numeroTotalFraudes)
         div_numeroTotalFraudes.innerHTML = numeroTotalFraudes;
     }
+
+    function atualizarPorcentagem(porcFraudes, totalVendas){
+        console.log("Atualizando porcentagem das fraudes e total das vendas: " + porcFraudes, totalVendas)
+        div_porcentagemFraudes.innerHTML = `${Number(porcFraudes).toFixed(2)}%`;
+        porcentagemRelacaoVendas.innerHTML = `Em relação ao total de ${totalVendas} vendas`;
+    }
+
+    function listarComprasFraudes(){
+        fetch("/centralAnaliseMedidas/listarComprasFraudes", {
+            method: "POST",
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify({id_empresa: sessionStorage.ID_EMPRESA})
+        })
+        .then(function(resposta) {
+            console.log("resposta compras suspeitas: ", resposta);
+
+            if(resposta.ok){
+                resposta.json().then(lista => {
+                    console.log("JSON compras suspeitas/fraudulentas", lista);
+                    preencherListaCompras(lista);
+                });
+            } else {
+                throw "Erro ao buscar compras suspeitas"
+            }
+        })
+        .catch(function (erro){
+            console.log(`Erro ao buscar compras suspeitas: ${erro}`);
+        })
+    }
+
+    function preencherListaCompras(lista){
+        const tbody = document.getElementById("comprasSuspeitas");
+        tbody.innerHTML="";
+
+        if(!lista || lista.length == 0){
+            tbody.innerHTML = `
+            <tr>
+                <td colspan="4">Nenhuma compra suspeita encontrada.</td>
+            </tr>
+            `;
+            return;
+        }
+        lista.forEach(linha => {
+        const valorFormatado = Number(linha.valor_transacao)
+            .toFixed(2)
+            .replace(".", ",");
+
+        const tr = document.createElement("tr");
+
+        const tdCompra = document.createElement("td");
+        tdCompra.textContent = `ID ${linha.id_compra}`;
+
+        const tdData = document.createElement("td");
+        tdData.textContent = linha.data_compra;
+
+        const tdValor = document.createElement("td");
+        tdValor.textContent = `R$ ${valorFormatado}`;
+
+        const tdBotao = document.createElement("td");
+        const btn = document.createElement("button");
+        btn.textContent = "Ver Mais";
+
+        btn.addEventListener("click", () => {
+            verMaisComprasSweetAlert(linha);
+        });
+
+        tdBotao.appendChild(btn);
+
+        tr.appendChild(tdCompra);
+        tr.appendChild(tdData);
+        tr.appendChild(tdValor);
+        tr.appendChild(tdBotao);
+
+        tbody.appendChild(tr);
+    });
+    }
+
+function verMaisComprasSweetAlert(compra) {
+    const valorFormatado = Number(compra.valor_transacao)
+        .toFixed(2)
+        .replace(".", ",");
+
+    let tipoLegivel = compra.tipo_transacao;
+    if (tipoLegivel === "purchase") tipoLegivel = "Compra";
+    if (tipoLegivel === "refund")   tipoLegivel = "Estorno";
+
+    Swal.fire({
+        title: `Compra ID ${compra.id_compra}`,
+        html: `
+            <p><strong>Data e hora:</strong> ${compra.data_compra}</p>
+            <p><strong>Valor:</strong> R$ ${valorFormatado}</p>
+            <p><strong>Tipo de transação:</strong> ${tipoLegivel}</p>
+            <p><strong>Cidade:</strong> ${compra.cidade}</p>
+            <p><strong>Status:</strong> Fraude detectada</p>
+        `,
+        icon: 'info',             
+        confirmButtonText: 'Fechar',
+        confirmButtonColor: '#9193DE',
+        customClass: {
+            popup: 'swal2-popup-fraude'
+        }
+    });
+}
+
+function listarAlertasSlack() {
+    fetch("/centralAnaliseMedidas/listarAlertasSlack", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({id_empresa: sessionStorage.ID_EMPRESA})
+    })
+    .then(res => {
+        console.log("Resposta alertas slack: ", res);
+        if(!res.ok){
+            throw "erro ao buscar alertas do slack"
+        }
+        return res.json();
+    })
+    .then(lista => {
+        console.log("JSON alertas slack", lista);
+        preencherListaAlertasSlack(lista);
+    })
+    .catch(erro => {
+        console.log("Erro ao listar alertas do slack", erro);
+    });
+}
+
+function normalizarAlertaSlack(linha) {
+    const msg = linha.mensagem || "";
+    const resultado = {
+        data: linha.data_alerta,
+        filtros: "Nenhum",
+        fraudes: null,
+        prejuizo: null,
+        cidade: null
+    };
+
+    if (linha.acao === "RESUMO_ALERTA") {
+
+        const filtrosMatch = msg.match(/Filtros:\s*(.*)/i);
+        if (filtrosMatch) {
+            resultado.filtros = filtrosMatch[1].trim();
+        }
+
+        const fraudesMatch = msg.match(/Total de fraudes:\s*(\d+)/i);
+        if (fraudesMatch) {
+            resultado.fraudes = fraudesMatch[1];
+        }
+
+        const prejuizoMatch = msg.match(/Preju[ií]zo total:\s*R\$\s*([\d.,]+)/i);
+        if (prejuizoMatch) {
+            resultado.prejuizo = prejuizoMatch[1];
+        }
+
+        const cidadeMatch = msg.match(/cidade\s*=\s*([A-Za-zÀ-ú\s]+)/i);
+        if (cidadeMatch) {
+            resultado.cidade = cidadeMatch[1].trim();
+        }
+    }
+
+    else if (linha.acao === "RESUMO_FRAUDES_GERAL") {
+        const fraudesMatch = msg.match(/Quantidade de fraudes detectadas:\s*(\d+)/i);
+        if (fraudesMatch) {
+            resultado.fraudes = fraudesMatch[1];
+        }
+
+        const prejuizoMatch = msg.match(/Preju[ií]zo total:\s*R\$\s*([\d.,]+)/i);
+        if (prejuizoMatch) {
+            resultado.prejuizo = prejuizoMatch[1];
+        }
+
+    }
+
+    return resultado;
+}
+
+function preencherListaAlertasSlack(lista) {
+    const div = document.getElementById("div_mensagemSlack");
+    div.innerHTML = "";
+
+    if (!lista || lista.length === 0) {
+        div.innerHTML = "<p>Nenhum alerta de fraude enviado para o Slack.</p>";
+        return;
+    }
+
+    lista.forEach(linha => {
+        const alerta = document.createElement("div");
+        alerta.classList.add("alerta");
+
+        const info = normalizarAlertaSlack(linha);
+
+        const filtrosTexto = info.filtros && info.filtros.trim() !== "" ? info.filtros : "Nenhum";
+
+        let linhaCidade = "";
+        if (info.cidade) {
+            linhaCidade = `<br><span><strong>Cidade:</strong> ${info.cidade}</span>`;
+        }
+
+        alerta.innerHTML = `
+            ⚠️ <strong>Notificação do Slack</strong><br>
+            <span>Enviado em ${info.data}</span><br>
+            <span><strong>Filtros:</strong> ${filtrosTexto}</span><br>
+            <span><strong>Fraudes:</strong> ${info.fraudes ?? "-"}</span>
+            <span style="margin-left: 10px;">
+                <strong>Prejuízo total:</strong> 
+                ${info.prejuizo ? "R$ " + info.prejuizo : "-"}
+            </span>
+            ${linhaCidade}
+        `;
+
+        div.appendChild(alerta);
+    });
+}
+
+    function listarLogCron() {
+    fetch("/centralAnaliseMedidas/listarLogCron", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id_empresa: sessionStorage.ID_EMPRESA })
+    })
+    .then(res => {
+        console.log("Resposta log cron: ", res);
+        if (!res.ok) {
+            throw "Erro ao buscar log de execuções do cron";
+        }
+        return res.json();
+    })
+    .then(lista => {
+        console.log("JSON log cron", lista);
+        preencherLogCron(lista);
+    })
+    .catch(erro => {
+        console.log("Erro ao listar log cron:", erro);
+    });
+}
+
+function preencherLogCron(lista) {
+    const div = document.getElementById("div_logCron");
+    div.innerHTML = "";
+
+    if (!lista || lista.length === 0) {
+        div.innerHTML = "<p>Nenhuma execução programada registrada.</p>";
+        return;
+    }
+
+    lista.forEach((linha, index) => {
+        const card = document.createElement("div");
+        card.classList.add("alerta", "alerta-log");
+
+        const titulo = index === 0 ? "Última execução programada da aplicação": `Execução programada anterior`;
+
+        const mensagem = linha.mensagem || `Executado às: ${linha.data_execucao}`;
+
+        card.innerHTML = `
+            ⏱️ <strong>${titulo}</strong><br>
+            <span>Executado em: ${linha.data_execucao}</span><br>
+            <span>Mensagem: ${mensagem}</span>
+        `;
+
+        div.appendChild(card);
+    });
+}
 
     function atualizarIconeSlack() {
         const botao = document.getElementById("btn_notificacao");

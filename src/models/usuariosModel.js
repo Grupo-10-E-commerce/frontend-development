@@ -27,8 +27,29 @@ function atualizar(nome, email, id_usuario) {
     return database.executar(instrucao);
 }
 
+function atualizarSenha(nome, email, id_usuario, senha) {
+    var instrucao = `
+    UPDATE usuario 
+    SET nome = '${nome}', email = '${email}', senha = '${senha}'
+    WHERE id_usuario = ${id_usuario};
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
+function buscarDados(id_usuario) {
+    var instrucao = `
+    SELECT nome, email FROM usuario 
+    WHERE id_usuario = '${id_usuario}'
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
 module.exports = {
     efetuarLogin,
     cadastrar,
-    atualizar
+    atualizar,
+    buscarDados,
+    atualizarSenha
 }

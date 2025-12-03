@@ -134,100 +134,101 @@
 <script>
     span_bem_vindo.innerHTML = `Bem-vindo(a), ${sessionStorage.NOME_USUARIO}!`;
 
-    var options = {
-        chart: {
-        type: 'bar',
-        width: 930,
-        height: 285,
-        toolbar: {
-            show: true,
-            tools: {
-                download: true
+    function buscarDados() {
+        fetch("/painelPerformanceRisco/buscarDados", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
             },
-        },
-        export: {
-            svg: false
-        }
-    }, 
-        colors: ['#9193DE'],
-        series: [{
-            data: [{
-            x: 'JAN',
-            y: 19
-            }, {
-            x: 'FEV',
-            y: 28
-            }, {
-            x: 'MAR',
-            y: 24
-            }, {
-            x: 'ABR',
-            y: 14
-            }, {
-            x: 'MAI',
-            y: 11
-            }, {
-            x: 'JUN',
-            y: 19
-            }, {
-            x: 'JUL',
-            y: 17
-            }, {
-            x: 'AGO',
-            y: 15
-            }, {
-            x: 'SET',
-            y: 4
-            }, {
-            x: 'OUT',
-            y: 20
-            }, {
-            x: 'NOV',
-            y: 25
-            }, {
-            x: 'DEZ',
-            y: 23
-            }]
-        }],
-            dataLabels: {
-                enabled: true,
-                offsetY: -25,
-                style: {
-                    fontSize: '18px',
-                    fontWeight: 'bolder',
-                    colors: ['#333'],   
-                },
-            },
-            plotOptions: {
-                bar: {
-                columnWidth: '70%',
-                borderRadius:  5,
-                dataLabels: {
-                    position: 'top',
+            body: JSON.stringify({
+                id_empresa: sessionStorage.ID_EMPRESA,
+                ano: ano
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+                    resposta.json().then(json => {
+                        console.log(json);
+                        console.log(JSON.stringify(json));
+                        
+                        const dados = json.map(item => ({
+                            x: item.mes,
+                            y: item.quantidade_fraudes
+                        }));
+
+                        var options = {
+                                chart: {
+                                type: 'bar',
+                                width: 930,
+                                height: 285,
+                                toolbar: {
+                                    show: true,
+                                    tools: {
+                                        download: true
+                                    },
+                                },
+                                export: {
+                                    svg: false
+                                }
+                            }, 
+                                colors: ['#9193DE'],
+                                series: [{
+                                    data: dados
+                                }],
+                                    dataLabels: {
+                                        enabled: true,
+                                        offsetY: -25,
+                                        style: {
+                                            fontSize: '18px',
+                                            fontWeight: 'bolder',
+                                            colors: ['#333'],   
+                                        },
+                                    },
+                                    plotOptions: {
+                                        bar: {
+                                        columnWidth: '70%',
+                                        borderRadius:  5,
+                                        dataLabels: {
+                                            position: 'top',
+                                        }
+                                        }
+                                    },
+                            xaxis: {
+                                labels: {
+                                    style: {
+                                        colors: '#333',
+                                        fontSize: '18px',
+                                    }
+                                }
+                            },
+                            yaxis: {
+                                labels: {
+                                    style: {
+                                        colors: '#333',
+                                        fontSize: '18px'
+                                    }
+                                }
+                            }
+                        };
+
+                        window.chartFraudes = new ApexCharts(document.querySelector("#chart"),options);
+                        window.chartFraudes.render();
+
+                    });
+                } else {
+                    throw "Houve um erro ao tentar buscar dados do gráfico!"
                 }
-                }
-            },
-    xaxis: {
-        labels: {
-            style: {
-                colors: '#333',
-                fontSize: '18px',
-            }
-        }
-    },
-    yaxis: {
-        labels: {
-            style: {
-                colors: '#333',
-                fontSize: '18px'
-            }
-        }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
     }
-}
 
-
-    var chart = new ApexCharts(document.querySelector("#chart"),options)
-    chart.render();
+    document.addEventListener('DOMContentLoaded', function(){
+        buscarDados();
+    })
 
     var options = {
         chart: {

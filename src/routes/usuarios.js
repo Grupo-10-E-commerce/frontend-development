@@ -14,4 +14,8 @@ router.post("/login", function (req, res){
 router.post("/atualizar", function (req, res){
     usuariosController.atualizar(req, res);
 });
+
+router.post("/buscarDados", function (req, res){
+    usuariosController.buscarDados(req, res);
+});
 module.exports = router;

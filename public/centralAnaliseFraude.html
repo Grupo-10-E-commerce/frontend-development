@@ -85,6 +85,8 @@
 <script>
     span_bem_vindo.innerHTML = `Bem-vindo(a), ${sessionStorage.NOME_USUARIO}!`;
 
+    let graficoTopCidades = null;
+
     // Gráfico de Barras — Cidades com maior número de fraudes top 10
 
     function buscarTopCidades() {
@@ -103,124 +105,147 @@
     .then(dados => {
         console.log("Dados top cidades:", dados);
 
-        const categorias = dados.map(linha => linha.cidade);
+        const categorias   = dados.map(linha => linha.cidade);
         const totaisFraudes = dados.map(linha => Number(linha.total_fraudes));
+        const totaisVendas  = dados.map(linha => Number(linha.total_vendas));
+        const taxasFraudes  = dados.map(linha => Number(linha.taxa_fraudes));
 
-        var options = {
-            series: [{
-                name: 'Total de fraudes',
-                data: totaisFraudes
-            }],
-            chart: {
-                height: 350,
-                type: 'bar',
-            },
-            plotOptions: {
-                bar: {
-                    borderRadius: 10,
-                    dataLabels: {
-                        position: 'top',
-                    },
-                }
-            },
-            colors: ['#9193DE'],
-            dataLabels: {
-                enabled: true,
-                formatter: function (val) {
-                    return val;
-                },
-                offsetY: -20,
-                style: {
-                    fontSize: '16px',
-                    colors: ["#304758"],
-                    fontWeight: 'bold'
-                }
-            },
-            xaxis: {
-                categories: categorias,
-                position: 'bottom',
-                axisBorder: {
-                    show: false
-                },
-                axisTicks: {
-                    show: false
-                },
-                labels: {
-                    style: {
-                        fontSize: '12px',
-                        fontWeight: 'bold'
-                    }
-                },
-                crosshairs: {
-                    fill: {
-                        type: 'gradient',
-                        gradient: {
-                            colorFrom: '#D8E3F0',
-                            colorTo: '#BED1E6',
-                            stops: [0, 100],
-                            opacityFrom: 0.4,
-                            opacityTo: 0.5
-                        }
-                    }
-                },
-                tooltip: {
-                    enabled: true,
-                }
-            },
-            yaxis: {
-                axisBorder: {
-                    show: false
-                },
-                axisTicks: {
-                    show: false,
-                },
-                labels: {
-                    show: true,
-                    formatter: function (val) {
-                        return val;
-                    },
-                    style: {
-                        fontSize: '16px',
-                        fontWeight: 'bold'
-                    }
-                }
-            },
-            title: {
-                text: 'Cidades com maior número de fraudes',
-                floating: false,
-                offsetY: 0,
-                align: 'center',
-                style: {
-                    color: '#444',
-                    fontSize: '22px',
-                    fontWeight: 'bold'
-                }
-            },
-            subtitle: {
-                text: 'Total de fraudes por cidade',
-                align: 'center',
-                style: {
-                    color: '#666',
-                    fontSize: '18px'
-                }
-            },
-            legend: {
-                show: false
-            },
-            tooltip: {
-                y: {
-                    formatter: function (val) {
-                        return val + " fraudes";
-                    }
+        const tooltipConfig = {
+            y: {
+                formatter: function (val, opts) {
+                    const i = opts.dataPointIndex;
+                    const fraudes = totaisFraudes[i];
+                    const vendas  = totaisVendas[i];
+                    return `${Number(val).toFixed(2)}% de fraudes (${fraudes}/${vendas} compras)`;
                 }
             }
         };
+        if (!graficoTopCidades) {
+            var options = {
+                series: [{
+                    name: 'Taxa de fraudes (%)',
+                    data: taxasFraudes
+                }],
+                chart: {
+                    height: 350,
+                    type: 'bar',
+                },
+                plotOptions: {
+                    bar: {
+                        borderRadius: 10,
+                        dataLabels: {
+                            position: 'top',
+                        },
+                    }
+                },
+                colors: ['#9193DE'],
+                dataLabels: {
+                    enabled: true,
+                    formatter: function (val) {
+                        return Number(val).toFixed(2) + "%";
+                    },
+                    offsetY: -20,
+                    style: {
+                        fontSize: '16px',
+                        colors: ["#304758"],
+                        fontWeight: 'bold'
+                    }
+                },
+                xaxis: {
+                    categories: categorias,
+                    position: 'bottom',
+                    axisBorder: {
+                        show: false
+                    },
+                    axisTicks: {
+                        show: false
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '12px',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    crosshairs: {
+                        fill: {
+                            type: 'gradient',
+                            gradient: {
+                                colorFrom: '#D8E3F0',
+                                colorTo: '#BED1E6',
+                                stops: [0, 100],
+                                opacityFrom: 0.4,
+                                opacityTo: 0.5
+                            }
+                        }
+                    },
+                    tooltip: {
+                        enabled: true,
+                    }
+                },
+                yaxis: {
+                    axisBorder: {
+                        show: false
+                    },
+                    axisTicks: {
+                        show: false,
+                    },
+                    labels: {
+                        show: true,
+                        formatter: function (val) {
+                            return val + "%";
+                        },
+                        style: {
+                            fontSize: '16px',
+                            fontWeight: 'bold'
+                        }
+                    }
+                },
+                title: {
+                    text: 'Taxa de fraudes por cidade',
+                    floating: false,
+                    offsetY: 0,
+                    align: 'center',
+                    style: {
+                        color: '#444',
+                        fontSize: '22px',
+                        fontWeight: 'bold'
+                    }
+                },
+                subtitle: {
+                    text: 'Fraudes / total de compras em cada cidade',
+                    align: 'center',
+                    style: {
+                        color: '#666',
+                        fontSize: '18px'
+                    }
+                },
+                legend: {
+                    show: false
+                },
+                tooltip: tooltipConfig
+            };
 
-        var chart = new ApexCharts(document.querySelector("#chartBar"), options);
-        chart.render();
+            graficoTopCidades = new ApexCharts(document.querySelector("#chartBar"), options);
+            graficoTopCidades.render();
+
+        } else {
+            graficoTopCidades.updateOptions({
+                xaxis: {
+                    categories: categorias
+                },
+                tooltip: tooltipConfig
+            });
+
+            graficoTopCidades.updateSeries([{
+                name: 'Taxa de fraudes (%)',
+                data: taxasFraudes
+            }]);
+        }
+
     })
     .catch(erro => console.error(erro));
 }
+
     let slackNotificationsEnabled = JSON.parse(localStorage.getItem("slackNotificationsEnabled") || "true");
 
     function buscarMedidas() {
@@ -639,4 +664,15 @@ function preencherLogCron(lista) {
             console.error("Erro ao enviar notificação:", erro);
         }
     }
+
+    function atualizarDashboard(){
+            buscarMedidas();
+            buscarPorcentagem(); 
+            buscarTopCidades(); 
+            listarComprasFraudes(); 
+            listarAlertasSlack(); 
+            listarLogCron();
+    }
+
+    setInterval(atualizarDashboard, 6000);
 </script>

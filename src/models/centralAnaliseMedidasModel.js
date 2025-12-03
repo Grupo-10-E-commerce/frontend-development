@@ -28,7 +28,7 @@ function buscarPorcentagem(id_empresa) {
 
 function buscarTopCidades(id_empresa){
     var instrucao = `
-    SELECT 
+        SELECT 
             cidade,
             SUM(CASE WHEN fraude = 1 THEN 1 ELSE 0 END) AS total_fraudes,
             COUNT(*) AS total_vendas,
@@ -79,14 +79,13 @@ function listarAlertasSlack(id_empresa) {
     return database.executar(instrucao);
 }
 
-function listarLogCron(id_empresa) {
+function listarLogCron() {
     var instrucao = `
         SELECT 
             DATE_FORMAT(data_hora, '%d/%m/%Y %H:%i:%s') AS data_execucao,
             mensagem
         FROM log
-        WHERE id_empresa = ${id_empresa}
-          AND acao = 'CRON_EXECUCAO'
+        WHERE acao = 'CRON_EXECUCAO'
         ORDER BY data_hora DESC
         LIMIT 4;
     `;

@@ -211,6 +211,7 @@ body {
 .filtros {
     display: flex;
     justify-content: end;
+    margin-top: 5px;
     gap: 10px;
     width: 100%;
 }

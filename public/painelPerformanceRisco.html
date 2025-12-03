@@ -33,7 +33,7 @@
                 <div class="KPI">
                     <span class="title-KPI">Lucros Totais</span>
                     <div class="valor">
-                        <span class="valor-KPI">R$1.247.890,00</span>
+                        <span class="valor-KPI"></span>
                         <div class="image">
                             <img src="./img/Group.svg" alt="lucros">
                         </div>
@@ -44,7 +44,7 @@
                 <div class="KPI">
                     <span class="title-KPI">Perdas Totais</span>
                     <div class="valor">
-                        <span class="valor-KPI">R$89.450,00</span>
+                        <span class="valor-KPI"></span>
                         <div class="image">
                             <img src="./img/Group2.svg" alt="lucros">
                         </div>
@@ -52,18 +52,9 @@
                     <span class="legenda-KPI">Decréscimo de 15%</span>
                 </div>
                 <div class="KPI">
-                    <span class="title-KPI">Fraudes Evitadas</span>
-                    <div class="valor">
-                        <span class="valor-KPI">127</span>
-                        <div class="image">
-                            <img src="./img/Vector.svg" alt="lucros">
-                        </div>
-                    </div>      
-                </div>
-                <div class="KPI">
                     <span class="title-KPI">Total de Fraudes</span>
                     <div class="valor">
-                        <span class="valor-KPI">243</span>
+                        <span class="valor-KPI"></span>
                         <div class="image">
                             <img src="./img/Group3.svg" alt="lucros">
                         </div>
@@ -79,13 +70,9 @@
 
                 <div class="grafico2">
                     <div class="grafico-header">
-                        <span class="grafico-titulo">Atividade de Vendas</span>
                         <div class="filtros">
                             <select class="data-select">
-                                <option value="30/08">30/08</option>
-                                <option value="29/08">29/08</option>
-                                <option value="28/08">28/08</option>
-                                <option value="27/08">27/08</option>
+                                <option value="">Selecione uma data</option>
                             </select>
                         </div>
                     </div>
@@ -95,16 +82,10 @@
 
             <div class="containers3">
                 <div class="grafico3">
-                    <span>Cidades Com Mais Fraudes</span>
-                    <div id="chart3"></div>
+                    <div id="chart3">
+                    </div>
                 </div>
                 <div class="grafico4">
-                    <div class="grafico-header-lucros">
-                        <div class="titulo-info">
-                            <h3 class="grafico-titulo">Lucros</h3>
-                            <p class="grafico-subtitulo">Lucros Totais</p>
-                        </div>
-                    </div>
                     <div id="chart4"></div>
                 </div>
             </div>
@@ -115,8 +96,104 @@
 <script>
     span_bem_vindo.innerHTML = `Bem-vindo(a), ${sessionStorage.NOME_USUARIO}!`;
 
+    function buscarKPIs() {
+        const ano = document.getElementById('ano-fraudes').value;
+
+        // Lucros Totais
+        fetch("/painelPerformanceRisco/KPIlucroTotal", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                id_empresa: sessionStorage.ID_EMPRESA,
+                ano: ano
+            }),
+        })
+        .then(function (resposta) {
+            console.log("resposta lucros totais: ", resposta);
+            if(resposta.ok) {
+                resposta.json().then(json => {
+                    console.log(json);
+                    let lucroTotal = json[0].lucros;
+                    console.log("Lucro total: " + lucroTotal);
+
+                    document.querySelector('.KPI:nth-child(1) .valor-KPI').textContent = 
+                    `R$${Number(lucroTotal).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                })
+            } else {
+                throw "Erro ao buscar lucro total!"
+            }
+        })
+        .catch(function (resposta){
+            console.log(`#ERRO: ${resposta}`);
+        });
+
+        //Perdas Totais
+        fetch("/painelPerformanceRisco/KPIperdaTotal", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify ({
+                id_empresa: sessionStorage.ID_EMPRESA,
+                ano: ano
+            }),
+        })
+        .then(function(resposta) {
+            console.log("resposta perdas: ", resposta);
+            if(resposta.ok) {
+                resposta.json().then(json => {
+                    console.log(json);
+                    let perdaTotal = json[0].perdas_totais;
+                    console.log("Perda total: " + perdaTotal);
+
+                    document.querySelector('.KPI:nth-child(2) .valor-KPI').textContent = 
+                    `R$${Number(perdaTotal).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                });
+            } else {
+                throw "Erro ao buscar KPI perda total"
+            }
+        })
+        .catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`);
+        });
+
+        // Total de Fraudes
+        fetch("/painelPerformanceRisco/KPItotalFraudes", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                id_empresa: sessionStorage.ID_EMPRESA,
+                ano: ano
+            }),
+        })
+        .then(function (resposta) {
+            console.log("resposta total fraudes: ", resposta);
+            if (resposta.ok) {
+                resposta.json().then(json => {
+                    console.log(json);
+                    let totalFraudes = json[0].total_fraudes;
+                    console.log("Total Fraudes: " + totalFraudes);
+
+                     document.querySelector('.KPI:nth-child(3) .valor-KPI').textContent = totalFraudes;
+                });
+            } else {
+                throw "Erro ao buscar KPI Total de Fraudes"
+            }
+        })
+        .catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`);
+        });
+    }
+
+    // Gráfico Quantidade de Fraudes por Mês
     function qtdFraudes() {
-        fetch(`/painelPerformanceRisco/buscarDados`, {
+        const ano = document.getElementById('ano-fraudes').value;
+
+        fetch(`/painelPerformanceRisco/qtdFraudes`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -134,10 +211,8 @@
                         console.log(json);
                         console.log(JSON.stringify(json));
                         
-                        const dados = json.map(item => ({
-                            x: item.mes,
-                            y: item.quantidade_fraudes
-                        }));
+                        const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+                        const dados = json.map(item => item.quantidade_fraudes);
 
                         var options = {
                                 chart: {
@@ -205,6 +280,10 @@
                             }
                         };
 
+                        if (window.chartFraudes) {
+                            window.chartFraudes.destroy();
+                        }
+
                         window.chartFraudes = new ApexCharts(document.querySelector("#chart"),options);
                         window.chartFraudes.render();
 
@@ -218,255 +297,427 @@
             });
     }
 
-    document.addEventListener('DOMContentLoaded', function(){
-        qtdFraudes();
-    })
+    // Gráfico de Atividade de Vendas
+    function atividadeVenda() {
+        const dataSelect = document.querySelector('.data-select').value;
+        const ano = document.getElementById('ano-fraudes').value;
+        const [dia, mes] = dataSelect.split('/');
+        const dataFormatada = `${ano}-${mes}-${dia}`;
 
-    var options = {
-        chart: {
-        width: 930,
-        height: 275,
-        type: "area",
-        toolbar: {
-            show: true,
-            tools: {
-                download: true,
-                selection: false,
-                zoom: true,
-                zoomin: false,
-                zoomout: true,
-                pan: false,
-                reset: false
-            }
-    },
-        export: {
-            svg: false
-        },
-        sparkline: {
-        enabled: false
-    }
-  },
-        dataLabels: {
-    enabled: false
-  },
-        series: [{
-        name: "",
-        data: [2, 3, 5, 6, 19, 16, 18, 21]
-  }],
-        stroke: {
-        curve: 'smooth',
-        width: 2
-  },
-        fill: {
-        type: "gradient",
-        gradient: {
-        shadeIntensity: 1,
-        opacityFrom: 0.9,
-        opacityTo: 0.8,
-        stops: [0, 100]
-    }
-  },
-        colors: ['#1F1B56'],
-    xaxis: {
-        categories: [
-        "10:00",
-        "12:00",
-        "14:00",
-        "16:00",
-        "18:00",
-        "20:00",
-        "22:00",
-        "00:00"
-    ],
-        labels: {
-        style: {
-        colors: '#333',
-        fontSize: '18px'
-      }
-    },
-        axisBorder: {
-        show: false
-    },
-        axisTicks: {
-        show: false
-    }
-  },
-    yaxis: {
-        show: true,
-        labels: {
-            style: {
-                colors: '#333',
-                fontSize: '18px'
-      }
-    },
-    min: 0,
-    max: 25
-  },
-    grid: {
-        show: true,
-        borderColor: '#f1f1f1',
-        strokeDashArray: 0,
-    xaxis: {
-      lines: {
-        show: false
-      }
-    },
-    yaxis: {
-      lines: {
-        show: true
-      }
-    }
-  },
-    tooltip: {
-        enabled: true
-  }
-};
-
-    var chart = new ApexCharts(document.querySelector("#chart2"), options);
-    chart.render();
-
-    var optionsDonut = {
-    chart: {
-        type: 'donut',
-        width: 600,
-        height: 275,
-        toolbar: {
-            show: true,
-            tools: {
-                download: true,
-            }
-    },
-        export: {
-            svg: false
-        },
-    },
-    series: [55, 45],
-    labels: ['Lamburgh', 'West Ashley'],
-    colors: ['#332C66', '#9193DE'],
-    dataLabels: {
-        enabled: false
-    },
-    plotOptions: {
-        pie: {
-            donut: {
-                size: '70%'
-            }
-        }
-    },
-    legend: {
-        position: 'bottom',
-        fontSize: '20px',
-        labels: {
-            colors: '#333'
-        }
-    },
-    stroke: {
-        show: false
-    },
-    tooltip: {
-    custom: function({series, seriesIndex, w}) {
-        return `
-            <div style="
-                background: #5B51A8;
-                color: #ffffff;
-                padding: 12px 18px;
-                border-radius: 8px;
-                font-family: Arial, sans-serif;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            ">
-                <span style="
-                    color: #ffffff; 
-                    font-weight: 600;
-                    font-size: 18px;
-                ">
-                    ${w.config.labels[seriesIndex]}:
-                </span>
-                <span style="
-                    color: #ffffff; 
-                    margin-left: 10px; 
-                    font-size: 18px; 
-                    font-weight: bold;
-                ">
-                    ${series[seriesIndex]}
-                </span>
-            </div>
-        `;
-    }
-    }
-};
-
-var chartDonut = new ApexCharts(document.querySelector("#chart3"), optionsDonut);
-chartDonut.render();
-
-    var optionsLucros = {
-    chart: {
-        type: 'line',
-        width: 1200,
-        height: 250,
-        toolbar: {
-            show: true,
-            tools: {
-                download: true,
-                selection: false,
-                zoom: true,
-                zoomin: false,
-                zoomout: true,
-                pan: false,
-                reset: false
-            }
-        },
-        export: {
-            svg: false
-        }
-    },
-    series: [{
-        name: 'Mar 2025',
-        data: [60, 85, 52, 92, 75,105, 62, 58, 48, 88, 72, 78]
-    }, {
-        name: 'Mar 2024',
-        data: [95, 58, 78, 68, 70, 98, 87, 82, 75, 32, 102, 110]
-    }],
-    stroke: {
-        curve: 'smooth',
-        width: 3
-    },
-    colors: ['#2E3A59', '#9FA8DA'],
-    xaxis: {
-        categories: ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'],
-        labels: {
-            style: {
-                    colors: '#333',
-                    fontSize: '18px'
-            }
-        }
-    },
-    yaxis: {
-        labels: {
-            formatter: function(val) {
-                if (val >= 100) return '100M';
-                if (val >= 50) return '50M';
-                if (val >= 10) return '10M';
-                return val;
+        fetch("/painelPerformanceRisco/atividadeVenda", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
             },
-            style: {
-                colors: '#333',
-                fontSize: '18px'
-            }
-        }
-    },
-    dataLabels: {
-        enabled: false
-    },
-    legend: {
-        position: 'bottom',
-        fontSize: '20px',
-        labels: {
-            colors: '#333'
-        }
-    }
-};
+            body: JSON.stringify({
+                id_empresa: sessionStorage.ID_EMPRESA,
+                data: dataFormatada
+            }),
+        })
+        .then(function (resposta) {
+            console.log("resposta atividade vendas: ", resposta);
 
-var chartLucros = new ApexCharts(document.querySelector("#chart4"), optionsLucros);
-chartLucros.render();
+            if (resposta.ok) {
+            resposta.json().then(json => {
+                console.log(json);
+                
+                const horas = json.map(item => `${item.hora}:00`);
+                const quantidades = json.map(item => item.quantidade_vendas);
+                
+                var optionsVenda = {
+                        chart: {
+                        width: 930,
+                        height: 275,
+                        type: "area",
+                        toolbar: {
+                            show: true,
+                            tools: {
+                                download: true,
+                                selection: false,
+                                zoom: true,
+                                zoomin: false,
+                                zoomout: true,
+                                pan: false,
+                                reset: false
+                            }
+                    },
+                        export: {
+                            svg: false
+                        },
+                        title: {
+                                text: 'Atividade de Vendas',
+                                align: 'left',
+                                style: {
+                                    fontSize: '20px',
+                                    fontWeight: 'bold',
+                                    color: '#333'
+                                }
+                            },
+                        sparkline: {
+                        enabled: false
+                    }
+                },
+                        dataLabels: {
+                    enabled: false
+                },
+                        series: [{
+                        name: "Vendas",
+                        data: quantidades
+                }],
+                        stroke: {
+                        curve: 'smooth',
+                        width: 2
+                },
+                        fill: {
+                        type: "gradient",
+                        gradient: {
+                        shadeIntensity: 1,
+                        opacityFrom: 0.9,
+                        opacityTo: 0.8,
+                        stops: [0, 100]
+                    }
+                },
+                    colors: ['#1F1B56'],
+                    xaxis: {
+                        categories: horas,
+                        labels: {
+                        style: {
+                        colors: '#333',
+                        fontSize: '18px'
+                    }
+                    },
+                        axisBorder: {
+                        show: false
+                    },
+                        axisTicks: {
+                        show: false
+                    }
+                },
+                    yaxis: {
+                        show: true,
+                        labels: {
+                            style: {
+                                colors: '#333',
+                                fontSize: '18px'
+                        }
+                    }
+                },
+                    grid: {
+                        show: true,
+                        borderColor: '#f1f1f1',
+                        strokeDashArray: 0,
+                    xaxis: {
+                    lines: {
+                        show: false
+                    }
+                    },
+                    yaxis: {
+                    lines: {
+                        show: true
+                    }
+                    }
+                },
+                    tooltip: {
+                        enabled: true
+                }
+                };
+
+                if (window.chartAtividade) {
+                    window.chartAtividade.destroy();
+                }
+
+                window.chartAtividade = new ApexCharts(document.querySelector("#chart2"), optionsVenda);
+                window.chartAtividade.render();
+            });
+            } else {
+                throw "Erro ao buscar gráfico de atividade de vendas"
+            }
+        })
+        .catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`);
+        });
+    }
+
+    // Gráfico de Cidades com Mais Fraudes
+    function cidadeFraude() {
+        const ano = document.getElementById('ano-fraudes').value;
+
+        fetch("/painelPerformanceRisco/cidadeFraude", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                id_empresa: sessionStorage.ID_EMPRESA,
+                ano: ano
+            }),
+        })
+        .then(function (resposta) {
+        console.log("resposta cidades: ", resposta);
+
+        if (resposta.ok) {
+            resposta.json().then(json => {
+                console.log(json);
+                
+                const cidades = json.map(item => item.cidade);
+                const quantidades = json.map(item => item.quantidade_fraudes);
+
+                var optionsDonut = {
+                    chart: {
+                        type: 'donut',
+                        width: 600,
+                        height: 275,
+                        toolbar: {
+                            show: true,
+                            tools: {
+                                download: true,
+                            }
+                    },
+                        export: {
+                            svg: false
+                        },
+                        title: {
+                                text: 'Cidades com Mais Fraudes',
+                                align: 'left',
+                                style: {
+                                    fontSize: '20px',
+                                    fontWeight: 'bold',
+                                    color: '#333'
+                                }
+                        },
+                    },
+                    series: quantidades,
+                    labels: cidades,
+                    colors: ['#332C66', '#9193DE', '#5B51A8', '#7B7BAE', '#A5A5D6'],
+                    dataLabels: {
+                        enabled: false
+                    },
+                    plotOptions: {
+                        pie: {
+                            donut: {
+                                size: '70%'
+                            }
+                        }
+                    },
+                    legend: {
+                        position: 'bottom',
+                        fontSize: '20px',
+                        labels: {
+                            colors: '#333'
+                        }
+                    },
+                    stroke: {
+                        show: false
+                    },
+                    tooltip: {
+                    custom: function({series, seriesIndex, w}) {
+                        return `
+                            <div style="
+                                background: #5B51A8;
+                                color: #ffffff;
+                                padding: 12px 18px;
+                                border-radius: 8px;
+                                font-family: Arial, sans-serif;
+                                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                            ">
+                                <span style="
+                                    color: #ffffff; 
+                                    font-weight: 600;
+                                    font-size: 18px;
+                                ">
+                                    ${w.config.labels[seriesIndex]}:
+                                </span>
+                                <span style="
+                                    color: #ffffff; 
+                                    margin-left: 10px; 
+                                    font-size: 18px; 
+                                    font-weight: bold;
+                                ">
+                                    ${series[seriesIndex]}
+                                </span>
+                            </div>
+                        `;
+                    }
+                    }
+                };
+
+                if (window.chartDonut) {
+                    window.chartDonut.destroy();
+                }
+
+                window.chartDonut = new ApexCharts(document.querySelector("#chart3"), optionsDonut);
+                window.chartDonut.render();
+
+            });
+        } else {
+            throw "Erro ao buscar gráfico cidades com fraudes"
+        }
+    })
+    .catch(function (resposta) {
+        console.log(`#ERRO: ${resposta}`);
+    });
+}   
+
+// Gráfico Lucros
+function lucrosTotais() {
+    const ano = document.getElementById('ano-fraudes').value;
+
+    fetch("/painelPerformanceRisco/lucrosTotais", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            id_empresa: sessionStorage.ID_EMPRESA,
+            ano: ano
+        }),
+    })
+    .then(function (resposta){
+        console.log("resposta grafico lucros totais: ", resposta);
+
+        if (resposta.ok) {
+            resposta.json().then(json => {
+                console.log(json);
+
+                const meses = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'];
+                const lucrosAnoAtual = Array(12).fill(0);
+
+                json.forEach(item => {
+                    lucrosAnoAtual[item.mes - 1] = item.lucro_total;
+                });
+
+                var optionsLucros = {
+                    chart: {
+                        type: 'line',
+                        width: 1200,
+                        height: 250,
+                        toolbar: {
+                            show: true,
+                            tools: {
+                                download: true,
+                                selection: false,
+                                zoom: true,
+                                zoomin: false,
+                                zoomout: true,
+                                pan: false,
+                                reset: false
+                            }
+                        },
+                        export: {
+                            svg: false
+                        },
+                        title: {
+                                text: 'Lucros',
+                                align: 'left',
+                                style: {
+                                    fontSize: '20px',
+                                    fontWeight: 'bold',
+                                    color: '#333'
+                                }
+                            },
+                        subtitle: {
+                            text: 'Lucros Totais',
+                                align: 'left',
+                                style: {
+                                    fontSize: '15px',
+                                    color: '#333'
+                            }
+                        }
+                    },
+                    series: [{
+                        name: `Lucro ${ano}`,
+                        data: lucrosAnoAtual
+                    }],
+                    stroke: {
+                        curve: 'smooth',
+                        width: 3
+                    },
+                    colors: ['#2E3A59'],
+                    xaxis: {
+                        categories: meses,
+                        labels: {
+                            style: {
+                                    colors: '#333',
+                                    fontSize: '18px'
+                            }
+                        }
+                    },
+                    yaxis: {
+                        labels: {
+                            formatter: function(val) {
+                                if (val >= 1000000) return (val / 1000000).toFixed(0) + 'M';
+                                if (val >= 1000) return (val / 1000).toFixed(0) + 'K';
+                                return val;
+                            },
+                            style: {
+                                colors: '#333',
+                                fontSize: '18px'
+                            }
+                        }
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    legend: {
+                        position: 'bottom',
+                        fontSize: '20px',
+                        labels: {
+                            colors: '#333'
+                        }
+                    }
+                };
+
+                if (window.chartLucros) {
+                    window.chartLucros.destroy();
+                }
+
+                window.chartLucros = new ApexCharts(document.querySelector("#chart4"), optionsLucros);
+                window.chartLucros.render();
+
+            });
+        } else {
+            throw "Erro ao buscar gráfico lucros totais"
+        }
+    })
+    .catch(function (resposta){
+        console.log(`#ERRO: ${resposta}`);
+    })
+}
+
+// Filtro de data
+    document.addEventListener('DOMContentLoaded', function() {
+        const dataSelect = document.querySelector('.data-select');
+        const hoje = new Date();
+
+        for (let i = 0; i < 5; i++) {
+            const data = new Date(hoje);
+            data.setDate(hoje.getDate() - i);
+            const dia = String(data.getDate()).padStart(2, '0');
+            const mes = String(data.getMonth() + 1).padStart(2, '0');
+            const option = document.createElement('option');
+            option.value = `${dia}/${mes}`;
+            option.textContent = `${dia}/${mes}`;
+            dataSelect.appendChild(option);
+        }
+
+        dataSelect.selectedIndex = 0;
+
+        buscarKPIs();
+        qtdFraudes();
+        cidadeFraude();
+        atividadeVenda();
+        lucrosTotais();
+
+        document.getElementById('ano-fraudes').addEventListener('change', function() {
+            buscarKPIs();
+            qtdFraudes();
+            cidadeFraude();
+            lucrosTotais();
+        });
+    
+        document.querySelector('.data-select').addEventListener('change', function() {
+            atividadeVenda();
+        });
+    });
 
 </script>

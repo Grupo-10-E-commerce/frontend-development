@@ -65,6 +65,52 @@
 <script>
     span_bem_vindo.innerHTML = `Bem-vindo(a), ${sessionStorage.NOME_USUARIO}!`;
 
+    // formatações da biblioteca sweetalert2
+    function swalSucesso(titulo, mensagem) {
+        return Swal.fire({
+            icon: 'success',
+            title: titulo || 'Sucesso',
+            text: mensagem || '',
+            confirmButtonColor: '#3085d6'
+        });
+    }
+
+    function swalErro(titulo, mensagem) {
+        return Swal.fire({
+            icon: 'error',
+            title: titulo || 'Erro',
+            text: mensagem || '',
+            confirmButtonColor: '#d33'
+        });
+    }
+
+    function swalInfo(titulo, mensagem) {
+        if (mensagem === undefined) {
+            mensagem = titulo;
+            titulo = 'Informação';
+        }
+
+        return Swal.fire({
+            icon: 'info',
+            title: titulo || 'Informação',
+            text: mensagem || '',
+            confirmButtonColor: '#3085d6'
+        });
+    }
+
+    async function swalConfirmar(titulo, mensagem) {
+        const confirmar = await Swal.fire({
+            title: titulo || 'Tem certeza?',
+            text: mensagem || '',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sim',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6'
+        });
+        return confirmar.isConfirmed;
+    }
     function buscarUsuarios() {
 
         fetch("/usuarios/buscarTodosUsuarios", {
@@ -80,7 +126,11 @@
                 console.log("resposta: ", resposta);
 
                 if (resposta.ok) {
-                    filtrarUsuarios();
+                    resposta.json().then(json => {
+                        console.log(json);
+                        console.log(JSON.stringify(json));
+                        filtrarUsuarios(json);               
+                    });
 
                 } else {
                     throw "Houve um erro ao tentar buscar Usuários!"
@@ -91,8 +141,8 @@
             });
     }
 
-    function filtrarUsuarios() {
-        
+    function filtrarUsuarios(dados) {
+        console.log(JSON.stringify(dados));
     }
 
     let slackNotificationsEnabled = JSON.parse(localStorage.getItem("slackNotificationsEnabled") || "true");

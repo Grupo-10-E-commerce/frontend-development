@@ -332,11 +332,6 @@ class SideBarComponent extends HTMLElement {
                         <span>Alertas Personalizados</span>
                     </div>
 
-                    <div class="menu-item" data-page="editarPerfil">
-                        <img src="img/editarIcon.png" class="menu-icon">
-                        <span>Editar Perfil</span>
-                    </div>
-
                     <div class="menu-item" data-page="editarUsuarios">
                         <img src="img/editarIcon.png" class="menu-icon">
                         <span>Editar Usuários</span>

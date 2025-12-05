@@ -94,9 +94,21 @@ function buscarDados(req, res) {
     })
 }
 
+function buscarTodosUsuarios(req, res) {
+    let id_empresa = req.body.id_empresa;
+
+    usuariosModel.buscarTodosUsuarios(id_empresa).then(function (resposta) {
+        res.status(200).send(resposta);
+    }).catch(function (erro) {
+        console.log("ERRO NO BUSCAR:", erro);
+        res.status(500).json(erro.sqlMessage || erro.message || erro);
+    })
+}
+
 module.exports = {
     login,
     cadastrar,
     atualizar,
-    buscarDados
+    buscarDados,
+    buscarTodosUsuarios
 }

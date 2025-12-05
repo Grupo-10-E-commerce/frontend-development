@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./script/sideBar.js"></script>
+    <link rel="stylesheet" href="./style/editarUsuarios.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Konkhmer+Sleokchher&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap ">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <title>Editar Usuários</title>
+</head>
+
+<body onload="buscarUsuarios()">
+
+    <body>
+        <side-Bar></side-Bar>
+        <div class="header">
+            <div class="title">Editar Usuários</div>
+            <div class="btn">
+                <button id="btn_notificacao" class="btn_sino" onclick="notificacao()">
+                    <img src="img/notification-bell.png" alt="Notificacoes">
+                </button>
+                <span id="span_bem_vindo"></span>
+            </div>
+        </div>
+
+
+        <main>
+            <p class="p_descricao">Edite os dados dos usuários abaixo. Clique na lixeira para deletá-lo do sistema.</p>
+
+            <div class="div-pesquisar">
+                <p>Buscar usuário: </p>
+                <input type="text" name="" id="" placeholder="Busque por nome, e-email ou cargo">
+                <button onclick="filtrarUsuarios()">Buscar</button>
+            </div>
+            <div class="div-lista-usuarios">
+                <div class="div-usuario div-usuario-head">
+                    <span>Nome</span>
+                    <span>E-mail</span>
+                    <span>Cargo</span>
+                    <div class="div-icon">
+                        <span>Editar</span>
+                        <span>Excluir</span>
+                    </div>
+                </div>
+
+                <div class="div-usuario">
+                    <span>Nome</span>
+                    <span>Email</span>
+                    <span>Cargo</span>
+                    <div class="div-icon">
+                        <img src="./img/lapis-icone.png" width="25px" alt="">
+                        <img src="./img/lixeira-icone.png" width="25px" alt="">
+                    </div>
+                </div>
+            </div>
+        </main>
+
+    </body>
+
+</html>
+<script>
+    span_bem_vindo.innerHTML = `Bem-vindo(a), ${sessionStorage.NOME_USUARIO}!`;
+
+    // formatações da biblioteca sweetalert2
+    function swalSucesso(titulo, mensagem) {
+        return Swal.fire({
+            icon: 'success',
+            title: titulo || 'Sucesso',
+            text: mensagem || '',
+            confirmButtonColor: '#3085d6'
+        });
+    }
+
+    function swalErro(titulo, mensagem) {
+        return Swal.fire({
+            icon: 'error',
+            title: titulo || 'Erro',
+            text: mensagem || '',
+            confirmButtonColor: '#d33'
+        });
+    }
+
+    function swalInfo(titulo, mensagem) {
+        if (mensagem === undefined) {
+            mensagem = titulo;
+            titulo = 'Informação';
+        }
+
+        return Swal.fire({
+            icon: 'info',
+            title: titulo || 'Informação',
+            text: mensagem || '',
+            confirmButtonColor: '#3085d6'
+        });
+    }
+
+    async function swalConfirmar(titulo, mensagem) {
+        const confirmar = await Swal.fire({
+            title: titulo || 'Tem certeza?',
+            text: mensagem || '',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sim',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6'
+        });
+        return confirmar.isConfirmed;
+    }
+    function buscarUsuarios() {
+
+        fetch("/usuarios/buscarTodosUsuarios", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                id_empresa: sessionStorage.ID_USUARIO
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+                    resposta.json().then(json => {
+                        console.log(json);
+                        console.log(JSON.stringify(json));
+                        filtrarUsuarios(json);               
+                    });
+
+                } else {
+                    throw "Houve um erro ao tentar buscar Usuários!"
+                }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+    }
+
+    function filtrarUsuarios(dados) {
+        console.log(JSON.stringify(dados));
+    }
+
+    let slackNotificationsEnabled = JSON.parse(localStorage.getItem("slackNotificationsEnabled") || "true");
+
+    function atualizarIconeSlack() {
+        const botao = document.getElementById("btn_notificacao");
+
+        if (slackNotificationsEnabled) {
+            botao.style.opacity = "1";
+            botao.title = "Notificações do Slack: Ligadas";
+        } else {
+            botao.style.opacity = "0.3";
+            botao.title = "Notificações do Slack: Desligadas";
+        }
+    }
+
+    function notificacao() {
+        slackNotificationsEnabled = !slackNotificationsEnabled;
+
+        localStorage.setItem("slackNotificationsEnabled", JSON.stringify(slackNotificationsEnabled));
+
+        atualizarIconeSlack();
+
+        const usuario = sessionStorage.NOME_USUARIO;
+        let mensagem = "";
+
+        if (slackNotificationsEnabled) {
+            mensagem = "🔔 Notificações do Slack ATIVADAS pelo usuário " + usuario + ".";
+        } else {
+            mensagem = "🔔 Notificações do Slack DESATIVADAS pelo usuário " + usuario + ".";
+        }
+
+        const idEmpresa = sessionStorage.ID_EMPRESA;
+
+        fetch("/slack/status/" + idEmpresa, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ativo: slackNotificationsEnabled })
+        }).catch(erro => {
+            console.error("Erro ao atualizar status do Slack no backend:", erro);
+        });
+
+        enviarNotificacaoSlack(mensagem, true);
+
+    }
+
+    window.addEventListener("load", async () => {
+        const idEmpresa = sessionStorage.ID_EMPRESA;
+
+        try {
+            const resposta = await fetch("/slack/status/" + idEmpresa);
+            if (resposta.ok) {
+                const dados = await resposta.json();
+                slackNotificationsEnabled = dados.ativo;
+                localStorage.setItem("slackNotificationsEnabled", JSON.stringify(slackNotificationsEnabled));
+            } else {
+                console.error("erro ao buscar status do slack no backend.");
+                slackNotificationsEnabled = JSON.parse(localStorage.getItem("slackNotificationsEnabled") || "true");
+            }
+        } catch (erro) {
+            console.error("Erro ao buscar status do slack no backend", erro);
+            slackNotificationsEnabled = JSON.parse(localStorage.getItem("slackNotificationsEnabled") || "true");
+        }
+
+        atualizarIconeSlack();
+    });
+
+    async function enviarNotificacaoSlack(texto, ignorarEstado = false) {
+
+        if (!ignorarEstado && !slackNotificationsEnabled) {
+            console.log("Slack desligado. Notificação não será enviada.");
+            return;
+        }
+
+        try {
+            const resposta = await fetch("/slack/notificar", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text: texto })
+            });
+
+            if (!resposta.ok) {
+                console.error("Erro ao enviar notificações para o Slack:", resposta.status);
+            }
+        } catch (erro) {
+            console.error("Erro ao enviar notificação:", erro);
+        }
+    }
+</script>

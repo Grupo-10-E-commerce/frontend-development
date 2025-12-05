@@ -40,16 +40,33 @@ function atualizarSenha(nome, email, id_usuario, senha) {
 function buscarDados(id_usuario) {
     var instrucao = `
     SELECT nome, email FROM usuario 
-    WHERE id_usuario = '${id_usuario}'
+    WHERE id_usuario = '${id_usuario};'
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
 }
 
+function buscarTodosUsuarios(id_empresa) {
+    var instrucao = `
+    SELECT 
+	u.nome AS usuario,
+    u.email,
+    u.senha,
+    
+    c.nome AS cargo
+    FROM usuario u
+    JOIN cargo c ON u.id_cargo = c.id_cargo
+    
+    WHERE u.id_empresa = ${id_empresa};
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
 module.exports = {
     efetuarLogin,
     cadastrar,
     atualizar,
     buscarDados,
-    atualizarSenha
+    atualizarSenha,
+    buscarTodosUsuarios
 }

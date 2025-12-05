@@ -8,7 +8,9 @@
     <link rel="stylesheet" href="./style/editarPerfil.css">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Konkhmer+Sleokchher&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap ">
-
+        
+    <!-- icone da página -->
+    <link rel="icon" href="img/fraux-logo.png" type="image/png"> 
 
     <title>Editar Perfil</title>
 </head>
@@ -156,7 +158,7 @@
 
         if (senhaAtual != "" || novaSenha != "") {
 
-            if (novaSenha < 8) {
+            if (novaSenha.length < 8) {
                 swalInfo("Sua nova senha deve ter pelo menos 8 digitos.");
                 return;
             } else if (novaSenha == "") {

@@ -18,4 +18,8 @@ router.post("/atualizar", function (req, res){
 router.post("/buscarDados", function (req, res){
     usuariosController.buscarDados(req, res);
 });
+
+router.post("/buscarTodosUsuarios", function (req, res){
+    usuariosController.buscarTodosUsuarios(req, res);
+});
 module.exports = router;

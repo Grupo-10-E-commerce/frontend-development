@@ -108,6 +108,12 @@
 <script>
     span_bem_vindo.innerHTML = `Bem-vindo(a), ${sessionStorage.NOME_USUARIO}!`;
 
+    function notificacao() {
+        const btn = document.getElementById('btn_notificacao');
+        btn.classList.toggle('ativo');
+        console.log("Botão de notificação clicado!");
+    }
+
     function carregarAnos() {
         const idEmpresa = sessionStorage.ID_EMPRESA;
         const select = document.getElementById('ano-fraudes');
@@ -801,6 +807,91 @@ function lucrosTotais() {
         console.log(`#ERRO: ${resposta}`);
     })
 }
+
+    function atualizarIconeSlack() {
+        const botao = document.getElementById("btn_notificacao");
+
+        if (slackNotificationsEnabled) {
+            botao.style.opacity = "1";
+            botao.title = "Notificações do Slack: Ligadas";
+        } else {
+            botao.style.opacity = "0.3";
+            botao.title = "Notificações do Slack: Desligadas";
+        }
+    }
+
+    function notificacao() {
+        slackNotificationsEnabled = !slackNotificationsEnabled;
+
+        localStorage.setItem("slackNotificationsEnabled", JSON.stringify(slackNotificationsEnabled));
+
+        atualizarIconeSlack();
+
+        const usuario = sessionStorage.NOME_USUARIO;
+        let mensagem = "";
+
+        if (slackNotificationsEnabled) {
+            mensagem = "🔔 Notificações do Slack ATIVADAS pelo usuário " + usuario + ".";
+        } else {
+            mensagem = "🔔 Notificações do Slack DESATIVADAS pelo usuário " + usuario + ".";
+        }
+
+        const idEmpresa = sessionStorage.ID_EMPRESA;
+
+        fetch("/slack/status/" + idEmpresa, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ativo: slackNotificationsEnabled })
+        }).catch(erro => {
+            console.error("Erro ao atualizar status do Slack no backend:", erro);
+        });
+
+        enviarNotificacaoSlack(mensagem, true);
+
+    }
+
+    window.addEventListener("load", async () => {
+        const idEmpresa = sessionStorage.ID_EMPRESA;
+
+        try {
+            const resposta = await fetch("/slack/status/" + idEmpresa);
+            if (resposta.ok) {
+                const dados = await resposta.json();
+                slackNotificationsEnabled = dados.ativo;
+                localStorage.setItem("slackNotificationsEnabled", JSON.stringify(slackNotificationsEnabled));
+            } else {
+                console.error("erro ao buscar status do slack no backend.");
+                slackNotificationsEnabled = JSON.parse(localStorage.getItem("slackNotificationsEnabled") || "true");
+            }
+        } catch (erro) {
+            console.error("Erro ao buscar status do slack no backend", erro);
+            slackNotificationsEnabled = JSON.parse(localStorage.getItem("slackNotificationsEnabled") || "true");
+        }
+
+        atualizarIconeSlack();
+    });
+
+    async function enviarNotificacaoSlack(texto, ignorarEstado = false) {
+
+        if (!ignorarEstado && !slackNotificationsEnabled) {
+            console.log("Slack desligado. Notificação não será enviada.");
+            return;
+        }
+
+        try {
+            const resposta = await fetch("/slack/notificar", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text: texto })
+            });
+
+            if (!resposta.ok) {
+                console.error("Erro ao enviar notificações para o Slack:", resposta.status);
+            }
+        } catch (erro) {
+            console.error("Erro ao enviar notificação:", erro);
+        }
+    }
 
     function atualizarDashboard() {
         buscarKPIs();

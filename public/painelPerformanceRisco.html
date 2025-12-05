@@ -12,11 +12,12 @@
     <title>Painel de Performance e Risco</title>
 </head>
 <body>
+    <body onload="atualizarDashboard()"></body>
     <side-Bar></side-Bar>
         <div class="header">
         <div class="title">Painel de Performance e Risco</div>
         <div class="btn">
-            <select class="ano-select1" id="ano-fraudes">
+            <select class="ano-select1" id="ano-fraudes" onchange="atualizarDashboard()">
                 <option value="2024" selected>2024</option>
                 <option value="2023">2023</option>
             </select>
@@ -71,8 +72,19 @@
                 <div class="grafico2">
                     <div class="grafico-header">
                         <div class="filtros">
-                            <select class="data-select">
-                                <option value="">Selecione uma data</option>
+                            <select class="mes-select" id="mes-vendas" onchange="atividadeVenda()">
+                                <option value="1">Janeiro</option>
+                                <option value="2">Fevereiro</option>
+                                <option value="3">Março</option>
+                                <option value="4">Abril</option>
+                                <option value="5">Maio</option>
+                                <option value="6">Junho</option>
+                                <option value="7">Julho</option>
+                                <option value="8">Agosto</option>
+                                <option value="9">Setembro</option>
+                                <option value="10">Outubro</option>
+                                <option value="11">Novembro</option>
+                                <option value="12">Dezembro</option>
                             </select>
                         </div>
                     </div>
@@ -119,7 +131,7 @@
                     console.log("Lucro total: " + lucroTotal);
 
                     document.querySelector('.KPI:nth-child(1) .valor-KPI').textContent = 
-                    `R$${Number(lucroTotal).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                    `R$${Number(lucroTotal).toLocaleString()}`;
                 })
             } else {
                 throw "Erro ao buscar lucro total!"
@@ -218,7 +230,7 @@
                                 chart: {
                                 type: 'bar',
                                 width: 930,
-                                height: 285,
+                                height: 340,
                                 toolbar: {
                                     show: true,
                                     tools: {
@@ -233,7 +245,7 @@
                                 text: 'Quantidade de Fraudes por Mês',
                                 align: 'left',
                                 style: {
-                                    fontSize: '20px',
+                                    fontSize: '25px',
                                     fontWeight: 'bold',
                                     color: '#333'
                                 }
@@ -299,10 +311,12 @@
 
     // Gráfico de Atividade de Vendas
     function atividadeVenda() {
-        const dataSelect = document.querySelector('.data-select').value;
+        const idEmpresa = sessionStorage.ID_EMPRESA;
         const ano = document.getElementById('ano-fraudes').value;
-        const [dia, mes] = dataSelect.split('/');
-        const dataFormatada = `${ano}-${mes}-${dia}`;
+        const mesSelect = document.getElementById('mes-vendas');
+        const mes = mesSelect.value;
+
+        console.log(`Buscando vendas -> Empresa: ${idEmpresa}, Ano: ${ano}, Mês: ${mes}`);
 
         fetch("/painelPerformanceRisco/atividadeVenda", {
             method: "POST",
@@ -311,18 +325,28 @@
             },
             body: JSON.stringify({
                 id_empresa: sessionStorage.ID_EMPRESA,
-                data: dataFormatada
+                ano: ano,
+                mes: mes
             }),
         })
         .then(function (resposta) {
             console.log("resposta atividade vendas: ", resposta);
 
             if (resposta.ok) {
-            resposta.json().then(json => {
-                console.log(json);
+                resposta.json().then(json => {
+                console.log("Dados recebidos: ", json);
                 
-                const horas = json.map(item => `${item.hora}:00`);
-                const quantidades = json.map(item => item.quantidade_vendas);
+                const diasDoMes = new Date(ano, mes, 0).getDate();
+                const diasMes = Array.from({length: diasDoMes}, (_, i) => i + 1);
+                const vendasPorDia = Array(diasDoMes).fill(0);
+
+                json.forEach(item => {
+                    const diaIndex = item.dia - 1;
+
+                    if (diaIndex >= 0 && diaIndex < diasDoMes) {
+                        vendasPorDia[diaIndex] = item.quantidade_vendas;
+                    }
+                });
                 
                 var optionsVenda = {
                         chart: {
@@ -348,7 +372,7 @@
                                 text: 'Atividade de Vendas',
                                 align: 'left',
                                 style: {
-                                    fontSize: '20px',
+                                    fontSize: '25px',
                                     fontWeight: 'bold',
                                     color: '#333'
                                 }
@@ -362,7 +386,7 @@
                 },
                         series: [{
                         name: "Vendas",
-                        data: quantidades
+                        data: vendasPorDia
                 }],
                         stroke: {
                         curve: 'smooth',
@@ -379,7 +403,7 @@
                 },
                     colors: ['#1F1B56'],
                     xaxis: {
-                        categories: horas,
+                        categories: diasMes,
                         labels: {
                         style: {
                         colors: '#333',
@@ -399,7 +423,8 @@
                             style: {
                                 colors: '#333',
                                 fontSize: '18px'
-                        }
+                        },
+                        formatter: (val) => val.toFixed(0)
                     }
                 },
                     grid: {
@@ -438,16 +463,17 @@
         });
     }
 
+const id_empresa = sessionStorage.ID_EMPRESA
     // Gráfico de Cidades com Mais Fraudes
     function cidadeFraude() {
         const ano = document.getElementById('ano-fraudes').value;
 
-        fetch("/painelPerformanceRisco/cidadeFraude", {
+        fetch(`/painelPerformanceRisco/cidadeFraude`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({
+            body: JSON.stringify({ 
                 id_empresa: sessionStorage.ID_EMPRESA,
                 ano: ano
             }),
@@ -457,16 +483,16 @@
 
         if (resposta.ok) {
             resposta.json().then(json => {
-                console.log(json);
+                console.log(JSON.stringify(json));
                 
                 const cidades = json.map(item => item.cidade);
-                const quantidades = json.map(item => item.quantidade_fraudes);
+                const quantidades = json.map(item => Number(item.quantidade_fraudes));
 
                 var optionsDonut = {
                     chart: {
                         type: 'donut',
                         width: 600,
-                        height: 275,
+                        height: 290,
                         toolbar: {
                             show: true,
                             tools: {
@@ -476,19 +502,19 @@
                         export: {
                             svg: false
                         },
-                        title: {
+                    },
+                    title: {
                                 text: 'Cidades com Mais Fraudes',
                                 align: 'left',
                                 style: {
-                                    fontSize: '20px',
+                                    fontSize: '25px',
                                     fontWeight: 'bold',
                                     color: '#333'
                                 }
-                        },
                     },
                     series: quantidades,
                     labels: cidades,
-                    colors: ['#332C66', '#9193DE', '#5B51A8', '#7B7BAE', '#A5A5D6'],
+                    colors: ['#332C66', '#4143BA', '#675DB3', '#7676e8', '#ACACE8'],
                     dataLabels: {
                         enabled: false
                     },
@@ -560,6 +586,8 @@
 
 // Gráfico Lucros
 function lucrosTotais() {
+    const anoSelecionado = parseInt(document.getElementById('ano-fraudes').value); 
+    const anoAnterior = anoSelecionado - 1;
     const ano = document.getElementById('ano-fraudes').value;
 
     fetch("/painelPerformanceRisco/lucrosTotais", {
@@ -580,17 +608,28 @@ function lucrosTotais() {
                 console.log(json);
 
                 const meses = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'];
-                const lucrosAnoAtual = Array(12).fill(0);
+                const dadosAnoAnterior = Array(12).fill(0);
+                const dadosAnoAtual = Array(12).fill(0);
 
                 json.forEach(item => {
-                    lucrosAnoAtual[item.mes - 1] = item.lucro_total;
+                    const mesIndex = parseInt(item.mes) - 1;
+                    const valor = parseFloat(item.lucro_total);
+                    const anoItem = parseInt(item.ano);
+
+                    if (mesIndex >= 0 && mesIndex < 12) {
+                        if (anoItem === anoAnterior) {
+                            dadosAnoAnterior[mesIndex] = valor;
+                        } else if (anoItem === anoSelecionado) {
+                            dadosAnoAtual[mesIndex] = valor;
+                        }
+                    }
                 });
 
                 var optionsLucros = {
                     chart: {
                         type: 'line',
-                        width: 1200,
-                        height: 250,
+                        width: 1240,
+                        height: 330,
                         toolbar: {
                             show: true,
                             tools: {
@@ -606,11 +645,12 @@ function lucrosTotais() {
                         export: {
                             svg: false
                         },
-                        title: {
+                    },
+                    title: {
                                 text: 'Lucros',
                                 align: 'left',
                                 style: {
-                                    fontSize: '20px',
+                                    fontSize: '25px',
                                     fontWeight: 'bold',
                                     color: '#333'
                                 }
@@ -619,20 +659,25 @@ function lucrosTotais() {
                             text: 'Lucros Totais',
                                 align: 'left',
                                 style: {
-                                    fontSize: '15px',
+                                    fontSize: '20px',
                                     color: '#333'
                             }
+                        },
+                    series: [
+                        {
+                            name: `Ano ${anoAnterior}`,
+                            data: dadosAnoAnterior
+                        },
+                        {
+                            name: `Ano ${anoSelecionado}`,
+                            data: dadosAnoAtual
                         }
-                    },
-                    series: [{
-                        name: `Lucro ${ano}`,
-                        data: lucrosAnoAtual
-                    }],
+                    ],
                     stroke: {
                         curve: 'smooth',
                         width: 3
                     },
-                    colors: ['#2E3A59'],
+                    colors: ['#A5A5D6', '#2E3A59'],
                     xaxis: {
                         categories: meses,
                         labels: {
@@ -684,40 +729,11 @@ function lucrosTotais() {
     })
 }
 
-// Filtro de data
-    document.addEventListener('DOMContentLoaded', function() {
-        const dataSelect = document.querySelector('.data-select');
-        const hoje = new Date();
-
-        for (let i = 0; i < 5; i++) {
-            const data = new Date(hoje);
-            data.setDate(hoje.getDate() - i);
-            const dia = String(data.getDate()).padStart(2, '0');
-            const mes = String(data.getMonth() + 1).padStart(2, '0');
-            const option = document.createElement('option');
-            option.value = `${dia}/${mes}`;
-            option.textContent = `${dia}/${mes}`;
-            dataSelect.appendChild(option);
-        }
-
-        dataSelect.selectedIndex = 0;
-
+    function atualizarDashboard() {
         buscarKPIs();
         qtdFraudes();
-        cidadeFraude();
         atividadeVenda();
+        cidadeFraude();
         lucrosTotais();
-
-        document.getElementById('ano-fraudes').addEventListener('change', function() {
-            buscarKPIs();
-            qtdFraudes();
-            cidadeFraude();
-            lucrosTotais();
-        });
-    
-        document.querySelector('.data-select').addEventListener('change', function() {
-            atividadeVenda();
-        });
-    });
-
+    }
 </script>

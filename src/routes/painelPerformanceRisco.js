@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
 
-var painelPerformanceRiscoController = require("../controllers/painelPerformanceRiscoController"); 
+var painelPerformanceRiscoController = require("../controllers/painelPerformanceController"); 
 
 router.post("/KPIlucroTotal", function (req, res){
     painelPerformanceRiscoController.KPIlucroTotal(req, res);

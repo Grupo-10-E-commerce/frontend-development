@@ -66,8 +66,8 @@ async function cidadeFraude(req, res) {
     var ano = req.body.ano;
 
     try {
-        const resultado = await painelPerformanceRiscoModel.cidadeFraude(id_empresa, ano);
-        res.status(200).json(resultado);
+        const resposta = await painelPerformanceRiscoModel.cidadeFraude(id_empresa, ano);
+        res.status(200).json(resposta);
     } catch (erro) {
         console.error("Erro ao buscar cidades com fraude:", erro);
         res.status(500).json({ erro: "Erro ao buscar dados" });
@@ -76,19 +76,33 @@ async function cidadeFraude(req, res) {
 }
 
 async function atividadeVenda(req, res) {
-
     var id_empresa = req.body.id_empresa;
     var ano = req.body.ano;
-    var data = req.body.data;
+    var mes = req.body.mes;
+
+    if (id_empresa == undefined) {
+        return res.status(400).send("Seu id_empresa está undefined!");
+    }
+    if (ano == undefined) {
+        return res.status(400).send("Seu ano está undefined!");
+    }
 
     try {
-        const resultado = await painelPerformanceRiscoModel.atividadeVenda(id_empresa, ano, data);
-        res.status(200).json(resultado);
+        const resultado = await painelPerformanceRiscoModel.atividadeVenda(id_empresa, ano, mes);
+
+        console.log(`\nResultados encontrados: ${resultado.length}`);
+        console.log(`Resultados: ${JSON.stringify(resultado)}`);
+
+        if (resultado.length > 0) {
+            return res.status(200).json(resultado);
+        } else {
+            return res.status(204).send("Nenhum resultado encontrado!");
+        }
     } catch (erro) {
-        console.error("Erro ao buscar atividade de vendas:", erro);
-        res.status(500).json({ erro: "Erro ao buscar dados" });
+        console.log(erro);
+        console.log("Erro ao realizar a busca! Erro: ", erro.sqlMessage);
+        return res.status(500).json(erro.sqlMessage);
     }
-    
 }
 
 async function lucrosTotais(req, res) {

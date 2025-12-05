@@ -12,6 +12,19 @@ class SideBarComponent extends HTMLElement {
         this.shadowRoot.querySelectorAll('.menu-item').forEach(el =>
             el.addEventListener('click', this.handleMenuClick.bind(this))
         );
+
+        const btnEditar = this.shadowRoot.querySelector('#btnEditProfile');
+        if (btnEditar) {
+            btnEditar.addEventListener('click', () => {
+                window.location.href = 'editarPerfil.html';
+            });
+        }
+
+        const btnLogout = this.shadowRoot.querySelector('#btnLogout');
+        if (btnLogout) {
+            btnLogout.addEventListener('click', this.logout.bind(this));
+        }
+
         this.shadowRoot.querySelector('.toggleMenu').addEventListener('click', this.toggleMenu.bind(this));
         this.shadowRoot.querySelector('.profile').addEventListener('click', this.toggleOptions.bind(this));
 
@@ -43,6 +56,11 @@ class SideBarComponent extends HTMLElement {
         }
     }
 
+    logout() {
+        sessionStorage.clear();
+        window.location.href = "login.html"; 
+    }
+
     render() {
         this.shadowRoot.innerHTML = `
             <style>
@@ -50,6 +68,7 @@ class SideBarComponent extends HTMLElement {
                     margin: 0;
                     padding: 0;
                     box-sizing: border-box;
+                    font-family: 'Poppins', sans-serif;
                 }
 
                 .sidebar {
@@ -169,6 +188,14 @@ class SideBarComponent extends HTMLElement {
                     display: inline;
                 }
 
+                .profile-container {
+                    position: relative;
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    margin-top: 20px;
+                }
+
                 .profile {
                     width: 50px;
                     height: 50px;
@@ -181,22 +208,102 @@ class SideBarComponent extends HTMLElement {
                     font-weight: 600;
                     font-size: 18px;
                     cursor: pointer;
-                    margin-top: 20px;
                     transition: all 0.3s;
+                    border: 2px solid transparent;
                 }
 
                 .profile:hover {
                     background: #9193DE;
+                    border-color: white;
                 }
 
+                .moreOptions {
+                    display: none;
+                    position: absolute;
+                    bottom: 70px;
+                    background: #ddd;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+                    padding: 10px 0;
+                    flex-direction: column;
+                    z-index: 1001;
+                    width: 160px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                }
+
+                .sidebar:not(.collapsed) .moreOptions {
+                    left: 20px;
+                    transform: translateX(0);
+                }
+
+                .moreOptions::after {
+                    content: '';
+                    position: absolute;
+                    bottom: -8px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    border-width: 8px 8px 0;
+                    border-style: solid;
+                    border-color: white transparent transparent transparent;
+                }
+                
+                .sidebar:not(.collapsed) .moreOptions::after {
+                    left: 25px;
+                    transform: translateX(0);
+                }
+
+                .moreOptions.open {
+                    display: flex;
+                    animation: fadeIn 0.2s ease;
+                }
+
+                .option-item {
+                    padding: 12px 20px;
+                    color: #332C66;
+                    font-size: 18px;
+                    font-weight: 500;
+                    cursor: pointer;
+                    transition: background 0.2s;
+                    text-decoration: none;
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                }
+
+                .option-item:hover {
+                    background: #f0f0f5;
+                    color: #5B51A8;
+                }
+                
+                .option-item.logout {
+                    color: #d9534f; /* Vermelho para sair */
+                    border-top: 1px solid #eee;
+                }
+
+                .option-item.logout:hover {
+                    background: #fff0f0;
+                }
+
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translate(-50%, 10px); }
+                    to { opacity: 1; transform: translate(-50%, 0); }
+                }
 
                 @media (max-width: 768px) {
                     .sidebar {
                         width: 60px;
                     }
-
                     .sidebar.collapsed {
                         width: 200px;
+                    }
+                    .moreOptions {
+                        left: 10px;
+                        transform: none;
+                    }
+                    .moreOptions::after {
+                        left: 25px;
+                        transform: none;
                     }
                 }
             </style>
@@ -247,11 +354,22 @@ class SideBarComponent extends HTMLElement {
 
                 </nav>
 
-                <div class="profile">
-                    ${(sessionStorage.NOME_USUARIO || 'V').charAt(0).toUpperCase()}
+                 <div class="profile-container">
+
+                 <div class="moreOptions">
+                        <div class="option-item" id="btnEditProfile">
+                            Editar Perfil
+                        </div>
+                        <div class="option-item logout" id="btnLogout">
+                            Sair
+                        </div>
+                    </div>
+
+                    <div class="profile">
+                        ${(sessionStorage.NOME_USUARIO || 'V').charAt(0).toUpperCase()}
+                    </div>
                 </div>
             </div>
-
         `;
 
         this.applyRoleRules();

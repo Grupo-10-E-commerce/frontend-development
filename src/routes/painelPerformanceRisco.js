@@ -31,4 +31,8 @@ router.post("/lucrosTotais", function (req, res){
     painelPerformanceRiscoController.lucrosTotais(req, res);
 });
 
+router.post("/listarAnos", function (req, res){
+    painelPerformanceRiscoController.listarAnos(req, res);
+});
+
 module.exports = router;

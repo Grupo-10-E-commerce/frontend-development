@@ -12,14 +12,13 @@
     <title>Painel de Performance e Risco</title>
 </head>
 <body>
-    <body onload="atualizarDashboard()"></body>
+    <body onload="carregarAnos()">
     <side-Bar></side-Bar>
         <div class="header">
         <div class="title">Painel de Performance e Risco</div>
         <div class="btn">
             <select class="ano-select1" id="ano-fraudes" onchange="atualizarDashboard()">
-                <option value="2024" selected>2024</option>
-                <option value="2023">2023</option>
+                <option value="" disabled selected>Carregando anos...</option>
             </select>
             <button id="btn_notificacao" class="btn_sino" onclick="notificacao()">
                 <img src="img/notification-bell.png" alt="Notificacoes">
@@ -39,7 +38,7 @@
                             <img src="./img/Group.svg" alt="lucros">
                         </div>
                     </div>
-                    <span class="legenda-KPI">Aumento de 23%</span>
+                    <span class="legenda-KPI"></span>
                 </div>
 
                 <div class="KPI">
@@ -50,7 +49,7 @@
                             <img src="./img/Group2.svg" alt="lucros">
                         </div>
                     </div>
-                    <span class="legenda-KPI">Decréscimo de 15%</span>
+                    <span class="legenda-KPI"></span>
                 </div>
                 <div class="KPI">
                     <span class="title-KPI">Total de Fraudes</span>
@@ -59,7 +58,8 @@
                         <div class="image">
                             <img src="./img/Group3.svg" alt="lucros">
                         </div>
-                    </div>  
+                    </div> 
+                     <span class="legenda-KPI"></span> 
                 </div>
             </div>
 
@@ -108,8 +108,48 @@
 <script>
     span_bem_vindo.innerHTML = `Bem-vindo(a), ${sessionStorage.NOME_USUARIO}!`;
 
+    function carregarAnos() {
+        const idEmpresa = sessionStorage.ID_EMPRESA;
+        const select = document.getElementById('ano-fraudes');
+
+        fetch("/painelPerformanceRisco/listarAnos", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id_empresa: idEmpresa })
+        })
+        .then(function (resposta) {
+            if (resposta.ok) {
+                resposta.json().then(json => {
+                    select.innerHTML = "";
+
+                    if (json.length === 0) {
+                        select.innerHTML = '<option value="">Sem dados</option>';
+                        return;
+                    }
+                    for (let i = 0; i < json.length; i++) {
+                        let ano = json[i].ano;
+                        let option = document.createElement("option");
+                        option.value = ano;
+                        option.text = ano;
+                        select.add(option);
+                    }
+
+                    select.value = json[0].ano;
+                    atualizarDashboard();
+                });
+            } else {
+                console.log("Erro ao buscar anos");
+            }
+        })
+        .catch(function (erro) {
+            console.log("#ERRO: " + erro);
+        });
+    }
+
     function buscarKPIs() {
-        const ano = document.getElementById('ano-fraudes').value;
+        const anoSelecionado = parseInt(document.getElementById('ano-fraudes').value);
+        const anoAnterior = anoSelecionado - 1;
+        const idEmpresa = sessionStorage.ID_EMPRESA;
 
         // Lucros Totais
         fetch("/painelPerformanceRisco/KPIlucroTotal", {
@@ -119,27 +159,37 @@
             },
             body: JSON.stringify({
                 id_empresa: sessionStorage.ID_EMPRESA,
-                ano: ano
+                ano: anoSelecionado
             }),
         })
-        .then(function (resposta) {
-            console.log("resposta lucros totais: ", resposta);
-            if(resposta.ok) {
-                resposta.json().then(json => {
-                    console.log(json);
-                    let lucroTotal = json[0].lucros;
-                    console.log("Lucro total: " + lucroTotal);
+        .then(res => res.json())
+        .then(json => {
+            let totalAtual = 0;
+            let totalAnterior = 0;
 
-                    document.querySelector('.KPI:nth-child(1) .valor-KPI').textContent = 
-                    `R$${Number(lucroTotal).toLocaleString()}`;
-                })
+            json.forEach(item => {
+                if (item.ano === anoSelecionado) totalAtual = Number(item.total);
+                if (item.ano === anoAnterior) totalAnterior = Number(item.total);
+            });
+
+            const kpiValor = document.querySelector('.KPI:nth-child(1) .valor-KPI');
+            kpiValor.textContent = `R$${totalAtual.toLocaleString('pt-BR')}`;
+
+            const kpiLegenda = document.querySelector('.KPI:nth-child(1) .legenda-KPI');
+            
+            if (totalAnterior === 0) {
+                kpiLegenda.textContent = "Sem dados anteriores";
+                kpiLegenda.style.color = "#666";
             } else {
-                throw "Erro ao buscar lucro total!"
+                const diferenca = ((totalAtual - totalAnterior) / totalAnterior) * 100;
+                const texto = diferenca >= 0 ? "Aumento" : "Queda";
+                
+                kpiLegenda.textContent = `${texto} de ${Math.abs(diferenca).toFixed(1)}%`;
+                
+                kpiLegenda.style.color = diferenca >= 0 ? "#22c55e" : "#ef4444";
             }
         })
-        .catch(function (resposta){
-            console.log(`#ERRO: ${resposta}`);
-        });
+        .catch(erro => console.error("Erro KPI Lucro:", erro));
 
         //Perdas Totais
         fetch("/painelPerformanceRisco/KPIperdaTotal", {
@@ -149,27 +199,36 @@
             },
             body: JSON.stringify ({
                 id_empresa: sessionStorage.ID_EMPRESA,
-                ano: ano
+                ano: anoSelecionado
             }),
         })
-        .then(function(resposta) {
-            console.log("resposta perdas: ", resposta);
-            if(resposta.ok) {
-                resposta.json().then(json => {
-                    console.log(json);
-                    let perdaTotal = json[0].perdas_totais;
-                    console.log("Perda total: " + perdaTotal);
+        .then(res => res.json())
+        .then(json => {
+            let totalAtual = 0;
+            let totalAnterior = 0;
 
-                    document.querySelector('.KPI:nth-child(2) .valor-KPI').textContent = 
-                    `R$${Number(perdaTotal).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-                });
+            json.forEach(item => {
+                if (item.ano === anoSelecionado) totalAtual = Number(item.total);
+                if (item.ano === anoAnterior) totalAnterior = Number(item.total);
+            });
+
+            const kpiValor = document.querySelector('.KPI:nth-child(2) .valor-KPI');
+            kpiValor.textContent = `R$${totalAtual.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+
+            const kpiLegenda = document.querySelector('.KPI:nth-child(2) .legenda-KPI');
+
+            if (totalAnterior === 0) {
+                kpiLegenda.textContent = "Sem dados anteriores";
+                kpiLegenda.style.color = "#666";
             } else {
-                throw "Erro ao buscar KPI perda total"
+                const diferenca = ((totalAtual - totalAnterior) / totalAnterior) * 100;
+                const texto = diferenca >= 0 ? "Aumento" : "Decréscimo";
+                
+                kpiLegenda.textContent = `${texto} de ${Math.abs(diferenca).toFixed(1)}%`;
+                kpiLegenda.style.color = diferenca >= 0 ? "#ef4444" : "#22c55e"; 
             }
         })
-        .catch(function (resposta) {
-            console.log(`#ERRO: ${resposta}`);
-        });
+        .catch(erro => console.error("Erro KPI Perda:", erro));
 
         // Total de Fraudes
         fetch("/painelPerformanceRisco/KPItotalFraudes", {
@@ -179,31 +238,44 @@
             },
             body: JSON.stringify({
                 id_empresa: sessionStorage.ID_EMPRESA,
-                ano: ano
+                ano: anoSelecionado
             }),
         })
-        .then(function (resposta) {
-            console.log("resposta total fraudes: ", resposta);
-            if (resposta.ok) {
-                resposta.json().then(json => {
-                    console.log(json);
-                    let totalFraudes = json[0].total_fraudes;
-                    console.log("Total Fraudes: " + totalFraudes);
+        .then(res => res.json())
+        .then(json => {
+            let totalAtual = 0;
+            let totalAnterior = 0;
 
-                     document.querySelector('.KPI:nth-child(3) .valor-KPI').textContent = totalFraudes;
-                });
+            json.forEach(item => {
+                if (item.ano === anoSelecionado) totalAtual = Number(item.total_fraudes);
+                if (item.ano === anoAnterior) totalAnterior = Number(item.total_fraudes);
+            });
+
+            document.querySelector('.KPI:nth-child(3) .valor-KPI').textContent = totalAtual;
+            const kpiLegenda = document.querySelector('.KPI:nth-child(3) .legenda-KPI');
+            
+            if (totalAnterior === 0) {
+                kpiLegenda.textContent = "Sem dados anteriores";
+                kpiLegenda.style.color = "#666";
             } else {
-                throw "Erro ao buscar KPI Total de Fraudes"
+                const diferenca = ((totalAtual - totalAnterior) / totalAnterior) * 100;
+                
+                const texto = diferenca >= 0 ? "Aumento" : "Queda";
+                kpiLegenda.textContent = `${texto} de ${Math.abs(diferenca).toFixed(1)}%`;
+
+                kpiLegenda.style.color = diferenca >= 0 ? "#ef4444" : "#22c55e";
             }
         })
-        .catch(function (resposta) {
-            console.log(`#ERRO: ${resposta}`);
+        .catch(err => {
+            console.error("Erro KPI Fraudes:", err);
+            document.querySelector('.KPI:nth-child(3) .valor-KPI').textContent = "0";
         });
     }
 
     // Gráfico Quantidade de Fraudes por Mês
     function qtdFraudes() {
         const ano = document.getElementById('ano-fraudes').value;
+        const idEmpresa = sessionStorage.ID_EMPRESA;
 
         fetch(`/painelPerformanceRisco/qtdFraudes`, {
             method: "POST",
@@ -463,10 +535,10 @@
         });
     }
 
-const id_empresa = sessionStorage.ID_EMPRESA
     // Gráfico de Cidades com Mais Fraudes
     function cidadeFraude() {
         const ano = document.getElementById('ano-fraudes').value;
+        const idEmpresa = sessionStorage.ID_EMPRESA;
 
         fetch(`/painelPerformanceRisco/cidadeFraude`, {
             method: "POST",
@@ -586,6 +658,7 @@ const id_empresa = sessionStorage.ID_EMPRESA
 
 // Gráfico Lucros
 function lucrosTotais() {
+    const idEmpresa = sessionStorage.ID_EMPRESA;
     const anoSelecionado = parseInt(document.getElementById('ano-fraudes').value); 
     const anoAnterior = anoSelecionado - 1;
     const ano = document.getElementById('ano-fraudes').value;

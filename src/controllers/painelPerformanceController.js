@@ -119,6 +119,26 @@ async function lucrosTotais(req, res) {
     }
 }
 
+async function listarAnos(req, res) {
+    var id_empresa = req.body.id_empresa;
+
+    if (id_empresa == undefined) {
+        return res.status(400).send("id_empresa undefined!");
+    }
+
+    try {
+        const resultado = await painelPerformanceRiscoModel.listarAnos(id_empresa);
+        if (resultado.length > 0) {
+            res.status(200).json(resultado);
+        } else {
+            res.status(204).send("Nenhum ano encontrado!");
+        }
+    } catch (erro) {
+        console.log(erro);
+        res.status(500).json(erro.sqlMessage);
+    }
+}
+
 module.exports = {
     KPIlucroTotal, 
     KPIperdaTotal, 
@@ -126,5 +146,6 @@ module.exports = {
     qtdFraudes, 
     cidadeFraude, 
     atividadeVenda, 
-    lucrosTotais
+    lucrosTotais,
+    listarAnos
 }

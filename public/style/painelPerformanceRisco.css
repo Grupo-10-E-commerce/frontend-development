@@ -89,7 +89,7 @@ body {
     align-items: left;
     border: 2px solid #ddd;
     border-radius: 10px;
-    width: 23%;
+    width: 32.4%;
     display: flex;
     flex-direction: column;
     background-color: white;
@@ -240,6 +240,18 @@ body {
     background-repeat: no-repeat;
     background-position: right 8px center;
     padding-right: 30px;
+}
+
+.filtro-flutuante {
+    display: flex;
+    justify-content: end;
+    margin-top: 5px;
+    gap: 10px;
+    width: 90%;
+    position: absolute;
+    top: 20px;      
+    right: 100px;    
+    z-index: 10;
 }
 
 .containers3 {

@@ -2,10 +2,12 @@ var database = require("../database/config");
 
 function buscarMedidas(id_empresa) {
     var instrucao = `
-        SELECT COUNT(fraude) AS total_fraudes 
+        SELECT COUNT(fraude) AS total_fraudes, 
+        SUM(valor_transacao) AS prejuizo_total
         FROM compra
         WHERE fraude = 1 AND id_empresa = ${id_empresa};
     `;
+
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
 }

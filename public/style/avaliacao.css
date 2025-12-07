@@ -17,37 +17,47 @@ body {
 }
 
 .btn {
-  display: flex;
-  align-items: center;
-  gap: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 450px;
 }
 
-.btn_emitir_relatorio {
-  color: #333;
-  padding: 8px 16px;
-  border: 1px solid #333;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 18px;
-  transition: all 0.3s;
+.btn_sino {
+    color: #333;
+    padding: 8px 16px;
+    border: 1px solid #919191;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 20px;
+    transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    font-weight: 800;
+    background-image: none;
 }
 
-.btn_emitir_relatorio:hover {
-  background-color: #9194de91;
-  border-color: #333;
-  color: #333;
+.btn_sino:hover {
+    background-color: #9193DE;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(124, 122, 184, 0.4);
+    font-weight: 800;
+}
+
+.btn_sino.ativo {
+    background-color: #9193DE;
+    transform: scale(0.95);
 }
 
 .btn_sino img,
 .btn_user img {
-  width: 24px;
-  height: 24px;
-  display: block;
-  background-color: #f4f3ff;
+    width: 24px;
+    height: 24px;
+    display: block;
+    background-image: none;
 }
 
 .btn span {
-    font-size: 20px;
+    font-size: 25px;
 }
 
 .container {
@@ -170,6 +180,7 @@ body {
     width: 100%;
     display: flex;
     justify-content: center;
+    justify-content: space-evenly;
 }
 
 .btn-avaliar {
@@ -187,6 +198,26 @@ body {
 }
 
 .btn-avaliar:hover {
+    background-color: #5D5A9B;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(124, 122, 184, 0.4);
+}
+
+.btn-excluir {
+   width: 100%;
+    max-width: 250px;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    background-color: #7C7AB8;
+    color: white;
+    font-size: 22px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-excluir:hover {
     background-color: #5D5A9B;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(124, 122, 184, 0.4);

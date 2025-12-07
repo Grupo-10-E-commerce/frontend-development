@@ -9,15 +9,15 @@ function verificarAvaliacao(idUsuario) {
 }
 
 function cadastrar(nota, descricao, idUsuario) {
-    var instrucao = `insert into avaliacao(nota, descricao, data_avaliacao)
-    values (${nota}, ${descricao}, ${idUsuario}, now());`;
+    var instrucao = `insert into avaliacao(nota, descricao, id_Usuario, data_avaliacao)
+    values (${nota}, '${descricao}', ${idUsuario}, now());`;
 
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
 }
 
 function editar(nota, descricao, idUsuario) {
-    var instrucao = `update avaliacao set nota = ${nota}, descricao = ${descricao}, 
+    var instrucao = `update avaliacao set nota = ${nota}, descricao = '${descricao}', 
     data_avaliacao = now() where id_usuario = ${idUsuario};`;
 
     console.log("Executando a instrução SQL: \n" + instrucao);
@@ -25,7 +25,7 @@ function editar(nota, descricao, idUsuario) {
 }
 
 function excluir(idUsuario) {
-    var instrucao = `delete from avaliacao where id_usuario = ${idUsuario};`
+    var instrucao = `delete from avaliacao where id_usuario = ${idUsuario};`;
 
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);

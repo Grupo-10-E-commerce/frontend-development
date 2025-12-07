@@ -6,7 +6,7 @@ router.post("/salvar", function(req, res) {
     avaliacaoController.salvar(req, res);
 });
 
-router.post("/excluir", function(req, res) {
+router.delete("/excluir/:idUsuario", function(req, res) {
     avaliacaoController.excluir(req, res);
 });
 

@@ -135,16 +135,8 @@ body {
   content: "\2605"; /* cheio */
 }
 
-.star-icon.ativo ~ .star-icon::before{
-  content: "\2606"; /*vazio*/
-}
-
-.avaliacao:hover .star-icon::before{
-  content: "\2605"; /*cheio*/
-}
-
-.star-icon:hover ~ .star-icon::before{
-  content: "\2606"; /*vazio*/
+.star-icon:hover {
+    transform: scale(1.2);
 }
 
 .comentario {

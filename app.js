@@ -23,6 +23,7 @@ var alertaPersonalizadoRouter = require("./src/routes/alertaPersonalizado");
 var centralAnaliseMedidas = require("./src/routes/centralAnaliseMedidas");
 var ragRouter = require("./src/routes/rag");
 var painelPerformance = require("./src/routes/painelPerformanceRisco");
+var avaliar = require("./src/routes/avaliacao");
 // var avisosRouter = require("./src/routes/avisos");
 // var medidasRouter = require("./src/routes/medidas");
 // var aquariosRouter = require("./src/routes/aquarios");
@@ -41,19 +42,20 @@ app.use("/alertaPersonalizado", alertaPersonalizadoRouter);
 app.use("/rag", ragRouter)
 app.use("/centralAnaliseMedidas", centralAnaliseMedidas);
 app.use("/painelPerformanceRisco", painelPerformance);
+app.use("/avaliacao", avaliar);
 // app.use("/avisos", avisosRouter);
 // app.use("/medidas", medidasRouter);
 // app.use("/aquarios", aquariosRouter);
 
 app.listen(PORTA_APP, function () {
     console.log(`
-    ##   ##  ######   #####             ####       ##     ######     ##              ##  ##    ####    ######  
-    ##   ##  ##       ##  ##            ## ##     ####      ##      ####             ##  ##     ##         ##  
-    ##   ##  ##       ##  ##            ##  ##   ##  ##     ##     ##  ##            ##  ##     ##        ##   
-    ## # ##  ####     #####    ######   ##  ##   ######     ##     ######   ######   ##  ##     ##       ##    
-    #######  ##       ##  ##            ##  ##   ##  ##     ##     ##  ##            ##  ##     ##      ##     
-    ### ###  ##       ##  ##            ## ##    ##  ##     ##     ##  ##             ####      ##     ##      
-    ##   ##  ######   #####             ####     ##  ##     ##     ##  ##              ##      ####    ######  
+    #######  ######      ###    ##   ##  ##   ##
+    ##       ##   ##    ## ##   ##   ##   ## ##
+    ##       ##   ##   ##   ##  ##   ##    ###
+    #####    ######   ##     ## ##   ##    ###
+    ##       ##   ##  ######### ##   ##   ## ##
+    ##       ##   ##  ##     ## ##   ##  ##   ##
+    ##       ##   ##  ##     ##  #####  ##     ##
     \n\n\n                                                                                                 
     Servidor do seu site já está rodando! Acesse o caminho a seguir para visualizar .: http://${HOST_APP}:${PORTA_APP} :. \n\n
     Você está rodando sua aplicação em ambiente de .:${process.env.AMBIENTE_PROCESSO}:. \n\n

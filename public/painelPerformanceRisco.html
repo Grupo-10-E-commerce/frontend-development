@@ -69,9 +69,9 @@
                     <div id="chart"></div>
                 </div>
 
-                <div class="grafico2">
+                <div class="grafico2" style="position: relative;">
                     <div class="grafico-header">
-                        <div class="filtros">
+                        <div class="filtro-flutuante">
                             <select class="mes-select" id="mes-vendas" onchange="atividadeVenda()">
                                 <option value="1">Janeiro</option>
                                 <option value="2">Fevereiro</option>
@@ -178,8 +178,8 @@
                 if (item.ano === anoAnterior) totalAnterior = Number(item.total);
             });
 
-            const kpiValor = document.querySelector('.KPI:nth-child(1) .valor-KPI');
-            kpiValor.textContent = `R$${totalAtual.toLocaleString('pt-BR')}`;
+            document.querySelector('.KPI:nth-child(1) .valor-KPI').textContent = 
+            `R$${totalAtual.toLocaleString('pt-BR')}`;
 
             const kpiLegenda = document.querySelector('.KPI:nth-child(1) .legenda-KPI');
             
@@ -187,12 +187,17 @@
                 kpiLegenda.textContent = "Sem dados anteriores";
                 kpiLegenda.style.color = "#666";
             } else {
-                const diferenca = ((totalAtual - totalAnterior) / totalAnterior) * 100;
-                const texto = diferenca >= 0 ? "Aumento" : "Queda";
+                let diferenca = ((totalAtual - totalAnterior) / totalAnterior) * 100;
+                diferenca = Math.abs(diferenca);
+
+                if (diferenca > 100) {
+                    diferenca = diferenca % 100; 
+                }
                 
-                kpiLegenda.textContent = `${texto} de ${Math.abs(diferenca).toFixed(1)}%`;
+                kpiLegenda.textContent = `Aumento de ${diferenca.toFixed(1)}%`;
                 
-                kpiLegenda.style.color = diferenca >= 0 ? "#22c55e" : "#ef4444";
+                kpiLegenda.style.color = "#0D99FF"; 
+                kpiLegenda.style.fontWeight = "bold";
             }
         })
         .catch(erro => console.error("Erro KPI Lucro:", erro));
@@ -218,8 +223,8 @@
                 if (item.ano === anoAnterior) totalAnterior = Number(item.total);
             });
 
-            const kpiValor = document.querySelector('.KPI:nth-child(2) .valor-KPI');
-            kpiValor.textContent = `R$${totalAtual.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            document.querySelector('.KPI:nth-child(2) .valor-KPI').textContent = 
+            `R$${totalAtual.toLocaleString('pt-BR')}`;
 
             const kpiLegenda = document.querySelector('.KPI:nth-child(2) .legenda-KPI');
 
@@ -227,11 +232,17 @@
                 kpiLegenda.textContent = "Sem dados anteriores";
                 kpiLegenda.style.color = "#666";
             } else {
-                const diferenca = ((totalAtual - totalAnterior) / totalAnterior) * 100;
-                const texto = diferenca >= 0 ? "Aumento" : "Decréscimo";
+                let diferenca = ((totalAtual - totalAnterior) / totalAnterior) * 100;
+                diferenca = Math.abs(diferenca);
+
+                if (diferenca > 100) {
+                    diferenca = diferenca % 100;
+                }
                 
-                kpiLegenda.textContent = `${texto} de ${Math.abs(diferenca).toFixed(1)}%`;
-                kpiLegenda.style.color = diferenca >= 0 ? "#ef4444" : "#22c55e"; 
+                kpiLegenda.textContent = `Decréscimo de ${diferenca.toFixed(1)}%`;
+
+                kpiLegenda.style.color = "#0D99FF"; 
+                kpiLegenda.style.fontWeight = "bold";
             }
         })
         .catch(erro => console.error("Erro KPI Perda:", erro));
@@ -264,12 +275,18 @@
                 kpiLegenda.textContent = "Sem dados anteriores";
                 kpiLegenda.style.color = "#666";
             } else {
-                const diferenca = ((totalAtual - totalAnterior) / totalAnterior) * 100;
-                
-                const texto = diferenca >= 0 ? "Aumento" : "Queda";
-                kpiLegenda.textContent = `${texto} de ${Math.abs(diferenca).toFixed(1)}%`;
+                let diferencaReal = ((totalAtual - totalAnterior) / totalAnterior) * 100;
+                let valorAbsoluto = Math.abs(diferencaReal);
 
-                kpiLegenda.style.color = diferenca >= 0 ? "#ef4444" : "#22c55e";
+               if (valorAbsoluto > 100) {
+                    valorAbsoluto = valorAbsoluto % 100;
+                }
+                
+                const texto = totalAtual >= totalAnterior ? "Aumento" : "Redução";
+            
+                kpiLegenda.textContent = `${texto} de ${valorAbsoluto.toFixed(1)}%`;
+                kpiLegenda.style.color = "#0D99FF"; 
+                kpiLegenda.style.fontWeight = "bold";
             }
         })
         .catch(err => {
@@ -429,7 +446,7 @@
                 var optionsVenda = {
                         chart: {
                         width: 930,
-                        height: 275,
+                        height: 320,
                         type: "area",
                         toolbar: {
                             show: true,
@@ -446,20 +463,20 @@
                         export: {
                             svg: false
                         },
-                        title: {
-                                text: 'Atividade de Vendas',
-                                align: 'left',
-                                style: {
-                                    fontSize: '25px',
-                                    fontWeight: 'bold',
-                                    color: '#333'
-                                }
-                            },
                         sparkline: {
                         enabled: false
                     }
                 },
-                        dataLabels: {
+                title: {
+                    text: 'Atividade de Vendas',
+                    align: 'left',
+                    style: {
+                        fontSize: '25px',
+                        fontWeight: 'bold',
+                        color: '#333'
+                    }
+                },
+                    dataLabels: {
                     enabled: false
                 },
                         series: [{
@@ -570,7 +587,7 @@
                     chart: {
                         type: 'donut',
                         width: 600,
-                        height: 290,
+                        height: 300,
                         toolbar: {
                             show: true,
                             tools: {

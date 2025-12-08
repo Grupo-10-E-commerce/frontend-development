@@ -15,8 +15,6 @@
 
     <div class="header">
         <div class="btn">
-            <button id="btn_relatorio" class="btn_emitir_relatorio" onclick="emitirRelatorio()">Emitir
-                Relatório</button>
             <button id="btn_notificacao" class="btn_sino" onclick="notificacao()">
                 <img src="img/notification-bell.png" alt="Notificacoes">
             </button>
@@ -50,6 +48,7 @@
         </div>
 
         <div class="botao-feedback">
+            <button class="btn-excluir" onclick="excluirAvaliacao()">Excluir Avaliação</button>
             <button class="btn-avaliar" onclick="avaliar()">Enviar Feedback</button>
         </div>
 
@@ -60,27 +59,88 @@
 </html>
 <script>
 
-    const avaliacoes = document.querySelectorAll('.avaliacao');
-    const notas = [];
-    const comente = [];
+    span_bem_vindo.innerHTML = `Bem-vindo(a), ${sessionStorage.NOME_USUARIO}!`;
 
-    for (var i = 0; i < avaliacoes.length; i++) {
-        const stars = avaliacoes[i].querySelectorAll('.star-icon');
-        console.log(stars)
+    let notaAtual = 0;
+    const estrelas = document.querySelectorAll('.star-icon');
+    
+    estrelas.forEach(estrela => {
+        estrela.addEventListener('click', function() {
+            const valor = parseInt(this.getAttribute('data-avaliacao'));
+            notaAtual = valor;
 
-        for (var a = 0; a < stars.length; a++) {
+            atualizarEstrelas(notaAtual);
+        });
+    });
 
-            stars[a].addEventListener('click', function (e) {
-                const starsGroup = this.parentElement.querySelectorAll('.star-icon');
-                
-                const comentario = this.parentNode.parentNode.querySelector("textarea").value
+    function atualizarEstrelas(nota) {
+        estrelas.forEach(estrela => {
+            const valorEstrela = parseInt(estrela.getAttribute('data-avaliacao'));
+            
+            if (valorEstrela <= nota) {
+                estrela.classList.add('ativo');
+            } else {
+                estrela.classList.remove('ativo');
+            }
+        });
+    }
 
-                for (var b = 0; b < starsGroup.length; b++) {
-                    starsGroup[b].classList.remove('ativo');
-                }
-                this.classList.add('ativo');
-            })
+    function avaliar() {
+        const comentario = document.getElementById('coment').value;
+        const idUsuario = sessionStorage.ID_USUARIO;
+
+        if(notaAtual === 0) {
+            alert("Selecione as estrelas!");
+            return;
         }
+
+        fetch("/avaliacao/salvar", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                nota: notaAtual,
+                descricao: comentario,
+                idUsuario: idUsuario
+            }),
+        })
+        .then(async function (resposta) {
+            if(resposta.ok) {
+                alert("Feedback enviado com sucesso!");
+                window.location.href = "centralAnaliseFraude.html";
+            } else if (resposta.status === 403) {
+                const mensagem = await resposta.text();
+                alert(mensagem);
+            } else {
+                throw "Erro ao enviar";
+            }
+        })
+        .catch(erro => {
+            console.log(erro);
+            alert("Erro ao processar avaliação");
+        });
+
+    }
+    
+    function excluirAvaliacao() {
+        const idUsuario = sessionStorage.ID_USUARIO;
+
+        if(!confirm("Tem certeza que deseja excluir sua avaliação antiga?")) return;
+
+        fetch(`/avaliacao/excluir/${idUsuario}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" }
+        })
+        .then(resposta => {
+            if (resposta.ok) {
+                alert("Avaliação excluída com sucesso!");   
+                document.getElementById('coment').value = "";
+                atualizarEstrelas(0);
+                notaAtual = 0;
+            } else {
+                alert("Erro ao excluir ou nenhuma avaliação encontrada.");
+            }
+        })
+        .catch(erro => console.log(erro));
     }
 
 </script>

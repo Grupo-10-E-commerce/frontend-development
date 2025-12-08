@@ -32,12 +32,13 @@
             <div class="card">
                 <p class="titulo">Nº de Fraudes</p>
                 <div class="valor" id="div_numeroTotalFraudes">127</div>
+                <p class="sub" id="div_prejuizoTotal" style="margin-top: 5px;">Carregando...</p>
                 <div class="icone">⚠️</div>
             </div>
             <div class="card">
                 <p class="titulo">Porcentagem de Fraudes</p>
                 <div class="valor" id="div_porcentagemFraudes">24%</div>
-                <p class="sub" id="porcentagemRelacaoVendas">Em relação a 528 Vendas</p>
+                <p class="sub" id="porcentagemRelacaoVendas" style="margin-top: 5px;">Em relação a 528 Vendas</p>
                 <div class="icone">⚠️</div>
             </div>
             <div class="grafico-card">
@@ -267,9 +268,10 @@
                     console.log(json);
                     console.log(JSON.stringify(json));
                     let numeroTotalFraudes = json[0].total_fraudes;
+                    let prejuizoTotal = json[0].prejuizo_total || 0;
                     console.log("N FRAUDES: " + numeroTotalFraudes);
 
-                    atualizarMedidas(numeroTotalFraudes);
+                    atualizarMedidas(numeroTotalFraudes, prejuizoTotal);
                 });
             } else {
                 throw "Houve um erro ao tentar buscar medidas!"
@@ -314,9 +316,20 @@
 }
 
 
-    function atualizarMedidas(numeroTotalFraudes) {
+    function atualizarMedidas(numeroTotalFraudes, prejuizoTotal) {
         console.log("Atualizando total fraudes, porcentageme total das vendas " + numeroTotalFraudes)
-        div_numeroTotalFraudes.innerHTML = numeroTotalFraudes;
+        document.getElementById("div_numeroTotalFraudes").innerHTML = numeroTotalFraudes;
+
+        const valorFormatado = Number(prejuizoTotal).toLocaleString('pt-BR', {
+            style: 'currency', 
+            currency: 'BRL',
+            maximumFractionDigits: 0 
+        });
+
+        const divPrejuizo = document.getElementById("div_prejuizoTotal");
+        if (divPrejuizo) {
+            divPrejuizo.innerHTML = `Totalizando <b>${valorFormatado}</b>`;
+        }
     }
 
     function atualizarPorcentagem(porcFraudes, totalVendas){

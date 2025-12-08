@@ -227,3 +227,19 @@ body {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(124, 122, 184, 0.4);
 }
+
+.swal2-title {
+    font-size: 30px !important; 
+    font-family: "DM Sans", sans-serif !important;
+}
+
+/* Aumentar Texto da Mensagem */
+.swal2-html-container {
+    font-size: 18px !important;
+    font-family: "DM Sans", sans-serif !important;
+}
+
+/* Aumentar Botões */
+.swal2-confirm, .swal2-cancel {
+    font-size: 16px !important;
+}

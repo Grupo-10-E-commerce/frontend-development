@@ -10,4 +10,8 @@ router.delete("/excluir/:idUsuario", function(req, res) {
     avaliacaoController.excluir(req, res);
 });
 
+router.post("/listarMelhores", function(req, res) {
+    avaliacaoController.listarMelhores(req, res);
+});
+
 module.exports = router;

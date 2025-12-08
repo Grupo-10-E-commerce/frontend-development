@@ -139,90 +139,15 @@
 
 
     <!-- RELATOS -->
-    <h1 id="h1_relatos" class="titulo-azul">Relatos</h1>
+     <h1 id="h1_relatos" class="titulo-azul">Relatos</h1>
 
-    <!-- Slider main container -->
     <div class="swiper mySwiper">
-        <!-- Additional required wrapper -->
-        <div class="swiper-wrapper">
-            <!-- Slides -->
-            <div class="swiper-slide">
-                <div class="relatos-card">
-                    <img src="./img/marianaLopes.jpg" alt="">
-                    <p>
-                        "A plataforma transformou a forma como lidamos com fraudes. Desde que começamos a usar, reduzimos significativamente nossos prejuízos e conseguimos focar em estratégias de crescimento."
-                    </p>
-                    <h4>Mariana Lopes</h4>
-                    <span>
-                        Gerente de E-commerce @Vitrine Digital
-                    </span>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="relatos-card">
-                    <img src="./img/rafaelMartins.jpg" alt="">
+        <div class="swiper-wrapper" id="swiper-wrapper-relatos"></div>
 
-                    <p>
-                        "O recurso de cadastro de perfis fraudulentos é simplesmente indispensável. 
-                        Hoje temos muito mais segurança e tranquilidade em cada transação"
-                    </p>
-                    <h4>Rafael Martins</h4>
-                    <span>
-                        Diretor de Operações @ShopMais
-                    </span>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="relatos-card">
-                    <img src="./img/claudiaFerreira.jpg" alt="">
-
-                    <p>
-                        "As dashboards são extremamente intuitivas. 
-                        Agora consigo ter uma visão clara do que realmente importa para o meu negócio, facilitando decisões rápidas."
-                    </p>
-                    <h4>Cláudia Ferreira</h4>
-                    <span>
-                        CEO @NovaTrend Store
-                    </span>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="relatos-card">
-                    <img src="./img/henriqueDuarte.jpg" alt="">
-
-                    <p>
-                        "Antes tínhamos grandes problemas com fraudes amigáveis. 
-                        Com essa solução, conseguimos identificá-las em tempo recorde e reduzir as perdas quase a zero."
-                    </p>
-                    <h4>Henrique Duarte</h4>
-                    <span>
-                        Analista de Risco @Conecta WebStores
-                    </span>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="relatos-card">
-                    <img src="./img/julianaAndrade.jpg" alt="">
-                    <p>
-                        "O sistema de alertas nos mantém sempre um passo à frente. 
-                        A equipe consegue agir rápido e evitar prejuízos que antes pareciam inevitáveis"
-                    </p>
-                    <h4>Juliana Andrade</h4>
-                    <span>
-                        Coordenadora de Segurança Digital @EasyBuy Brasil
-                    </span>
-                </div>
-            </div>
-        </div>
-        <!-- If we need pagination -->
         <div class="swiper-pagination"></div>
-
-        <!-- If we need navigation buttons -->
         <div class="swiper-button-prev"></div>
         <div class="swiper-button-next"></div>
-
     </div>
-
 
     <!-- FAQ -->
     <div class="faq">
@@ -360,19 +285,77 @@
         }
     }
 
-    // Swiper JS
-    var swiper = new Swiper(".mySwiper", {
-        slidesPerView: 1,
-        navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-        },
-        pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-        },
-        breakpoints: {
-            1000: { slidesPerView: 4 },
-        }
-    });
+    window.onload = function() {
+        ajustarTitulos(window.innerWidth);
+        listarRelatos();
+    }
+
+    function listarRelatos() {
+        fetch("/avaliacao/listarMelhores", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(function (resposta) {
+            if(resposta.ok) {
+                resposta.json().then(function (lista) {
+                    const wrapper = document.getElementById("swiper-wrapper-relatos");
+                    wrapper.innerHTML = "";
+
+                    lista.forEach(item => {
+                        const slide = document.createElement("div");
+                        slide.classList.add("swiper-slide");
+
+                        slide.innerHTML = `
+                            <div class="relatos-card">
+                                <!-- Bolinha amarela com a imagem -->
+                                <div class="bolinha-estrela">
+                                    <img src="./img/Estrela.png" alt="Estrela">
+                                </div>
+                                
+                                <p>"${item.descricao}"</p>
+                                
+                                <div>
+                                    <h4>${item.nome}</h4>
+                                    <span>${item.cargo} @${item.empresa}</span>
+                                </div>
+                            </div>
+                        `;
+                        wrapper.appendChild(slide);
+                    
+                    });
+                    iniciarSwiper();
+                });
+            } else {
+                console.log("Nenhuma avaliação encontrada.");
+                iniciarSwiper();
+            }
+        })
+        .catch(function (erro) {
+            console.log("#ERRO: " + erro);
+        });
+    }
+
+    function iniciarSwiper() {
+        var swiper = new Swiper(".mySwiper", {
+            slidesPerView: 1,
+            spaceBetween: 30,
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            breakpoints: {
+                1000: { slidesPerView: 3 },
+                700: { slidesPerView: 2 },
+                0: { slidesPerView: 1 }
+            }
+        });
+    }
+
+
 </script>

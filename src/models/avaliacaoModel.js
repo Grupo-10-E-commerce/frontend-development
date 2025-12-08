@@ -31,9 +31,19 @@ function excluir(idUsuario) {
     return database.executar(instrucao);
 }
 
+function listarMelhores() {
+    var instrucao = `select a.descricao, u.nome, c.nome as cargo, e.razao_social as empresa
+    from avaliacao a join usuario u on a.id_usuario = u.id_usuario join cargo c on u.id_cargo = c.id_cargo
+    join empresa e on u.id_empresa = e.id_empresa where a.nota = 5 order by a.data_avaliacao desc limit 10;`;
+
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
+
 module.exports = {
     verificarAvaliacao,
     cadastrar,
     editar,
-    excluir
+    excluir,
+    listarMelhores
 };

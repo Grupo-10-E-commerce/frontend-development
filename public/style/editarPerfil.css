@@ -38,38 +38,46 @@ html {
     position: fixed;
     display: flex;
     justify-content: flex-end;
-    padding: 10px 20px;
-    width: 100vw;
-    height: 40px;
+    padding: 6px 12px;
+    width: 94%;
+    align-items: center;
+}
+
+.header span {
+  color: #333;
 }
 
 .btn {
     display: flex;
-    padding-right: 350px;
     align-items: center;
     gap: 15px;
 }
 
-.btn_emitir_relatorio {
-    margin: 0;
-    width: 200px;
+.btn_sino {
     color: #333;
     padding: 8px 16px;
-    border: 1px solid #333;
-    border-radius: 6px;
+    border: 1px solid #919191;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 20px;
     transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    font-weight: 800;
+    background-image: none;
+    width: 60px;
+    display: flex;
 }
 
-.btn_emitir_relatorio:hover {
-    background-color: #9194de91;
-    border-color: #333;
-    color: #333;
+.btn_sino:hover {
+    background-color: #9193DE;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(124, 122, 184, 0.4);
+    font-weight: 800;
 }
 
-.btn_sino {
-    margin-top: 0;
+.btn_sino.ativo {
+    background-color: #9193DE;
+    transform: scale(0.95);
 }
 
 .btn_sino img,
@@ -77,11 +85,11 @@ html {
     width: 24px;
     height: 24px;
     display: block;
-    background-color: #f4f3ff;
+    background-image: none;
 }
 
 .btn span {
-    font-size: 20px;
+    font-size: 25px;
 }
 
 /* CONTEUDO PRINCIPAL */

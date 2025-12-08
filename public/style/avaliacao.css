@@ -14,6 +14,11 @@ body {
   align-items: center;
   padding: 10px 20px;
   justify-content: flex-end;
+  width: 101vw;
+}
+
+.header span {
+  color: #333;
 }
 
 .btn {

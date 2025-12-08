@@ -64,16 +64,21 @@ body {
     font-weight: 800;
 }
 
+.btn_sino.ativo {
+    background-color: #9193DE;
+    transform: scale(0.95);
+}
+
 .btn_sino img,
 .btn_user img {
     width: 24px;
     height: 24px;
     display: block;
-    background-color: none;
+    background-image: none;
 }
 
 .btn span {
-    font-size: 20px;
+    font-size: 25px;
 }
 
 .metricas {

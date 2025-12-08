@@ -86,17 +86,55 @@
         });
     }
 
+    function swalSucesso(titulo, mensagem) {
+        return Swal.fire({
+            icon: 'success',
+            title: titulo || 'Sucesso',
+            text: mensagem || '',
+            confirmButtonColor: '#3085d6'
+        });
+    }
+
+    function swalErro(titulo, mensagem) {
+        return Swal.fire({
+            icon: 'error',
+            title: titulo || 'Erro',
+            text: mensagem || '',
+            confirmButtonColor: '#d33'
+        });
+    }
+
+    function swalInfo(titulo, mensagem) {
+        return Swal.fire({
+            icon: 'info',
+            title: titulo || 'Informação',
+            text: mensagem || '',
+            confirmButtonColor: '#3085d6',
+            iconColor: '#3085d6' 
+        });
+    }
+
+    async function swalConfirmar(titulo, mensagem) {
+        const resultado = await Swal.fire({
+            title: titulo || 'Tem certeza?',
+            text: mensagem || '',
+            icon: 'warning',
+            iconColor: '#3085d6',
+            showCancelButton: true,
+            confirmButtonText: 'Sim',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#d33',  
+            cancelButtonColor: '#3085d6' 
+        });
+        return resultado.isConfirmed;
+    }
+
     function avaliar() {
         const comentario = document.getElementById('coment').value;
         const idUsuario = sessionStorage.ID_USUARIO;
 
         if(notaAtual === 0) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Atenção',
-                text: 'Por favor, selecione as estrelas!',
-                confirmButtonColor: '#3085d6'
-            });
+            swalInfo("Por favor, selecione as estrelas!");
             return;
         }
 
@@ -111,76 +149,45 @@
         })
         .then(async function (resposta) {
             if(resposta.ok) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Obrigado!',
-                    text: 'Feedback enviado com sucesso!',
-                    showConfirmButton: false,
-                    timer: 2000,
-                    background: '#fff'
-                }).then(() => {
-                    window.location.href = "centralAnaliseFraude.html";
-                });
+                await swalSucesso("FRAUX agradece!", "Avaliação enviada com sucesso, você pode editá-la pelas próximas 24 horas.");
+                window.location.href = "centralAnaliseFraude.html";
             } else if (resposta.status === 403) {
                 const mensagem = await resposta.text();
-                Swal.fire({
-                    icon: 'info',
-                    title: 'Aguarde',
-                    text: mensagem,
-                    confirmButtonColor: '#7C7AB8'
-                });
+                swalInfo("Aguarde", mensagem);
             } else {
                 throw "Erro ao enviar";
             }
         })
         .catch(erro => {
             console.log(erro);
-             Swal.fire({
-                icon: 'error',
-                title: 'Erro',
-                text: 'Erro ao processar avaliação.',
-                confirmButtonColor: '#d33'
-            });
+            swalErro("Erro", "Erro ao processar avaliação.");
         });
-
     }
     
-    function excluirAvaliacao() {
+    async function excluirAvaliacao() {
         const idUsuario = sessionStorage.ID_USUARIO;
+        const confirmou = await swalConfirmar("Tem certeza?", "Deseja excluir sua avaliação antiga permanentemente?");
 
-            Swal.fire({
-            title: 'Tem certeza?',
-            text: "Deseja excluir sua avaliação antiga permanentemente?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d9534f',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Sim, excluir!',
-            cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                fetch(`/avaliacao/excluir/${idUsuario}`, {
-                    method: "DELETE",
-                    headers: { "Content-Type": "application/json" }
-                })
-                .then(resposta => {
-                    if (resposta.ok) {
-                        Swal.fire({
-                            title: 'Excluído!',
-                            text: 'Sua avaliação foi removida.',
-                            icon: 'success',
-                            confirmButtonColor: '#7C7AB8'
-                        });
-                        document.getElementById('coment').value = "";
-                        atualizarEstrelas(0);
-                        notaAtual = 0;
-                    } else {
-                        Swal.fire('Erro!', 'Nenhuma avaliação encontrada para excluir.', 'error');
-                    }
-                })
-                .catch(erro => console.log(erro));
-            }
-        });
+        if (confirmou) {
+            fetch(`/avaliacao/excluir/${idUsuario}`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" }
+            })
+            .then(resposta => {
+                if (resposta.ok) {
+                    swalSucesso("Excluído!", "Sua avaliação foi excluída.");
+                    document.getElementById('coment').value = "";
+                    atualizarEstrelas(0);
+                    notaAtual = 0;
+                } else {
+                    swalErro("Erro!", "Nenhuma avaliação encontrada para excluir.");
+                }
+            })
+            .catch(erro => {
+                console.log(erro);
+                swalErro("Erro!", "Erro ao tentar excluir.");
+            });
+        }
     }
 
     function atualizarIconeSlack() {

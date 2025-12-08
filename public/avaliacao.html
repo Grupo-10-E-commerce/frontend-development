@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="./script/sideBar.js"></script>
     <link rel="stylesheet" href="style/avaliacao.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Konkhmer+Sleokchher&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap ">
     <title>Avaliar Plataforma Fraux</title>
@@ -85,12 +86,55 @@
         });
     }
 
+    function swalSucesso(titulo, mensagem) {
+        return Swal.fire({
+            icon: 'success',
+            title: titulo || 'Sucesso',
+            text: mensagem || '',
+            confirmButtonColor: '#3085d6'
+        });
+    }
+
+    function swalErro(titulo, mensagem) {
+        return Swal.fire({
+            icon: 'error',
+            title: titulo || 'Erro',
+            text: mensagem || '',
+            confirmButtonColor: '#d33'
+        });
+    }
+
+    function swalInfo(titulo, mensagem) {
+        return Swal.fire({
+            icon: 'info',
+            title: titulo || 'Informação',
+            text: mensagem || '',
+            confirmButtonColor: '#3085d6',
+            iconColor: '#3085d6' 
+        });
+    }
+
+    async function swalConfirmar(titulo, mensagem) {
+        const resultado = await Swal.fire({
+            title: titulo || 'Tem certeza?',
+            text: mensagem || '',
+            icon: 'warning',
+            iconColor: '#3085d6',
+            showCancelButton: true,
+            confirmButtonText: 'Sim',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#d33',  
+            cancelButtonColor: '#3085d6' 
+        });
+        return resultado.isConfirmed;
+    }
+
     function avaliar() {
         const comentario = document.getElementById('coment').value;
         const idUsuario = sessionStorage.ID_USUARIO;
 
         if(notaAtual === 0) {
-            alert("Selecione as estrelas!");
+            swalInfo("Por favor, selecione as estrelas!");
             return;
         }
 
@@ -105,42 +149,130 @@
         })
         .then(async function (resposta) {
             if(resposta.ok) {
-                alert("Feedback enviado com sucesso!");
+                await swalSucesso("FRAUX agradece!", "Avaliação enviada com sucesso, você pode editá-la pelas próximas 24 horas.");
                 window.location.href = "centralAnaliseFraude.html";
             } else if (resposta.status === 403) {
                 const mensagem = await resposta.text();
-                alert(mensagem);
+                swalInfo("Aguarde", mensagem);
             } else {
                 throw "Erro ao enviar";
             }
         })
         .catch(erro => {
             console.log(erro);
-            alert("Erro ao processar avaliação");
+            swalErro("Erro", "Erro ao processar avaliação.");
         });
-
     }
     
-    function excluirAvaliacao() {
+    async function excluirAvaliacao() {
         const idUsuario = sessionStorage.ID_USUARIO;
+        const confirmou = await swalConfirmar("Tem certeza?", "Deseja excluir sua avaliação antiga permanentemente?");
 
-        if(!confirm("Tem certeza que deseja excluir sua avaliação antiga?")) return;
+        if (confirmou) {
+            fetch(`/avaliacao/excluir/${idUsuario}`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" }
+            })
+            .then(resposta => {
+                if (resposta.ok) {
+                    swalSucesso("Excluído!", "Sua avaliação foi excluída.");
+                    document.getElementById('coment').value = "";
+                    atualizarEstrelas(0);
+                    notaAtual = 0;
+                } else {
+                    swalErro("Erro!", "Nenhuma avaliação encontrada para excluir.");
+                }
+            })
+            .catch(erro => {
+                console.log(erro);
+                swalErro("Erro!", "Erro ao tentar excluir.");
+            });
+        }
+    }
 
-        fetch(`/avaliacao/excluir/${idUsuario}`, {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" }
-        })
-        .then(resposta => {
+    function atualizarIconeSlack() {
+        const botao = document.getElementById("btn_notificacao");
+
+        if (slackNotificationsEnabled) {
+            botao.style.opacity = "1";
+            botao.title = "Notificações do Slack: Ligadas";
+        } else {
+            botao.style.opacity = "0.3";
+            botao.title = "Notificações do Slack: Desligadas";
+        }
+    }
+
+    function notificacao() {
+        slackNotificationsEnabled = !slackNotificationsEnabled;
+
+        localStorage.setItem("slackNotificationsEnabled", JSON.stringify(slackNotificationsEnabled));
+
+        atualizarIconeSlack();
+
+        const usuario = sessionStorage.NOME_USUARIO;
+        let mensagem = "";
+
+        if (slackNotificationsEnabled) {
+            mensagem = "Notificações do Slack ATIVADAS pelo usuário " + usuario + ".";
+        } else {
+            mensagem = "Notificações do Slack DESATIVADAS pelo usuário " + usuario + ".";
+        }
+
+        const idEmpresa = sessionStorage.ID_EMPRESA;
+
+        fetch("/slack/status/" + idEmpresa, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ativo: slackNotificationsEnabled })
+        }).catch(erro => {
+            console.error("Erro ao atualizar status do Slack no backend:", erro);
+        });
+
+        enviarNotificacaoSlack(mensagem, true);
+
+    }
+
+    window.addEventListener("load", async () => {
+        const idEmpresa = sessionStorage.ID_EMPRESA;
+
+        try {
+            const resposta = await fetch("/slack/status/" + idEmpresa);
             if (resposta.ok) {
-                alert("Avaliação excluída com sucesso!");   
-                document.getElementById('coment').value = "";
-                atualizarEstrelas(0);
-                notaAtual = 0;
+                const dados = await resposta.json();
+                slackNotificationsEnabled = dados.ativo;
+                localStorage.setItem("slackNotificationsEnabled", JSON.stringify(slackNotificationsEnabled));
             } else {
-                alert("Erro ao excluir ou nenhuma avaliação encontrada.");
+                console.error("erro ao buscar status do slack no backend.");
+                slackNotificationsEnabled = JSON.parse(localStorage.getItem("slackNotificationsEnabled") || "true");
             }
-        })
-        .catch(erro => console.log(erro));
+        } catch (erro) {
+            console.error("Erro ao buscar status do slack no backend", erro);
+            slackNotificationsEnabled = JSON.parse(localStorage.getItem("slackNotificationsEnabled") || "true");
+        }
+
+        atualizarIconeSlack();
+    });
+
+    async function enviarNotificacaoSlack(texto, ignorarEstado = false) {
+
+        if (!ignorarEstado && !slackNotificationsEnabled) {
+            console.log("Slack desligado. Notificação não será enviada.");
+            return;
+        }
+
+        try {
+            const resposta = await fetch("/slack/notificar", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text: texto })
+            });
+
+            if (!resposta.ok) {
+                console.error("Erro ao enviar notificações para o Slack:", resposta.status);
+            }
+        } catch (erro) {
+            console.error("Erro ao enviar notificação:", erro);
+        }
     }
 
 </script>

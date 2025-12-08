@@ -14,6 +14,11 @@ body {
   align-items: center;
   padding: 10px 20px;
   justify-content: flex-end;
+  width: 101vw;
+}
+
+.header span {
+  color: #333;
 }
 
 .btn {
@@ -221,4 +226,18 @@ body {
     background-color: #5D5A9B;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(124, 122, 184, 0.4);
+}
+
+.swal2-title {
+    font-size: 30px !important; 
+    font-family: "DM Sans", sans-serif !important;
+}
+
+.swal2-html-container {
+    font-size: 25px !important;
+    font-family: "DM Sans", sans-serif !important;
+}
+
+.swal2-confirm, .swal2-cancel {
+    font-size: 20px !important;
 }

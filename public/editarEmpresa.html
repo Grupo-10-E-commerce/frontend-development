@@ -46,7 +46,7 @@
                         <button class="btn-salvar" id="btn_salvar" onclick="verificarDados()">Salvar</button>
                         <button class="btn-cancelar" id="btn_cancelar"
                             onclick="carregarDadosEmpresa()">Cancelar</button>
-                        <button class="btn-deletar" id="btn_deletar" onclick="deletarEmpresa()">Desabilitar Empresa</button>
+                        <button class="btn-deletar" id="btn_deletar" onclick="deletarEmpresa()">Deletar Empresa</button>
                     </div>
                 </div>
             </div>
@@ -209,7 +209,7 @@
     }
 
     function deletarEmpresa() {
-        swalConfirmar("Desabilitar Empresa?", `Ao confirmar, a sua empresa será desabilitada do sistema. Isso impedirá que qualque usuário acesse o sistema e essa ação não poderá ser desfeita.`).then(function (resposta) {
+        swalConfirmar("Deletar Empresa?", `Ao confirmar, a sua empresa será excluida do sistema. Isso também excluirá todos os usuários do sistema e essa ação não poderá ser desfeita.`).then(function (resposta) {
             if (resposta) {
                 console.log("Fetch deletar empresa");
                 fetch("/empresas/deletar", {

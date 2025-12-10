@@ -50,6 +50,7 @@ html {
     display: flex;
     align-items: center;
     gap: 15px;
+    width: auto;
 }
 
 .btn_sino {
@@ -87,6 +88,11 @@ html {
 
 .btn span {
     font-size: 25px;
+}
+
+#span_bem_vindo {
+    white-space: nowrap;
+    width: auto;
 }
 
 /* alertas personalizados */

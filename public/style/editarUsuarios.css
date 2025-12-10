@@ -29,6 +29,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     /* border: 5px solid red; */
 }
 
@@ -140,6 +141,7 @@ main {
     width: 10%;
     border-radius: 10px;
     transition: 0.3s;
+    cursor: pointer;
 }
 
 .div-pesquisar button:hover {
@@ -154,6 +156,7 @@ main {
     padding: 30px;
     width: 75vw;
     align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .div-usuario {

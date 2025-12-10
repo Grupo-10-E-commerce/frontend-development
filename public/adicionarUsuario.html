@@ -12,51 +12,57 @@
     <!-- icone da página -->
     <link rel="icon" href="img/fraux-logo.png" type="image/png">
 
-    <title>Editar Empresa</title>
+    <title>Adicionar Usuário</title>
 </head>
 
-<body onload="carregarDadosEmpresa()">
+<body>
+    <side-Bar></side-Bar>
+    <main>
+        <header class="header">
+            <div class="btn">
+                <button id="btn_notificacao" class="btn_sino" onclick="notificacao()">
+                    <img src="img/notification-bell.png" alt="Notificacoes">
+                </button>
+                <span id="span_bem_vindo"></span>
+            </div>
+        </header>
 
-    <body>
-        <side-Bar></side-Bar>
-        <main>
-            <header class="header">
-                <div class="btn">
-                    <button id="btn_notificacao" class="btn_sino" onclick="notificacao()">
-                        <img src="img/notification-bell.png" alt="Notificacoes">
-                    </button>
-                    <span id="span_bem_vindo"></span>
+        <div class="div-content">
+
+            <h1>Adicionar Usuário</h1>
+            <div class="div-editar-informacoes">
+                <h2>Informações</h2>
+                <p>Preencha os dados para adicionar um novo usuário à empresa.</p>
+
+                <div class="div-formulario">
+                    <span id="span_nome">Nome</span>
+                    <input type="text" name="" id="input_nome" placeholder="Insira o nome do usuário">
+
+                    <span id="span_email">E-mail</span>
+                    <input type="text" name="" id="input_email" placeholder="Insira o E-mail do usuário">
+
+                    <span id="span_nova_senha">Senha</span>
+                    <input type="password" name="" id="input_senha" placeholder="Insira uma senha para o usuário">
+
+                    <span>Escolha um cargo:</span>
+                    <select id="select_cargo">
+                        <option selected disabled>Selecione um cargo</option>
+                        <option value="1">Admnistrador</option>
+                        <option value="2">Analista</option>
+                        <option value="3">Gerente</option>
+                    </select>
                 </div>
-            </header>
-
-
-            <div class="div-content">
-
-                <h1>Editar Empresa</h1>
-                <div class="div-editar-informacoes">
-                    <h2>Informações</h2>
-                    <p>Preencha os dados que deseja alterar.</p>
-
-                    <div class="div-formulario">
-                        <span>Razão Social</span>
-                        <input type="text" name="" id="input_razao_social" oninput="habilitarDesabilitarBtn()">
-
-                        <span>CNPJ</span>
-                        <input type="text" name="" id="input_cnpj" oninput="habilitarDesabilitarBtn()">
-                    </div>
-
-                    <div class="div-btn">
-                        <button class="btn-salvar" id="btn_salvar" onclick="verificarDados()">Salvar</button>
-                        <button class="btn-cancelar" id="btn_cancelar"
-                            onclick="carregarDadosEmpresa()">Cancelar</button>
-                        <button class="btn-deletar" id="btn_deletar" onclick="deletarEmpresa()">Desabilitar Empresa</button>
-                    </div>
+                <div class="div-btn">
+                    <button class="btn-salvar" id="btn_salvar" onclick="adicionarUsuario()">Adicionar</button>
+                    <button class="btn-cancelar" id="btn_cancelar"
+                        onclick='window.location = "editarUsuarios.html"'>Cancelar</button>
                 </div>
             </div>
+        </div>
 
-        </main>
+    </main>
 
-    </body>
+</body>
 
 </html>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -110,97 +116,58 @@
         return confirmar.isConfirmed;
     }
 
-    function carregarDadosEmpresa() {
-        console.log("Buscando empresa")
-        fetch("/empresas/buscarId", {
+
+    function adicionarUsuario() {
+        let nome = input_nome.value;
+        let email = input_email.value;
+        let senha = input_senha.value;
+        let cargo = select_cargo.value;
+
+        if (nome == "" || email == "" || senha == "") {
+            swalInfo("Preencha todos os campos necessários para adicionar usuário.")
+            return;
+        }
+
+        if (senha.length < 8) {
+            swalInfo("A senha deve conter no mínimo 8 caracteres.");
+            return;
+        }
+
+        if (cargo == "Selecione um cargo") {
+            swalInfo("Selecione um cargo para adicionar um usuário.")
+            return;
+        }
+
+        if (!email.includes("@") || !email.includes(".")) {
+            swalInfo("Por favor, insira um email válido.");
+            return;
+        }
+
+        fetch("/usuarios/cadastrar", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                id_empresa: sessionStorage.ID_EMPRESA
-            }),
-        })
-            .then(function (resposta) {
-                console.log("resposta: ", resposta);
-
-                if (resposta.ok) {
-                    resposta.json().then(json => {
-                        sessionStorage.RAZAO_SOCIAL = json[0].razao_social
-                        sessionStorage.CNPJ = json[0].cnpj
-                        input_razao_social.value = json[0].razao_social
-                        input_cnpj.value = json[0].cnpj
-                    });
-
-                } else {
-                    throw "Houve um erro ao tentar Buscar dados empresa!"
-                }
-            })
-            .catch(function (resposta) {
-                console.log(`#ERRO: ${resposta}`);
-            });
-
-        btn_cancelar.style.display = "none";
-        btn_salvar.style.display = "none";
-    }
-
-    function habilitarDesabilitarBtn() {
-        let razao_social = input_razao_social.value;
-        let cnpj = input_cnpj.value;
-
-        if (razao_social == sessionStorage.RAZAO_SOCIAL && cnpj == sessionStorage.CNPJ) {
-            btn_salvar.style.display = "none";
-            btn_cancelar.style.display = "none";
-            return;
-        }
-        btn_salvar.style.display = "block";
-        btn_cancelar.style.display = "block";
-    }
-
-    function verificarDados() {
-        let razao_social = input_razao_social.value;
-        let cnpj = input_cnpj.value;
-
-        if (cnpj == sessionStorage.CNPJ && razao_social == sessionStorage.RAZAO_SOCIAL) {
-            swalErro("", "Altere algum valor para continuar.");
-            return;
-        } else {
-            if (razao_social == "") {
-                swalInfo("Razão Social não pode estar em branco.")
-                return;
-            }
-            if (cnpj.length != 14) {
-                swalInfo("Por favor, insira um CNPJ válido.");
-                return;
-            }
-            swalConfirmar("Deseja salvar suas alterações?").then(function (resposta) {
-                if (resposta) { alterarEmpresa(razao_social, cnpj) };
-            });
-        }
-
-    }
-
-    function alterarEmpresa(razao_social, cnpj) {
-        console.log("Acessando function alterarEmpresa()");
-        fetch("/empresas/atualizar", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
+                nome: nome,
+                email: email,
+                senha: senha,
                 id_empresa: sessionStorage.ID_EMPRESA,
-                razao_social: razao_social,
-                cnpj: cnpj
+                id_cargo: cargo,
             }),
         })
             .then(function (resposta) {
                 console.log("resposta: ", resposta);
 
                 if (resposta.ok) {
-                    swalSucesso("Sucesso", "Dados atualizadas com sucesso!");
-                    carregarDadosEmpresa();
+                    setTimeout(async () => {
+                        await swalSucesso("Usuário cadastrado!");
+
+                    window.location = "editarUsuarios.html";
+                    }, "1000");
 
                 } else {
+                    swalErro("Algo deu errado.");
                     throw "Houve um erro ao tentar Atualizar!"
                 }
             })
@@ -209,39 +176,10 @@
             });
 
         return false;
+
     }
 
-    function deletarEmpresa() {
-        swalConfirmar("Desabilitar Empresa?", `Ao confirmar, a sua empresa será desabilitada do sistema. Isso impedirá que qualque usuário acesse o sistema e essa ação não poderá ser desfeita.`).then(function (resposta) {
-            if (resposta) {
-                console.log("Fetch deletar empresa");
-                fetch("/empresas/deletar", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        id_empresa: sessionStorage.ID_EMPRESA
-                    }),
-                })
-                    .then(function (resposta) {
-                        console.log("resposta: ", resposta);
 
-                        if (resposta.ok) {
-                            swalSucesso("Empresa desabilitada do sistema");
-                            buscarUsuarios();
-
-                        } else {
-                            swalErro("Não foi possível excluir a empresa");
-                            throw "Houve um erro ao tentar Excluir!"
-                        }
-                    })
-                    .catch(function (resposta) {
-                        console.log(`#ERRO: ${resposta}`);
-                    });
-            };
-        });
-    }
     function atualizarIconeSlack() {
         const botao = document.getElementById("btn_notificacao");
 
@@ -281,6 +219,7 @@
         });
 
         enviarNotificacaoSlack(mensagem, true);
+
     }
 
     window.addEventListener("load", async () => {

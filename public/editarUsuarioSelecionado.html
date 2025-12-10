@@ -8,9 +8,9 @@
     <link rel="stylesheet" href="./style/editarPerfil.css">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Konkhmer+Sleokchher&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap ">
-        
+
     <!-- icone da página -->
-    <link rel="icon" href="img/fraux-logo.png" type="image/png"> 
+    <link rel="icon" href="img/fraux-logo.png" type="image/png">
 
     <title>Editar Usuário</title>
 </head>
@@ -46,11 +46,19 @@
                         <span id="span_nova_senha">Nova senha</span>
                         <input type="text" name="" id="input_nova_senha" placeholder="Insira sua nova senha"
                             oninput="habilitarDesabilitarBtn()">
+
+                        <span>Escolha um cargo:</span>
+                        <select id="select_cargo" onchange="habilitarDesabilitarBtn()">
+                            <option selected disabled>Selecione um cargo</option>
+                            <option value="1">Admnistrador</option>
+                            <option value="2">Analista</option>
+                            <option value="3">Gerente</option>
+                        </select>
                     </div>
                     <div class="div-btn">
                         <button class="btn-salvar" id="btn_salvar" onclick="verificarDados()">Salvar</button>
                         <button class="btn-cancelar" id="btn_cancelar"
-                            onclick="carregarDadosUsuario()">Cancelar</button>
+                            onclick='window.location = "editarUsuarios.html"'>Cancelar</button>
                     </div>
                 </div>
             </div>
@@ -117,27 +125,35 @@
         input_nova_senha.value = sessionStorage.SENHA_USUARIO_EDITAR;
 
         btn_salvar.style.display = "none";
-        btn_cancelar.style.display = "none";
     }
 
     function habilitarDesabilitarBtn() {
         let nome = input_nome.value;
         let email = input_email.value;
         let novaSenha = input_nova_senha.value;
+        let cargo = select_cargo.value;
 
-        if (nome == sessionStorage.NOME_USUARIO_EDITAR && email == sessionStorage.EMAIL_USUARIO_EDITAR && novaSenha == "") {
+        if (nome == sessionStorage.NOME_USUARIO_EDITAR && email == sessionStorage.EMAIL_USUARIO_EDITAR && novaSenha == sessionStorage.SENHA_USUARIO_EDITAR && cargo == "Selecione um cargo") {
             btn_salvar.style.display = "none";
-            btn_cancelar.style.display = "none";
             return;
         }
         btn_salvar.style.display = "block";
-        btn_cancelar.style.display = "block";
     }
 
     function verificarDados() {
         let nome = input_nome.value;
         let email = input_email.value;
         let novaSenha = input_nova_senha.value;
+        let cargo = select_cargo.value;
+
+                console.log(cargo)
+
+
+
+        if (cargo == "Selecione um cargo") {
+            swalInfo("Selecione um cargo para o usuário.")
+            return;
+        }
 
         if (novaSenha != "") {
 
@@ -150,7 +166,7 @@
             }
             else {
                 swalConfirmar("Deseja salvar suas alterações?").then(function (resposta) {
-                    if (resposta) { alterarNomeEmail(nome, sessionStorage.EMAIL_USUARIO_EDITAR, email, novaSenha) };
+                    if (resposta) { alterarNomeEmail(nome, sessionStorage.EMAIL_USUARIO_EDITAR, email, novaSenha, cargo) };
                 });
             }
         }
@@ -167,13 +183,13 @@
                 return;
             }
             swalConfirmar("Deseja salvar suas alterações?").then(function (resposta) {
-                if (resposta) { alterarNomeEmail(nome, sessionStorage.EMAIL_USUARIO_EDITAR, email, novaSenha) };
+                if (resposta) { alterarNomeEmail(nome, sessionStorage.EMAIL_USUARIO_EDITAR, email, novaSenha, cargo) };
             });
         }
 
     }
 
-    function alterarNomeEmail(nome, emailAtual, email, novaSenha) {
+    function alterarNomeEmail(nome, emailAtual, email, novaSenha, cargo) {
         console.log("Acessando function alterarNomeEmail()");
         fetch("/usuarios/atualizar", {
             method: "POST",
@@ -187,6 +203,7 @@
                 email: email,
                 senhaAtual: sessionStorage.SENHA_USUARIO_EDITAR,
                 novaSenha: novaSenha,
+                cargo: cargo
             }),
         })
             .then(function (resposta) {

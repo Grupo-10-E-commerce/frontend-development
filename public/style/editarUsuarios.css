@@ -94,9 +94,17 @@ main {
 }
 
 .p_descricao {
-    margin-left: -50%;
     margin-bottom: 30px;
     font-size: 20px;
+}
+.span_descricao{
+    color: var(--azul-claro);
+    font-style: italic;
+    transition: 0.2s;
+}
+.span_descricao:hover{
+    font-weight: 600;
+    cursor: pointer;
 }
 
 .div-pesquisar {

@@ -9,28 +9,28 @@ function efetuarLogin(email, senha) {
 
 }
 
-function cadastrar(nome, email, senha, id_empresa) {
+function cadastrar(nome, email, senha, id_empresa, id_cargo) {
     var instrucao = `
-    INSERT INTO usuario (nome, email, senha, id_empresa, id_cargo) VALUES ('${nome}', '${email}', '${senha}', ${id_empresa}, 1);
+    INSERT INTO usuario (nome, email, senha, id_empresa, id_cargo) VALUES ('${nome}', '${email}', '${senha}', ${id_empresa}, ${id_cargo});
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
 }
 
-function atualizar(nome, email, id_usuario) {
+function atualizar(nome, email, id_usuario, cargo) {
     var instrucao = `
     UPDATE usuario 
-    SET nome = '${nome}', email = '${email}'
+    SET nome = '${nome}', email = '${email}, id_cargo = ${cargo}
     WHERE id_usuario = ${id_usuario};
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
 }
 
-function atualizarSenha(nome, email, id_usuario, senha) {
+function atualizarSenha(nome, email, id_usuario, senha, cargo) {
     var instrucao = `
     UPDATE usuario 
-    SET nome = '${nome}', email = '${email}', senha = '${senha}'
+    SET nome = '${nome}', email = '${email}', senha = '${senha}', id_cargo = ${cargo}
     WHERE id_usuario = ${id_usuario};
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);

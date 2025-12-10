@@ -44,7 +44,7 @@ html {
 }
 
 .header span {
-  color: #333;
+    color: #333;
 }
 
 .btn {
@@ -133,7 +133,8 @@ main {
     right: 30%;
     padding: 20px;
 }
-.div-content h1{
+
+.div-content h1 {
     margin-left: 50px;
 }
 
@@ -176,9 +177,11 @@ main {
     border-radius: 10px;
     padding-left: 20px;
 }
-.div-btn{
+
+.div-btn {
     display: flex;
 }
+
 button {
     width: 120px;
     height: 40px;
@@ -208,11 +211,20 @@ button {
     background-color: rgb(229, 228, 228);
 }
 
-.btn-deletar{
+.btn-deletar {
     width: 190px;
     color: white;
     background-color: rgb(209, 60, 60);
 }
-.btn-deletar:hover{
+
+.btn-deletar:hover {
     background-color: var(--vermelho);
+}
+
+select {
+    margin-top: 7px;
+    border-radius: 8px;
+    width: 20vw;
+    height: 40px;
+    font-size: 15px;
 }

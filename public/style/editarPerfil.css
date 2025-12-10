@@ -186,5 +186,14 @@ button {
 }
 
 .btn-cancelar:hover {
-    background-color: #d6d6d6;
+    background-color: #c2c2c2;
 }   
+
+.btn-deletar {
+    width: 10vw;
+    background-color: #e0e0e0;
+}
+
+.btn-deletar:hover {
+    background-color: #c2c2c2;
+}

@@ -105,10 +105,21 @@ function buscarTodosUsuarios(req, res) {
     })
 }
 
+function deletar(req, res) {
+    let id_usuario = req.body.id_usuario;
+
+    usuariosModel.deletar(id_usuario).then(function (resposta) {
+        res.status(200).send(resposta);
+    }).catch(function (erro) {
+        console.log("ERRO NO DELETAR:", erro);
+        res.status(500).json(erro.sqlMessage || erro.message || erro);
+    })
+}
 module.exports = {
     login,
     cadastrar,
     atualizar,
     buscarDados,
-    buscarTodosUsuarios
+    buscarTodosUsuarios,
+    deletar
 }

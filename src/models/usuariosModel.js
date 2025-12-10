@@ -39,7 +39,7 @@ function atualizarSenha(nome, email, id_usuario, senha) {
 
 function buscarDados(id_usuario) {
     var instrucao = `
-    SELECT nome, email FROM usuario 
+    SELECT nome, email, senha FROM usuario 
     WHERE id_usuario = '${id_usuario};'
     `;
     console.log("Executando a instrução SQL: \n" + instrucao);
@@ -49,6 +49,7 @@ function buscarDados(id_usuario) {
 function buscarTodosUsuarios(id_empresa) {
     var instrucao = `
     SELECT 
+    U.id_usuario,
 	u.nome AS usuario,
     u.email,
     u.senha,
@@ -62,11 +63,20 @@ function buscarTodosUsuarios(id_empresa) {
     console.log("Executando a instrução SQL: \n" + instrucao);
     return database.executar(instrucao);
 }
+
+function deletar(id_usuario) {
+    var instrucao = `
+    DELETE FROM usuario WHERE id_usuario = ${id_usuario};
+    `;
+    console.log("Executando a instrução SQL: \n" + instrucao);
+    return database.executar(instrucao);
+}
 module.exports = {
     efetuarLogin,
     cadastrar,
     atualizar,
     buscarDados,
     atualizarSenha,
-    buscarTodosUsuarios
+    buscarTodosUsuarios,
+    deletar
 }

@@ -12,7 +12,7 @@
     <!-- icone da página -->
     <link rel="icon" href="img/fraux-logo.png" type="image/png"> 
 
-    <title>Editar Perfil</title>
+    <title>Editar Usuário</title>
 </head>
 
 <body onload="carregarDadosUsuario()">
@@ -29,10 +29,9 @@
                 </div>
             </header>
 
-
             <div class="div-content">
 
-                <h1>Editar Perfil</h1>
+                <h1>Editar Usuário</h1>
                 <div class="div-editar-informacoes">
                     <h2>Informações</h2>
                     <p>Preencha os dados que deseja alterar.</p>
@@ -43,10 +42,6 @@
 
                         <span id="span_email">E-mail</span>
                         <input type="text" name="" id="input_email" oninput="habilitarDesabilitarBtn()">
-
-                        <span id="span_senha_atual">Senha atual</span>
-                        <input type="text" name="" id="input_senha_atual"
-                            placeholder="Insira sua senha altual para alterá-la" oninput="habilitarDesabilitarBtn()">
 
                         <span id="span_nova_senha">Nova senha</span>
                         <input type="text" name="" id="input_nova_senha" placeholder="Insira sua nova senha"
@@ -65,6 +60,7 @@
     </body>
 
 </html>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     span_bem_vindo.innerHTML = `Bem-vindo(a), ${sessionStorage.NOME_USUARIO}!`;
 
@@ -116,10 +112,9 @@
     }
 
     function carregarDadosUsuario() {
-        input_nome.value = sessionStorage.NOME_USUARIO;
-        input_email.value = sessionStorage.EMAIL_USUARIO;
-        input_senha_atual.value = "";
-        input_nova_senha.value = "";
+        input_nome.value = sessionStorage.NOME_USUARIO_EDITAR;
+        input_email.value = sessionStorage.EMAIL_USUARIO_EDITAR;
+        input_nova_senha.value = sessionStorage.SENHA_USUARIO_EDITAR;
 
         btn_salvar.style.display = "none";
         btn_cancelar.style.display = "none";
@@ -128,10 +123,9 @@
     function habilitarDesabilitarBtn() {
         let nome = input_nome.value;
         let email = input_email.value;
-        let senhaAtual = input_senha_atual.value;
         let novaSenha = input_nova_senha.value;
 
-        if (nome == sessionStorage.NOME_USUARIO && email == sessionStorage.EMAIL_USUARIO && senhaAtual == "" && novaSenha == "") {
+        if (nome == sessionStorage.NOME_USUARIO_EDITAR && email == sessionStorage.EMAIL_USUARIO_EDITAR && novaSenha == "") {
             btn_salvar.style.display = "none";
             btn_cancelar.style.display = "none";
             return;
@@ -143,10 +137,9 @@
     function verificarDados() {
         let nome = input_nome.value;
         let email = input_email.value;
-        let senhaAtual = input_senha_atual.value;
         let novaSenha = input_nova_senha.value;
 
-        if (senhaAtual != "" || novaSenha != "") {
+        if (novaSenha != "") {
 
             if (novaSenha.length < 8) {
                 swalInfo("Sua nova senha deve ter pelo menos 8 digitos.");
@@ -154,17 +147,14 @@
             } else if (novaSenha == "") {
                 swalInfo("Você precisa inserir sua nova senha para aterá-la.");
                 return;
-            } else if (senhaAtual == "") {
-                swalInfo("Você precisa informar sua senha atual para alterá-la");
-                return;
             }
             else {
                 swalConfirmar("Deseja salvar suas alterações?").then(function (resposta) {
-                    if (resposta) { alterarNomeEmail(nome, sessionStorage.EMAIL_USUARIO, email, senhaAtual, novaSenha) };
+                    if (resposta) { alterarNomeEmail(nome, sessionStorage.EMAIL_USUARIO_EDITAR, email, novaSenha) };
                 });
             }
         }
-        else if (nome == sessionStorage.NOME_USUARIO && email == sessionStorage.EMAIL_USUARIO) {
+        else if (nome == sessionStorage.NOME_USUARIO_EDITAR && email == sessionStorage.EMAIL_USUARIO_EDITAR) {
             swalErro("", "Altere algum valor para continuar.");
             return;
         } else {
@@ -177,13 +167,13 @@
                 return;
             }
             swalConfirmar("Deseja salvar suas alterações?").then(function (resposta) {
-                if (resposta) { alterarNomeEmail(nome, sessionStorage.EMAIL_USUARIO, email, senhaAtual, novaSenha) };
+                if (resposta) { alterarNomeEmail(nome, sessionStorage.EMAIL_USUARIO_EDITAR, email, novaSenha) };
             });
         }
 
     }
 
-    function alterarNomeEmail(nome, emailAtual, email, senhaAtual, novaSenha) {
+    function alterarNomeEmail(nome, emailAtual, email, novaSenha) {
         console.log("Acessando function alterarNomeEmail()");
         fetch("/usuarios/atualizar", {
             method: "POST",
@@ -191,11 +181,11 @@
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                id_usuario: sessionStorage.ID_USUARIO,
+                id_usuario: sessionStorage.ID_USUARIO_EDITAR,
                 nome: nome,
                 emailAtual: emailAtual,
                 email: email,
-                senhaAtual: senhaAtual,
+                senhaAtual: sessionStorage.SENHA_USUARIO_EDITAR,
                 novaSenha: novaSenha,
             }),
         })
@@ -227,7 +217,7 @@
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                id_usuario: sessionStorage.ID_USUARIO
+                id_usuario: sessionStorage.ID_USUARIO_EDITAR
             }),
         })
             .then(function (resposta) {
@@ -238,8 +228,9 @@
 
                     resposta.json().then(json => {
                         console.log(JSON.stringify(json));
-                        sessionStorage.NOME_USUARIO = json[0].nome;
-                        sessionStorage.EMAIL_USUARIO = json[0].email;
+                        sessionStorage.NOME_USUARIO_EDITAR = json[0].nome;
+                        sessionStorage.EMAIL_USUARIO_EDITAR = json[0].email;
+                        sessionStorage.SENHA_USUARIO_EDITAR = json[0].senha;
                     });
                     window.location.reload();
 

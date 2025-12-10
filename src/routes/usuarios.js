@@ -22,4 +22,8 @@ router.post("/buscarDados", function (req, res){
 router.post("/buscarTodosUsuarios", function (req, res){
     usuariosController.buscarTodosUsuarios(req, res);
 });
+
+router.post("/deletar", function (req, res){
+    usuariosController.deletar(req, res);
+});
 module.exports = router;

@@ -8,14 +8,14 @@
     <link rel="stylesheet" href="./style/editarPerfil.css">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Konkhmer+Sleokchher&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap ">
-        
-    <!-- icone da página -->
-    <link rel="icon" href="img/fraux-logo.png" type="image/png"> 
 
-    <title>Editar Perfil</title>
+    <!-- icone da página -->
+    <link rel="icon" href="img/fraux-logo.png" type="image/png">
+
+    <title>Editar Empresa</title>
 </head>
 
-<body onload="carregarDadosUsuario()">
+<body onload="carregarDadosEmpresa()">
 
     <body>
         <side-Bar></side-Bar>
@@ -32,30 +32,24 @@
 
             <div class="div-content">
 
-                <h1>Editar Perfil</h1>
+                <h1>Editar Empresa</h1>
                 <div class="div-editar-informacoes">
                     <h2>Informações</h2>
                     <p>Preencha os dados que deseja alterar.</p>
 
                     <div class="div-formulario">
-                        <span id="span_nome">Nome</span>
-                        <input type="text" name="" id="input_nome" oninput="habilitarDesabilitarBtn()">
+                        <span>Razão Social</span>
+                        <input type="text" name="" id="input_razao_social" oninput="habilitarDesabilitarBtn()">
 
-                        <span id="span_email">E-mail</span>
-                        <input type="text" name="" id="input_email" oninput="habilitarDesabilitarBtn()">
-
-                        <span id="span_senha_atual">Senha atual</span>
-                        <input type="text" name="" id="input_senha_atual"
-                            placeholder="Insira sua senha altual para alterá-la" oninput="habilitarDesabilitarBtn()">
-
-                        <span id="span_nova_senha">Nova senha</span>
-                        <input type="text" name="" id="input_nova_senha" placeholder="Insira sua nova senha"
-                            oninput="habilitarDesabilitarBtn()">
+                        <span>CNPJ</span>
+                        <input type="text" name="" id="input_cnpj" oninput="habilitarDesabilitarBtn()">
                     </div>
+
                     <div class="div-btn">
                         <button class="btn-salvar" id="btn_salvar" onclick="verificarDados()">Salvar</button>
                         <button class="btn-cancelar" id="btn_cancelar"
-                            onclick="carregarDadosUsuario()">Cancelar</button>
+                            onclick="carregarDadosEmpresa()">Cancelar</button>
+                        <button class="btn-deletar" id="btn_deletar" onclick="deletarEmpresa()">Desabilitar Empresa</button>
                     </div>
                 </div>
             </div>
@@ -65,6 +59,7 @@
     </body>
 
 </html>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     span_bem_vindo.innerHTML = `Bem-vindo(a), ${sessionStorage.NOME_USUARIO}!`;
 
@@ -115,23 +110,45 @@
         return confirmar.isConfirmed;
     }
 
-    function carregarDadosUsuario() {
-        input_nome.value = sessionStorage.NOME_USUARIO;
-        input_email.value = sessionStorage.EMAIL_USUARIO;
-        input_senha_atual.value = "";
-        input_nova_senha.value = "";
+    function carregarDadosEmpresa() {
+        console.log("Buscando empresa")
+        fetch("/empresas/buscarId", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                id_empresa: sessionStorage.ID_EMPRESA
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
 
-        btn_salvar.style.display = "none";
+                if (resposta.ok) {
+                    resposta.json().then(json => {
+                        sessionStorage.RAZAO_SOCIAL = json[0].razao_social
+                        sessionStorage.CNPJ = json[0].cnpj
+                        input_razao_social.value = json[0].razao_social
+                        input_cnpj.value = json[0].cnpj
+                    });
+
+                } else {
+                    throw "Houve um erro ao tentar Buscar dados empresa!"
+                }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+
         btn_cancelar.style.display = "none";
+        btn_salvar.style.display = "none";
     }
 
     function habilitarDesabilitarBtn() {
-        let nome = input_nome.value;
-        let email = input_email.value;
-        let senhaAtual = input_senha_atual.value;
-        let novaSenha = input_nova_senha.value;
+        let razao_social = input_razao_social.value;
+        let cnpj = input_cnpj.value;
 
-        if (nome == sessionStorage.NOME_USUARIO && email == sessionStorage.EMAIL_USUARIO && senhaAtual == "" && novaSenha == "") {
+        if (razao_social == sessionStorage.RAZAO_SOCIAL && cnpj == sessionStorage.CNPJ) {
             btn_salvar.style.display = "none";
             btn_cancelar.style.display = "none";
             return;
@@ -141,62 +158,39 @@
     }
 
     function verificarDados() {
-        let nome = input_nome.value;
-        let email = input_email.value;
-        let senhaAtual = input_senha_atual.value;
-        let novaSenha = input_nova_senha.value;
+        let razao_social = input_razao_social.value;
+        let cnpj = input_cnpj.value;
 
-        if (senhaAtual != "" || novaSenha != "") {
-
-            if (novaSenha.length < 8) {
-                swalInfo("Sua nova senha deve ter pelo menos 8 digitos.");
-                return;
-            } else if (novaSenha == "") {
-                swalInfo("Você precisa inserir sua nova senha para aterá-la.");
-                return;
-            } else if (senhaAtual == "") {
-                swalInfo("Você precisa informar sua senha atual para alterá-la");
-                return;
-            }
-            else {
-                swalConfirmar("Deseja salvar suas alterações?").then(function (resposta) {
-                    if (resposta) { alterarNomeEmail(nome, sessionStorage.EMAIL_USUARIO, email, senhaAtual, novaSenha) };
-                });
-            }
-        }
-        else if (nome == sessionStorage.NOME_USUARIO && email == sessionStorage.EMAIL_USUARIO) {
+        if (cnpj == sessionStorage.CNPJ && razao_social == sessionStorage.RAZAO_SOCIAL) {
             swalErro("", "Altere algum valor para continuar.");
             return;
         } else {
-            if (nome == "") {
-                swalInfo("Seu nome não pode estar em branco.")
+            if (razao_social == "") {
+                swalInfo("Razão Social não pode estar em branco.")
                 return;
             }
-            if (!email.includes("@") || !email.includes(".")) {
-                swalInfo("Por favor, insira um email válido.");
+            if (cnpj.length != 14) {
+                swalInfo("Por favor, insira um CNPJ válido.");
                 return;
             }
             swalConfirmar("Deseja salvar suas alterações?").then(function (resposta) {
-                if (resposta) { alterarNomeEmail(nome, sessionStorage.EMAIL_USUARIO, email, senhaAtual, novaSenha) };
+                if (resposta) { alterarEmpresa(razao_social, cnpj) };
             });
         }
 
     }
 
-    function alterarNomeEmail(nome, emailAtual, email, senhaAtual, novaSenha) {
-        console.log("Acessando function alterarNomeEmail()");
-        fetch("/usuarios/atualizar", {
+    function alterarEmpresa(razao_social, cnpj) {
+        console.log("Acessando function alterarEmpresa()");
+        fetch("/empresas/atualizar", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                id_usuario: sessionStorage.ID_USUARIO,
-                nome: nome,
-                emailAtual: emailAtual,
-                email: email,
-                senhaAtual: senhaAtual,
-                novaSenha: novaSenha,
+                id_empresa: sessionStorage.ID_EMPRESA,
+                razao_social: razao_social,
+                cnpj: cnpj
             }),
         })
             .then(function (resposta) {
@@ -204,10 +198,9 @@
 
                 if (resposta.ok) {
                     swalSucesso("Sucesso", "Dados atualizadas com sucesso!");
-                    buscarDadosAtualizados();
+                    carregarDadosEmpresa();
 
                 } else {
-                    swalErro("Senha incorreta", "Tente inserir sua senha atual novamente.");
                     throw "Houve um erro ao tentar Atualizar!"
                 }
             })
@@ -216,42 +209,39 @@
             });
 
         return false;
-
     }
 
-    function buscarDadosAtualizados() {
-        console.log("Buscando dados atualizados");
-        fetch("/usuarios/buscarDados", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                id_usuario: sessionStorage.ID_USUARIO
-            }),
-        })
-            .then(function (resposta) {
-                console.log("resposta: ", resposta);
+    function deletarEmpresa() {
+        swalConfirmar("Desabilitar Empresa?", `Ao confirmar, a sua empresa será desabilitada do sistema. Isso impedirá que qualque usuário acesse o sistema e essa ação não poderá ser desfeita.`).then(function (resposta) {
+            if (resposta) {
+                console.log("Fetch deletar empresa");
+                fetch("/empresas/deletar", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        id_empresa: sessionStorage.ID_EMPRESA
+                    }),
+                })
+                    .then(function (resposta) {
+                        console.log("resposta: ", resposta);
 
-                if (resposta.ok) {
-                    console.log("Dados atualizadas buscados com sucesso!");
+                        if (resposta.ok) {
+                            swalSucesso("Empresa desabilitada do sistema");
+                            buscarUsuarios();
 
-                    resposta.json().then(json => {
-                        console.log(JSON.stringify(json));
-                        sessionStorage.NOME_USUARIO = json[0].nome;
-                        sessionStorage.EMAIL_USUARIO = json[0].email;
+                        } else {
+                            swalErro("Não foi possível excluir a empresa");
+                            throw "Houve um erro ao tentar Excluir!"
+                        }
+                    })
+                    .catch(function (resposta) {
+                        console.log(`#ERRO: ${resposta}`);
                     });
-                    window.location.reload();
-
-                } else {
-                    throw "Houve um erro ao tentar Atualizar!"
-                }
-            })
-            .catch(function (resposta) {
-                console.log(`#ERRO: ${resposta}`);
-            });
+            };
+        });
     }
-
     function atualizarIconeSlack() {
         const botao = document.getElementById("btn_notificacao");
 
@@ -291,7 +281,6 @@
         });
 
         enviarNotificacaoSlack(mensagem, true);
-
     }
 
     window.addEventListener("load", async () => {

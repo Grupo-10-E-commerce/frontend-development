@@ -27,43 +27,26 @@
             </div>
         </div>
 
-
         <main>
-            <p class="p_descricao">Edite os dados dos usuários abaixo. Clique na lixeira para deletá-lo do sistema.</p>
+            <p class="p_descricao">Edite os dados dos usuários abaixo. Clique na lixeira para deletá-lo do sistema. <span class="span_descricao" onclick="window.location = 'adicionarUsuario.html'">Clique aqui</span> para adicionar um novo usuario</p>
 
-            <div class="div-pesquisar">
-                <p>Buscar usuário: </p>
-                <input type="text" name="" id="" placeholder="Busque por nome, e-email ou cargo">
-                <button onclick="filtrarUsuarios()">Buscar</button>
-            </div>
-            <div class="div-lista-usuarios">
-                <div class="div-usuario div-usuario-head">
-                    <span>Nome</span>
-                    <span>E-mail</span>
-                    <span>Cargo</span>
-                    <div class="div-icon">
-                        <span>Editar</span>
-                        <span>Excluir</span>
-                    </div>
+            <div id="div_lista_usuarios" class="div-lista-usuarios">
+                <div class="div-pesquisar">
+                    <p>Buscar usuário: </p>
+                    <input type="text" name="" id="input_buscar" placeholder="Busque por nome, e-email ou cargo">
+                    <button onclick="filtrarUsuarios()">Buscar</button>
                 </div>
-
-                <div class="div-usuario">
-                    <span>Nome</span>
-                    <span>Email</span>
-                    <span>Cargo</span>
-                    <div class="div-icon">
-                        <img src="./img/lapis-icone.png" width="25px" alt="">
-                        <img src="./img/lixeira-icone.png" width="25px" alt="">
-                    </div>
-                </div>
+                <!-- O restante do HTML encontra-se no JS -->
             </div>
         </main>
 
     </body>
 
 </html>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     span_bem_vindo.innerHTML = `Bem-vindo(a), ${sessionStorage.NOME_USUARIO}!`;
+    var dados;
 
     // formatações da biblioteca sweetalert2
     function swalSucesso(titulo, mensagem) {
@@ -111,6 +94,7 @@
         });
         return confirmar.isConfirmed;
     }
+
     function buscarUsuarios() {
 
         fetch("/usuarios/buscarTodosUsuarios", {
@@ -119,7 +103,7 @@
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                id_empresa: sessionStorage.ID_USUARIO
+                id_empresa: sessionStorage.ID_EMPRESA
             }),
         })
             .then(function (resposta) {
@@ -128,8 +112,8 @@
                 if (resposta.ok) {
                     resposta.json().then(json => {
                         console.log(json);
-                        console.log(JSON.stringify(json));
-                        filtrarUsuarios(json);               
+                        dados = json;
+                        filtrarUsuarios();
                     });
 
                 } else {
@@ -141,8 +125,106 @@
             });
     }
 
-    function filtrarUsuarios(dados) {
-        console.log(JSON.stringify(dados));
+    function filtrarUsuarios() {
+        console.log(dados[0]); console.log(dados.length);
+
+        let busca = input_buscar.value;
+
+        div_lista_usuarios.innerHTML =
+            `<div class="div-pesquisar">
+                <p>Buscar usuário: </p>
+                 <input type="text" name="" id="input_buscar" placeholder="Busque por nome, e-email ou cargo" value="${busca}">
+                 <button onclick="filtrarUsuarios(true)">Buscar</button>
+            </div>
+            
+                <span id="span_totalEncontrado">Total encontrado: 0</span>
+                <div class="div-usuario div-usuario-head">
+                    <span>Nome</span>
+                    <span>E-mail</span>
+                    <span>Cargo</span>
+                    <div class="div-icon">
+                        <span>Editar</span>
+                        <span>Excluir</span>
+                    </div>
+                </div>`;
+
+        let totalResultados = 0;
+        for (let i = 0; i < dados.length; i++) {
+            const id_usuario = dados[i].id_usuario
+            const nome = dados[i].usuario;
+            const email = dados[i].email;
+            const senha = dados[i].senha;
+            const cargo = dados[i].cargo;
+
+            if (busca != "") {
+                if (nome.toLowerCase().includes(busca.toLowerCase()) ||
+                    email.toLowerCase().includes(busca.toLowerCase()) ||
+                    cargo.toLowerCase().includes(busca.toLowerCase())) {
+
+                    totalResultados++;
+                    span_totalEncontrado.innerHTML = `Total encontrado: ${totalResultados}`;
+                    exibirUsuarios(id_usuario, nome, email, senha, cargo);
+                }
+
+            } else {
+                totalResultados++;
+                span_totalEncontrado.innerHTML = `Total encontrado: ${totalResultados}`;
+                exibirUsuarios(id_usuario, nome, email, senha, cargo);
+            }
+        }
+    }
+    function exibirUsuarios(id_usuario, nome, email, senha, cargo) {
+        div_lista_usuarios.innerHTML += `
+                <div class="div-usuario">
+                    <span>${nome}</span>
+                    <span>${email}</span>
+                    <span>${cargo}</span>
+                    <div class="div-icon">
+                        <img src="./img/lapis-icone.png" alt="" id="editUser-${id_usuario}" class="img-editar" onclick='editarUsuarios("${id_usuario}", "${nome}", "${email}", "${senha}", "${cargo}")'>
+                        <img src="./img/lixeira-icone.png" alt="" id="deleteUser-${id_usuario}" class="img-deletar" onclick='deletarUsuarios("${id_usuario}", "${nome}", "${email}", "${senha}", "${cargo}")'>
+                    </div>
+                </div>`
+    }
+
+
+    function editarUsuarios(id_usuario, nome, email, senha, cargo) {
+        sessionStorage.ID_USUARIO_EDITAR = id_usuario;
+        sessionStorage.NOME_USUARIO_EDITAR = nome;
+        sessionStorage.EMAIL_USUARIO_EDITAR = email;
+        sessionStorage.SENHA_USUARIO_EDITAR = senha;
+        sessionStorage.CARGO_USUARIO_EDITAR = cargo;
+        window.location = "editarUsuarioSelecionado.html";
+    }
+    function deletarUsuarios(id_usuario, nome) {
+        swalConfirmar("Excluir usuário?", `Ao confirmar, o usuário ${nome} será excluido do sistema. Essa ação não poderá ser desfeita.`).then(function (resposta) {
+            if (resposta) {
+                console.log("Fetch deletar usuário");
+                fetch("/usuarios/deletar", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        id_usuario: id_usuario
+                    }),
+                })
+                    .then(function (resposta) {
+                        console.log("resposta: ", resposta);
+
+                        if (resposta.ok) {
+                            swalSucesso("Usuário excluído");
+                            buscarUsuarios();
+
+                        } else {
+                            swalErro("Não foi possível excluir o usuário");
+                            throw "Houve um erro ao tentar Excluir!"
+                        }
+                    })
+                    .catch(function (resposta) {
+                        console.log(`#ERRO: ${resposta}`);
+                    });
+            };
+        });
     }
 
     let slackNotificationsEnabled = JSON.parse(localStorage.getItem("slackNotificationsEnabled") || "true");

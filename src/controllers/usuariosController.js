@@ -31,13 +31,14 @@ function cadastrar(req, res) {
     var email = req.body.email;
     var senha = req.body.senha;
     var id_empresa = req.body.id_empresa;
+    var id_cargo = req.body.id_cargo;
 
     if (nome == undefined) {
         res.status(400).send("Seu nome está undefined!");
     }
 
 
-    usuariosModel.cadastrar(nome, email, senha, id_empresa).then(function (resposta) {
+    usuariosModel.cadastrar(nome, email, senha, id_empresa, id_cargo).then(function (resposta) {
         res.status(200).send("Usuário cadastrado com sucesso!");
     }).catch(function (erro) {
         console.log("ERRO NO CADASTRO:", erro);
@@ -52,10 +53,11 @@ function atualizar(req, res) {
     var email = req.body.email;
     var senhaAtual = req.body.senhaAtual;
     var novaSenha = req.body.novaSenha;
+    var cargo = req.body.cargo;
 
     if (senhaAtual == "" || novaSenha == "") {
         console.log("Senhas vazias")
-        usuariosModel.atualizar(nome, email, id_usuario).then(function (resposta) {
+        usuariosModel.atualizar(nome, email, id_usuario, cargo).then(function (resposta) {
             res.status(200).send("Usuário atualizado com sucesso!");
         }).catch(function (erro) {
             console.log("ERRO NO ATUALIZAR:", erro);
@@ -67,7 +69,7 @@ function atualizar(req, res) {
         usuariosModel.efetuarLogin(emailAtual, senhaAtual).then(function (resposta) {
             
             if (resposta.length == 1) {
-                usuariosModel.atualizarSenha(nome, email, id_usuario, novaSenha).then(function (resposta) {
+                usuariosModel.atualizarSenha(nome, email, id_usuario, novaSenha, cargo).then(function (resposta) {
                     res.status(200).send("Usuário atualizado (com senha) com sucesso!");
                 }).catch(function (erro) {
                     console.log("ERRO NO ATUALIZAR:", erro);
@@ -105,10 +107,21 @@ function buscarTodosUsuarios(req, res) {
     })
 }
 
+function deletar(req, res) {
+    let id_usuario = req.body.id_usuario;
+
+    usuariosModel.deletar(id_usuario).then(function (resposta) {
+        res.status(200).send(resposta);
+    }).catch(function (erro) {
+        console.log("ERRO NO DELETAR:", erro);
+        res.status(500).json(erro.sqlMessage || erro.message || erro);
+    })
+}
 module.exports = {
     login,
     cadastrar,
     atualizar,
     buscarDados,
-    buscarTodosUsuarios
+    buscarTodosUsuarios,
+    deletar
 }

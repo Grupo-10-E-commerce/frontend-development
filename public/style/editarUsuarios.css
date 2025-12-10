@@ -86,45 +86,108 @@ body {
 }
 
 /* LISTA USUARIOS */
-main{
+main {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 2.5%;
 }
-.p_descricao{
-    margin-left: -50%;
+
+.p_descricao {
     margin-bottom: 30px;
     font-size: 20px;
 }
+.span_descricao{
+    color: var(--azul-claro);
+    font-style: italic;
+    transition: 0.2s;
+}
+.span_descricao:hover{
+    font-weight: 600;
+    cursor: pointer;
+}
 
-.div-pesquisar{
+.div-pesquisar {
+    font-weight: 500;
+    width: 75vw;
     display: flex;
+    justify-content: space-evenly;
     align-items: center;
     font-size: 18px;
+    margin-bottom: 30px;
 }
 
-.div-lista-usuarios{
+.div-pesquisar input {
+    padding: 10px;
+    border: 2px solid var(--azul-escuro);
+    border-radius: 8px;
+    height: 20px;
+    width: 55vw;
+}
+
+.div-pesquisar button {
+    color: white;
+    font-weight: 800;
+    font-size: 18px;
+    background-color: var(--roxo-claro);
+    height: 40px;
+    width: 10%;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.div-pesquisar button:hover {
+    background-color: var(--azul-claro);
+}
+
+.div-lista-usuarios {
+    background-color: white;
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
-    padding: 20px;
-    width: 70vw;
+    padding: 30px;
+    width: 75vw;
     align-items: center;
 }
-.div-usuario{
+
+.div-usuario {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 30px;
     width: 100%;
-    border: solid 1.5px var(--azul);
+    height: 40px;
+    border-top: solid 1.5px var(--azul);
 }
-.div-usuario-head{
+#span_totalEncontrado{
+    font-weight: 700;
+    margin-bottom: 20px;
+    margin-left: -90%;
+
+}
+
+.div-usuario-head {
     color: var(--azul-claro);
     font-weight: 800;
     font-size: 18px;
 }
-.div-icon{
+
+.div-icon {
     display: flex;
     justify-content: space-around;
     width: 10%;
     border-left: solid 1.5px var(--azul);
+}
+
+img{
+    width: 25px;
+    transition: 0.2s;
+}
+.img-editar:hover{
+    cursor: pointer;
+    width: 30px;
+}
+.img-deletar:hover{
+    cursor: pointer;
+    width: 30px;
 }

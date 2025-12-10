@@ -141,7 +141,6 @@
                 input_cnpj.value += cnpjVerificar[i];
             }
         }
-
     }
 
     function cadastrar() {
@@ -248,6 +247,7 @@
                 email: email,
                 senha: senha,
                 id_empresa: id_empresa,
+                id_cargo: 1
             }),
         })
             .then(function (resposta) {

@@ -20,6 +20,13 @@ class SideBarComponent extends HTMLElement {
             });
         }
 
+        const btnEditarEmpresa = this.shadowRoot.querySelector('#btnEditCompany');
+        if (btnEditarEmpresa) {
+            btnEditarEmpresa.addEventListener('click', () => {
+                window.location.href = 'editarEmpresa.html'; 
+            });
+        }
+
         const btnLogout = this.shadowRoot.querySelector('#btnLogout');
         if (btnLogout) {
             btnLogout.addEventListener('click', this.logout.bind(this));
@@ -227,7 +234,7 @@ class SideBarComponent extends HTMLElement {
                     padding: 10px 0;
                     flex-direction: column;
                     z-index: 1001;
-                    width: 160px;
+                    width: 200px;
                     left: 50%;
                     transform: translateX(-50%);
                 }
@@ -324,7 +331,7 @@ class SideBarComponent extends HTMLElement {
 
                     <div class="menu-item" data-page="painelPerformanceRisco">
                         <img src="img/painelicon.png" class="menu-icon">
-                        <span>Performance de Risco</span>
+                        <span>Painel Performance e Risco</span>
                     </div>
 
                     <div class="menu-item" data-page="alertasPersonalizados">
@@ -354,6 +361,9 @@ class SideBarComponent extends HTMLElement {
                  <div class="moreOptions">
                         <div class="option-item" id="btnEditProfile">
                             Editar Perfil
+                        </div>
+                        <div class="option-item" id="btnEditCompany">
+                            Editar Empresa
                         </div>
                         <div class="option-item logout" id="btnLogout">
                             Sair

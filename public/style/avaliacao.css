@@ -13,19 +13,25 @@ body {
   display: flex;
   align-items: center;
   padding: 10px 20px;
-  justify-content: flex-end;
-  width: 101vw;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .header span {
   color: #333;
 }
 
+.title {
+    font-size: 25px;
+    font-weight: 600;
+    color: #333;
+}
+
 .btn {
     display: flex;
     align-items: center;
     gap: 15px;
-    width: 450px;
+    width: auto;
 }
 
 .btn_sino {
@@ -65,11 +71,17 @@ body {
     font-size: 25px;
 }
 
+#span_bem_vindo {
+    white-space: nowrap;
+    width: auto;
+}
+
 .container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 70vh;
+  padding: 20px;
 }
 
 .container-avaliacao {
